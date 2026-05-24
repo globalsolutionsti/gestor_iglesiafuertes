@@ -1,5 +1,5 @@
 document.getElementById("loginForm")
-.addEventListener("submit", async(e)=>{
+.addEventListener("submit",(e)=>{
 
 e.preventDefault();
 
@@ -11,20 +11,10 @@ document.getElementById("password").value;
 
 mostrarLoader();
 
-try{
+const callbackName =
+"jsonp_callback_" + Date.now();
 
-const response = await fetch(
-
-`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-
-{
-method:"GET",
-mode:"cors"
-}
-
-);
-
-const data = await response.json();
+window[callbackName] = function(data){
 
 ocultarLoader();
 
@@ -58,21 +48,20 @@ title:data.message
 
 }
 
-}catch(error){
+document.body.removeChild(script);
 
-ocultarLoader();
+delete window[callbackName];
 
-console.error(error);
+};
 
-Swal.fire({
+const script =
+document.createElement("script");
 
-icon:"error",
-title:"Error Apps Script",
-text:"Revisa permisos de implementación"
+script.src =
 
-});
+`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&callback=${callbackName}`;
 
-}
+document.body.appendChild(script);
 
 });
 
