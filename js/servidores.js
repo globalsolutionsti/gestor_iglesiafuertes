@@ -1,113 +1,138 @@
-let tabla;
+let fotoBase64 = "";
 
-async function cargarServidores(){
+async function activarCamara(){
+
+const video =
+document.getElementById("camera");
+
+const stream =
+await navigator.mediaDevices.getUserMedia({
+
+video:{
+facingMode:"user"
+},
+audio:false
+
+});
+
+video.srcObject = stream;
+
+}
+
+function tomarFoto(){
+
+const video =
+document.getElementById("camera");
+
+const canvas =
+document.getElementById("canvas");
+
+const preview =
+document.getElementById("previewFoto");
+
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.drawImage(
+video,
+0,
+0
+);
+
+fotoBase64 =
+canvas.toDataURL("image/jpeg");
+
+preview.src = fotoBase64;
+
+preview.style.display = "block";
+
+}
+
+async function guardarServidor(){
 
 mostrarLoader();
 
-const callbackName =
-"jsonp_callback_" + Date.now();
+const body = {
 
-window[callbackName] = function(response){
+numeroServidor:
+document.getElementById("numeroServidor").value,
 
-let html = "";
+nombre:
+document.getElementById("nombre").value,
 
-const data = response.data;
+apellidos:
+document.getElementById("apellidos").value,
 
-for(let i=1;i<data.length;i++){
+telefono:
+document.getElementById("telefono").value,
 
-const s = data[i];
+email:
+document.getElementById("email").value,
 
-html += `
+ministerio:
+document.getElementById("ministerio").value,
 
-<tr>
+grupoConexion:
+document.getElementById("grupoConexion").value,
 
-<td>
+fechaIngreso:
+document.getElementById("fechaIngreso").value,
 
-<img src="${
-s[13] || 'https://i.pravatar.cc/50'
-}"
-
-class="avatar">
-
-</td>
-
-<td>
-
-<a href="perfil.html?numero=${s[1]}"
-class="perfil-link">
-
-${s[2]} ${s[3]}
-
-</a>
-
-</td>
-
-<td>${s[9]}</td>
-
-<td>${s[10]}</td>
-
-<td>
-
-<span class="badge bg-success">
-${s[12]}
-</span>
-
-</td>
-
-<td>
-
-<button class="btn btn-primary btn-sm">
-
-<i class="fa fa-edit"></i>
-
-</button>
-
-<button class="btn btn-danger btn-sm">
-
-<i class="fa fa-trash"></i>
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-}
-
-document.getElementById(
-"tablaServidores"
-).innerHTML = html;
-
-if(tabla){
-
-tabla.destroy();
-
-}
-
-tabla = $('#tabla').DataTable();
-
-ocultarLoader();
-
-document.body.removeChild(script);
-
-delete window[callbackName];
+foto:fotoBase64
 
 };
 
-const script =
-document.createElement("script");
+try{
 
-script.src =
+const response = await fetch(
 
-`${API_URL}?action=getServidores&callback=${callbackName}`;
+API_URL + "?action=guardarServidor",
 
-document.body.appendChild(script);
+{
+method:"POST",
+body:JSON.stringify(body)
+}
+
+);
+
+const data =
+await response.json();
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:data.status
+? "success"
+: "error",
+
+title:data.message
+
+});
+
+if(data.status){
+
+location.reload();
 
 }
 
-cargarServidores();
+}catch(error){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:error.toString()
+
+});
+
+}
+
+}
 
 function mostrarLoader(){
 
