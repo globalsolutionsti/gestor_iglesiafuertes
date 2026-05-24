@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+<div class="sidebar">
+
+<h3 class="logo">IGLESIA</h3>
+
+<ul>
+
+<li><a href="dashboard.html">Dashboard</a></li>
+<li><a href="servidores.html">Servidores</a></li>
+<li><a href="eventos.html">Eventos</a></li>
+<li><a href="asistencia.html">Asistencia QR</a></li>
+
+</ul>
+
+</div>
+
+<div class="content">
+
+<div class="topbar">
+
+<h2>Dashboard</h2>
+
+</div>
+
+<div class="cards">
+
+<div class="card-dashboard blue">
+<h3 id="totalServidores">0</h3>
+<p>Servidores</p>
+</div>
+
+<div class="card-dashboard purple">
+<h3>12</h3>
+<p>Ministerios</p>
+</div>
+
+<div class="card-dashboard green">
+<h3>15</h3>
+<p>Eventos</p>
+</div>
+
+<div class="card-dashboard orange">
+<h3>85%</h3>
+<p>Asistencia</p>
+</div>
+
+</div>
+
+<div class="chart-container">
+
+<canvas id="chart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
