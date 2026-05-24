@@ -4,7 +4,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Login Iglesia</title>
 
@@ -12,7 +14,8 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet"
+href="css/styles.css">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -30,7 +33,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <h1 class="logo-title">IGLESIA</h1>
 
 <p class="text-light">
-Sistema de Gestión de Servidores
+
+Sistema Gestión Ministerial
+
 </p>
 
 </div>
@@ -42,13 +47,16 @@ Sistema de Gestión de Servidores
 <div class="input-group">
 
 <span class="input-group-text">
+
 <i class="fa fa-envelope"></i>
+
 </span>
 
 <input type="email"
 class="form-control form-dark"
 id="email"
-placeholder="Correo">
+placeholder="Correo"
+required>
 
 </div>
 
@@ -59,13 +67,16 @@ placeholder="Correo">
 <div class="input-group">
 
 <span class="input-group-text">
+
 <i class="fa fa-lock"></i>
+
 </span>
 
 <input type="password"
 class="form-control form-dark"
 id="password"
-placeholder="Contraseña">
+placeholder="Contraseña"
+required>
 
 </div>
 
@@ -74,6 +85,7 @@ placeholder="Contraseña">
 <button class="btn btn-primary btn-login w-100">
 
 <i class="fa fa-right-to-bracket"></i>
+
 Ingresar
 
 </button>
@@ -84,20 +96,12 @@ Ingresar
 
 </div>
 
+<!-- SWEETALERT -->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="js/config.js"></script>
 <script src="js/login.js"></script>
-
-<script>
-
-if('serviceWorker' in navigator){
-
-navigator.serviceWorker.register(
-'service-worker.js'
-);
-
-}
-
-</script>
 
 </body>
 </html>
