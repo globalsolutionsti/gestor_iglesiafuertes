@@ -1,30 +1,34 @@
 let tabla;
-let editando = false;
-let servidorEditando = null;
 
 async function cargarServidores(){
 
 mostrarLoader();
 
-const response = await fetch(
-`${API_URL}?action=getServidores`
-);
+const callbackName =
+"jsonp_callback_" + Date.now();
 
-const data = await response.json();
+window[callbackName] = function(response){
 
 let html = "";
 
-for(let i=1;i<data.data.length;i++){
+const data = response.data;
 
-const s = data.data[i];
+for(let i=1;i<data.length;i++){
+
+const s = data[i];
 
 html += `
 
 <tr>
 
 <td>
-<img src="${s[13] || 'https://i.pravatar.cc/50'}"
+
+<img src="${
+s[13] || 'https://i.pravatar.cc/50'
+}"
+
 class="avatar">
+
 </td>
 
 <td>
@@ -52,15 +56,13 @@ ${s[12]}
 
 <td>
 
-<button class="btn btn-primary btn-sm"
-onclick='abrirEditar(${JSON.stringify(s)})'>
+<button class="btn btn-primary btn-sm">
 
 <i class="fa fa-edit"></i>
 
 </button>
 
-<button class="btn btn-danger btn-sm"
-onclick="eliminar('${s[0]}')">
+<button class="btn btn-danger btn-sm">
 
 <i class="fa fa-trash"></i>
 
@@ -69,194 +71,61 @@ onclick="eliminar('${s[0]}')">
 </td>
 
 </tr>
+
 `;
 
 }
 
-document.getElementById("tablaServidores")
-.innerHTML = html;
+document.getElementById(
+"tablaServidores"
+).innerHTML = html;
 
 if(tabla){
+
 tabla.destroy();
+
 }
 
 tabla = $('#tabla').DataTable();
 
 ocultarLoader();
 
-}
+document.body.removeChild(script);
 
-cargarServidores();
-
-async function guardarServidor(){
-
-const body = {
-
-id: servidorEditando,
-
-numeroServidor:
-document.getElementById("numeroServidor").value,
-
-nombre:
-document.getElementById("nombre").value,
-
-apellidos:
-document.getElementById("apellidos").value,
-
-telefono:
-document.getElementById("telefono").value,
-
-email:
-document.getElementById("email").value,
-
-ministerio:
-document.getElementById("ministerio").value,
-
-grupoConexion:
-document.getElementById("grupoConexion").value,
-
-fechaIngreso:
-document.getElementById("fechaIngreso").value,
-
-foto:
-document.getElementById("foto").value
+delete window[callbackName];
 
 };
 
-const accion = editando
-? "actualizarServidor"
-: "crearServidor";
+const script =
+document.createElement("script");
 
-mostrarLoader();
+script.src =
 
-const response = await fetch(
-`${API_URL}?action=${accion}`,
-{
-method:"POST",
-body:JSON.stringify(body)
+`${API_URL}?action=getServidores&callback=${callbackName}`;
+
+document.body.appendChild(script);
+
 }
-);
-
-const data = await response.json();
-
-ocultarLoader();
-
-Swal.fire({
-icon:"success",
-title:data.message
-});
-
-bootstrap.Modal.getInstance(
-document.getElementById("modalServidor")
-).hide();
-
-limpiarFormulario();
 
 cargarServidores();
-
-}
-
-function abrirEditar(s){
-
-editando = true;
-
-servidorEditando = s[0];
-
-document.getElementById("numeroServidor").value = s[1];
-document.getElementById("nombre").value = s[2];
-document.getElementById("apellidos").value = s[3];
-document.getElementById("telefono").value = s[4];
-document.getElementById("email").value = s[5];
-document.getElementById("ministerio").value = s[9];
-document.getElementById("grupoConexion").value = s[10];
-document.getElementById("foto").value = s[13];
-
-new bootstrap.Modal(
-document.getElementById("modalServidor")
-).show();
-
-}
-
-function limpiarFormulario(){
-
-editando = false;
-servidorEditando = null;
-
-document.querySelectorAll("input")
-.forEach(input=>input.value="");
-
-}
-
-async function eliminar(id){
-
-Swal.fire({
-
-title:"¿Eliminar servidor?",
-icon:"warning",
-showCancelButton:true
-
-}).then(async(result)=>{
-
-if(result.isConfirmed){
-
-mostrarLoader();
-
-const response = await fetch(
-`${API_URL}?action=eliminarServidor`,
-{
-method:"POST",
-body:JSON.stringify({id:id})
-}
-);
-
-const data = await response.json();
-
-ocultarLoader();
-
-Swal.fire({
-icon:"success",
-title:data.message
-});
-
-cargarServidores();
-
-}
-
-});
-
-}
-
-function exportarExcel(){
-
-let wb = XLSX.utils.table_to_book(
-document.getElementById("tabla")
-);
-
-XLSX.writeFile(wb,"servidores.xlsx");
-
-}
-
-function exportarPDF(){
-
-const { jsPDF } = window.jspdf;
-
-const doc = new jsPDF();
-
-doc.text("Reporte Servidores",20,20);
-
-doc.save("reporte.pdf");
-
-}
 
 function mostrarLoader(){
 
 document.body.insertAdjacentHTML(
+
 "beforeend",
+
 `
-<div class="loader-overlay" id="loader">
+
+<div class="loader-overlay"
+id="loader">
+
 <div class="loader"></div>
+
 </div>
+
 `
+
 );
 
 }
@@ -267,7 +136,9 @@ const loader =
 document.getElementById("loader");
 
 if(loader){
+
 loader.remove();
+
 }
 
 }
