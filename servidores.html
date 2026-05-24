@@ -175,6 +175,41 @@ data-bs-dismiss="modal"></button>
 
 <div class="row">
 
+<div class="col-md-12 text-center mb-4">
+
+<video id="camera"
+autoplay
+playsinline
+class="camera-preview"></video>
+
+<canvas id="canvas"
+style="display:none;"></canvas>
+
+<img id="previewFoto"
+class="preview-foto">
+
+<div class="mt-3">
+
+<button class="btn btn-dark"
+onclick="activarCamara()">
+
+<i class="fa fa-camera"></i>
+Activar Cámara
+
+</button>
+
+<button class="btn btn-primary"
+onclick="tomarFoto()">
+
+<i class="fa fa-image"></i>
+Tomar Foto
+
+</button>
+
+</div>
+
+</div>
+
 <div class="col-md-6 mb-3">
 
 <label>Número Servidor</label>
@@ -252,16 +287,6 @@ id="grupoConexion">
 <input type="date"
 class="form-control"
 id="fechaIngreso">
-
-</div>
-
-<div class="col-md-12 mb-3">
-
-<label>Foto URL</label>
-
-<input type="text"
-class="form-control"
-id="foto">
 
 </div>
 
