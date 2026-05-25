@@ -1,58 +1,97 @@
-document.getElementById("loginForm")
-.addEventListener("submit",(e)=>{
+const form =
+document.getElementById("loginForm");
+
+form.addEventListener(
+
+"submit",
+
+function(e){
 
 e.preventDefault();
 
-const email =
-document.getElementById("email").value;
-
-const password =
-document.getElementById("password").value;
-
 mostrarLoader();
 
-const callbackName =
-"jsonp_callback_" + Date.now();
+const email =
+document.getElementById(
+"email"
+).value;
 
-window[callbackName] = function(data){
+const password =
+document.getElementById(
+"password"
+).value;
+
+/* =========================
+JSONP CALLBACK
+========================= */
+
+const callbackName =
+"login_callback_" + Date.now();
+
+window[callbackName] = function(response){
 
 ocultarLoader();
 
-if(data.status){
+try{
+
+if(response.status){
+
+/* =========================
+GUARDAR SESION
+========================= */
 
 localStorage.setItem(
+
 "user",
-JSON.stringify(data.user)
+
+JSON.stringify(
+response.user
+)
+
 );
 
-Swal.fire({
-
-icon:"success",
-title:"Bienvenido"
-
-}).then(()=>{
+/* =========================
+REDIRECT
+========================= */
 
 window.location.href =
 "dashboard.html";
-
-});
 
 }else{
 
 Swal.fire({
 
 icon:"error",
-title:data.message
+title:response.message
 
 });
 
 }
 
-document.body.removeChild(script);
+}catch(error){
+
+Swal.fire({
+
+icon:"error",
+title:error.toString()
+
+});
+
+}
+
+/* =========================
+LIMPIAR CALLBACK
+========================= */
 
 delete window[callbackName];
 
+script.remove();
+
 };
+
+/* =========================
+SCRIPT JSONP
+========================= */
 
 const script =
 document.createElement("script");
@@ -61,11 +100,34 @@ script.src =
 
 `${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&callback=${callbackName}`;
 
-document.body.appendChild(script);
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:"Error conexión Apps Script"
 
 });
 
+};
+
+document.body.appendChild(script);
+
+}
+
+);
+
+/* =====================================================
+LOADER
+===================================================== */
+
 function mostrarLoader(){
+
+if(document.getElementById("loader")){
+return;
+}
 
 document.body.insertAdjacentHTML(
 
@@ -89,7 +151,9 @@ id="loader">
 function ocultarLoader(){
 
 const loader =
-document.getElementById("loader");
+document.getElementById(
+"loader"
+);
 
 if(loader){
 
