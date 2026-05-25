@@ -1,47 +1,122 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Perfil Servidor</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <link rel="stylesheet"
 href="css/styles.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+
+body{
+background:#f4f7fb;
+}
+
+.profile-header{
+background:white;
+border-radius:20px;
+padding:30px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+.profile-avatar{
+width:140px;
+height:140px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #0d6efd;
+}
+
+.info-card{
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
+
+.timeline-item{
+padding:15px;
+border-left:3px solid #0d6efd;
+margin-bottom:15px;
+background:#f8fbff;
+border-radius:10px;
+}
+
+.level-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-radius:15px;
+background:#f8f9fa;
+margin-bottom:10px;
+}
+
+.status-aprobado{
+color:#198754;
+font-weight:bold;
+}
+
+.status-cursando{
+color:#0d6efd;
+font-weight:bold;
+}
+
+.status-pendiente{
+color:#6c757d;
+font-weight:bold;
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div class="main-content">
+<div class="container py-4">
 
-<div class="container-fluid">
+<!-- HEADER -->
 
-<div class="perfil-header">
+<div class="profile-header">
 
-<div class="perfil-cover"></div>
+<div class="row align-items-center">
 
-<div class="perfil-info">
+<div class="col-md-2 text-center">
 
 <img id="fotoServidor"
-class="perfil-avatar">
+class="profile-avatar"
+src="https://i.pravatar.cc/200">
 
-<div>
+</div>
+
+<div class="col-md-7">
 
 <h2 id="nombreServidor"></h2>
 
-<p id="ministerioServidor"></p>
+<h5 class="text-primary"
+id="ministerioPrincipal"></h5>
+
+<div id="ministeriosSecundarios"></div>
+
+</div>
+
+<div class="col-md-3 text-end">
+
+<span class="badge bg-success p-3">
+ACTIVO
+</span>
 
 </div>
 
@@ -49,38 +124,45 @@ class="perfil-avatar">
 
 </div>
 
-<div class="row mt-4">
+<div class="row">
 
-<div class="col-lg-4">
+<!-- SIDEBAR -->
 
-<div class="card-custom">
+<div class="col-md-4">
 
-<h5>Información General</h5>
+<div class="info-card">
 
-<hr>
+<h5 class="mb-4">
+Información General
+</h5>
 
 <p>
-<strong>Número:</strong>
+<i class="fa fa-id-card"></i>
+<b>ID:</b>
 <span id="numeroServidor"></span>
 </p>
 
 <p>
-<strong>Email:</strong>
-<span id="emailServidor"></span>
+<i class="fa fa-envelope"></i>
+<b>Email:</b>
+<span id="email"></span>
 </p>
 
 <p>
-<strong>Teléfono:</strong>
-<span id="telefonoServidor"></span>
+<i class="fa fa-phone"></i>
+<b>Teléfono:</b>
+<span id="telefono"></span>
 </p>
 
 <p>
-<strong>Grupo:</strong>
-<span id="grupoServidor"></span>
+<i class="fa fa-users"></i>
+<b>Grupo:</b>
+<span id="grupo"></span>
 </p>
 
 <p>
-<strong>Ingreso:</strong>
+<i class="fa fa-calendar"></i>
+<b>Ingreso:</b>
 <span id="fechaIngreso"></span>
 </p>
 
@@ -88,19 +170,23 @@ class="perfil-avatar">
 
 </div>
 
-<div class="col-lg-8">
+<!-- MAIN -->
 
-<div class="card-custom">
+<div class="col-md-8">
 
-<ul class="nav nav-tabs">
+<div class="info-card">
+
+<ul class="nav nav-tabs"
+id="tabsPerfil">
 
 <li class="nav-item">
 
-<button class="nav-link active"
+<button
+class="nav-link active"
 data-bs-toggle="tab"
-data-bs-target="#asistencias">
+data-bs-target="#timeline">
 
-Asistencias
+Timeline
 
 </button>
 
@@ -108,7 +194,8 @@ Asistencias
 
 <li class="nav-item">
 
-<button class="nav-link"
+<button
+class="nav-link"
 data-bs-toggle="tab"
 data-bs-target="#formacion">
 
@@ -118,21 +205,68 @@ Formación
 
 </li>
 
+<li class="nav-item">
+
+<button
+class="nav-link"
+data-bs-toggle="tab"
+data-bs-target="#asistencias">
+
+Asistencias
+
+</button>
+
+</li>
+
 </ul>
 
-<div class="tab-content mt-4">
+<div class="tab-content pt-4">
+
+<!-- TIMELINE -->
 
 <div class="tab-pane fade show active"
-id="asistencias">
+id="timeline">
 
-<div id="historialAsistencias"></div>
+<div id="timelineContent"></div>
 
 </div>
+
+<!-- FORMACION -->
 
 <div class="tab-pane fade"
 id="formacion">
 
-<div id="historialFormacion"></div>
+<div id="formacionContent"></div>
+
+</div>
+
+<!-- ASISTENCIAS -->
+
+<div class="tab-pane fade"
+id="asistencias">
+
+<div class="mb-3">
+
+<h4 id="porcentajeAsistencia">
+0%
+</h4>
+
+<p>Asistencia General</p>
+
+</div>
+
+<div class="progress"
+style="height:25px;">
+
+<div id="barraAsistencia"
+class="progress-bar"
+style="width:0%">
+
+0%
+
+</div>
+
+</div>
 
 </div>
 
@@ -151,9 +285,7 @@ id="formacion">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="js/config.js"></script>
-
 <script src="js/perfil.js"></script>
 
 </body>
-
 </html>
