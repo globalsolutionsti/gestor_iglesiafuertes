@@ -1,55 +1,120 @@
-let fotoBase64 = "";
+let tabla;
 
-async function activarCamara(){
+async function cargarServidores(){
 
-const video =
-document.getElementById("camera");
+mostrarLoader();
 
-const stream =
-await navigator.mediaDevices.getUserMedia({
+const callbackName =
+"jsonp_callback_" + Date.now();
 
-video:{
-facingMode:"user"
-},
-audio:false
+window[callbackName] = function(response){
+
+const data = response.data;
+
+let html = "";
+
+for(let i=1;i<data.length;i++){
+
+const s = data[i];
+
+html += `
+
+<tr>
+
+<td>
+
+<img src="${
+s[10] || 'https://i.pravatar.cc/150'
+}"
+
+class="avatar">
+
+</td>
+
+<td>
+
+<a href="perfil.html?id=${s[1]}"
+class="perfil-link">
+
+${s[2]} ${s[3]}
+
+</a>
+
+</td>
+
+<td>${s[6]}</td>
+
+<td>${s[7]}</td>
+
+<td>
+
+<span class="badge bg-success">
+
+${s[9]}
+
+</span>
+
+</td>
+
+<td>
+
+<button class="btn btn-primary btn-sm">
+
+<i class="fa fa-edit"></i>
+
+</button>
+
+<button class="btn btn-danger btn-sm">
+
+<i class="fa fa-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+document.getElementById(
+"tablaServidores"
+).innerHTML = html;
+
+if(tabla){
+
+tabla.destroy();
+
+}
+
+tabla = $("#tabla").DataTable({
+
+responsive:true,
+pageLength:10
 
 });
 
-video.srcObject = stream;
+ocultarLoader();
+
+document.body.removeChild(script);
+
+delete window[callbackName];
+
+};
+
+const script =
+document.createElement("script");
+
+script.src =
+
+`${API_URL}?action=getServidores&callback=${callbackName}`;
+
+document.body.appendChild(script);
 
 }
 
-function tomarFoto(){
-
-const video =
-document.getElementById("camera");
-
-const canvas =
-document.getElementById("canvas");
-
-const preview =
-document.getElementById("previewFoto");
-
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
-
-const ctx =
-canvas.getContext("2d");
-
-ctx.drawImage(
-video,
-0,
-0
-);
-
-fotoBase64 =
-canvas.toDataURL("image/jpeg");
-
-preview.src = fotoBase64;
-
-preview.style.display = "block";
-
-}
+cargarServidores();
 
 async function guardarServidor(){
 
@@ -103,19 +168,87 @@ await response.json();
 
 ocultarLoader();
 
+if(data.status){
+
 Swal.fire({
 
-icon:data.status
-? "success"
-: "error",
-
-title:data.message
+icon:"success",
+title:"Servidor guardado"
 
 });
 
-if(data.status){
+bootstrap.Modal
+.getInstance(
+document.getElementById(
+"modalServidor"
+)
+)
+.hide();
 
-location.reload();
+// LIMPIAR TABLA
+
+if(tabla){
+
+tabla.destroy();
+
+}
+
+// RECARGAR LISTADO
+
+cargarServidores();
+
+// LIMPIAR FORMULARIO
+
+document
+.getElementById(
+"numeroServidor"
+).value = "";
+
+document
+.getElementById(
+"nombre"
+).value = "";
+
+document
+.getElementById(
+"apellidos"
+).value = "";
+
+document
+.getElementById(
+"telefono"
+).value = "";
+
+document
+.getElementById(
+"email"
+).value = "";
+
+document
+.getElementById(
+"ministerio"
+).value = "";
+
+document
+.getElementById(
+"groupoConexion"
+).value = "";
+
+document
+.getElementById(
+"fechaIngreso"
+).value = "";
+
+fotoBase64 = "";
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+title:data.message
+
+});
 
 }
 
@@ -129,40 +262,6 @@ icon:"error",
 title:error.toString()
 
 });
-
-}
-
-}
-
-function mostrarLoader(){
-
-document.body.insertAdjacentHTML(
-
-"beforeend",
-
-`
-
-<div class="loader-overlay"
-id="loader">
-
-<div class="loader"></div>
-
-</div>
-
-`
-
-);
-
-}
-
-function ocultarLoader(){
-
-const loader =
-document.getElementById("loader");
-
-if(loader){
-
-loader.remove();
 
 }
 
