@@ -1,18 +1,11 @@
 let tabla = null;
 let fotoBase64 = "";
-let cargandoTabla = false;
 
-/* =========================================
+/* =====================================================
 CARGAR SERVIDORES
-========================================= */
+===================================================== */
 
 function cargarServidores(){
-
-if(cargandoTabla){
-return;
-}
-
-cargandoTabla = true;
 
 mostrarLoader();
 
@@ -23,9 +16,28 @@ window[callbackName] = function(response){
 
 try{
 
-const data = response.data || [];
+if(!response.status){
+
+Swal.fire({
+
+icon:"error",
+title:response.message
+
+});
+
+ocultarLoader();
+return;
+
+}
+
+const data =
+response.data || [];
 
 let html = "";
+
+/* =========================
+RECORRER DATOS
+========================= */
 
 for(let i=1;i<data.length;i++){
 
@@ -93,7 +105,7 @@ ${s[9] || 'ACTIVO'}
 }
 
 /* =========================
-DESTRUIR DATATABLE
+DESTRUIR TABLA
 ========================= */
 
 if($.fn.DataTable.isDataTable('#tabla')){
@@ -111,10 +123,10 @@ document.getElementById(
 ).innerHTML = html;
 
 /* =========================
-CREAR DATATABLE NUEVO
+CREAR DATATABLE
 ========================= */
 
-tabla = $("#tabla").DataTable({
+tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
@@ -129,7 +141,7 @@ console.error(error);
 Swal.fire({
 
 icon:"error",
-title:"Error cargando servidores"
+title:error.toString()
 
 });
 
@@ -137,21 +149,19 @@ title:"Error cargando servidores"
 
 ocultarLoader();
 
-cargandoTabla = false;
-
 /* =========================
-LIMPIAR JSONP
+LIMPIAR CALLBACK
 ========================= */
-
-try{
 
 delete window[callbackName];
 
 script.remove();
 
-}catch(e){}
-
 };
+
+/* =========================
+CREAR SCRIPT JSONP
+========================= */
 
 const script =
 document.createElement("script");
@@ -160,20 +170,35 @@ script.src =
 
 `${API_URL}?action=getServidores&callback=${callbackName}`;
 
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:"Error conectando Apps Script"
+
+});
+
+};
+
 document.body.appendChild(script);
 
 }
 
-/* =========================================
+/* =====================================================
 ACTIVAR CAMARA
-========================================= */
+===================================================== */
 
 async function activarCamara(){
 
 try{
 
 const video =
-document.getElementById("camera");
+document.getElementById(
+"camera"
+);
 
 const stream =
 await navigator.mediaDevices.getUserMedia({
@@ -200,28 +225,41 @@ title:"No se pudo activar cámara"
 
 }
 
-/* =========================================
+/* =====================================================
 TOMAR FOTO
-========================================= */
+===================================================== */
 
 function tomarFoto(){
 
 const video =
-document.getElementById("camera");
+document.getElementById(
+"camera"
+);
 
 const canvas =
-document.getElementById("canvas");
+document.getElementById(
+"canvas"
+);
 
 const preview =
-document.getElementById("previewFoto");
+document.getElementById(
+"previewFoto"
+);
 
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
+canvas.width =
+video.videoWidth;
+
+canvas.height =
+video.videoHeight;
 
 const ctx =
 canvas.getContext("2d");
 
-ctx.drawImage(video,0,0);
+ctx.drawImage(
+video,
+0,
+0
+);
 
 fotoBase64 =
 canvas.toDataURL(
@@ -229,16 +267,17 @@ canvas.toDataURL(
 0.8
 );
 
-preview.src = fotoBase64;
+preview.src =
+fotoBase64;
 
 preview.style.display =
 "block";
 
 }
 
-/* =========================================
+/* =====================================================
 GUARDAR SERVIDOR
-========================================= */
+===================================================== */
 
 async function guardarServidor(){
 
@@ -337,56 +376,25 @@ modal.hide();
 }
 
 /* =========================
-LIMPIAR FORMULARIO
+LIMPIAR FORM
 ========================= */
 
 document.getElementById(
-"numeroServidor"
-).value = "";
-
-document.getElementById(
-"nombre"
-).value = "";
-
-document.getElementById(
-"apellidos"
-).value = "";
-
-document.getElementById(
-"telefono"
-).value = "";
-
-document.getElementById(
-"email"
-).value = "";
-
-document.getElementById(
-"ministerio"
-).value = "";
-
-document.getElementById(
-"grupoConexion"
-).value = "";
-
-document.getElementById(
-"fechaIngreso"
-).value = "";
+"formServidor"
+).reset();
 
 fotoBase64 = "";
 
 document.getElementById(
 "previewFoto"
-).style.display = "none";
+).style.display =
+"none";
 
 /* =========================
 RECARGAR TABLA
 ========================= */
 
-setTimeout(()=>{
-
 cargarServidores();
-
-},500);
 
 }else{
 
@@ -414,9 +422,9 @@ title:error.toString()
 
 }
 
-/* =========================================
+/* =====================================================
 LOADER
-========================================= */
+===================================================== */
 
 function mostrarLoader(){
 
@@ -458,9 +466,9 @@ loader.remove();
 
 }
 
-/* =========================================
+/* =====================================================
 INIT
-========================================= */
+===================================================== */
 
 document.addEventListener(
 
