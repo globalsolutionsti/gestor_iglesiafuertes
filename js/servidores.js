@@ -12,6 +12,17 @@ mostrarLoader();
 const callbackName =
 "jsonp_callback_" + Date.now();
 
+/* =========================
+CREAR SCRIPT
+========================= */
+
+const script =
+document.createElement("script");
+
+/* =========================
+CALLBACK JSONP
+========================= */
+
 window[callbackName] = function(response){
 
 try{
@@ -21,7 +32,7 @@ if(!response.status){
 Swal.fire({
 
 icon:"error",
-title:response.message
+title:response.message || "Error cargando servidores"
 
 });
 
@@ -158,6 +169,10 @@ title:error.toString()
 
 }
 
+/* =========================
+OCULTAR LOADER
+========================= */
+
 ocultarLoader();
 
 /* =========================
@@ -168,7 +183,11 @@ try{
 
 delete window[callbackName];
 
-script.remove();
+if(script.parentNode){
+
+script.parentNode.removeChild(script);
+
+}
 
 }catch(e){
 
@@ -179,15 +198,8 @@ console.log(e);
 };
 
 /* =========================
-SCRIPT JSONP
+ERROR SCRIPT
 ========================= */
-
-const script =
-document.createElement("script");
-
-script.src =
-
-`${API_URL}?action=getServidores&callback=${callbackName}`;
 
 script.onerror = function(){
 
@@ -196,11 +208,23 @@ ocultarLoader();
 Swal.fire({
 
 icon:"error",
-title:"Error conectando Apps Script"
+title:"Error conexión Apps Script"
 
 });
 
 };
+
+/* =========================
+URL JSONP
+========================= */
+
+script.src =
+
+`${API_URL}?action=getServidores&callback=${callbackName}`;
+
+/* =========================
+INSERTAR SCRIPT
+========================= */
 
 document.body.appendChild(script);
 
