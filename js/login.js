@@ -1,11 +1,13 @@
 const form =
-document.getElementById("loginForm");
+document.getElementById(
+"loginForm"
+);
 
 form.addEventListener(
 
 "submit",
 
-function(e){
+async function(e){
 
 e.preventDefault();
 
@@ -21,38 +23,28 @@ document.getElementById(
 "password"
 ).value;
 
-/* =========================
-JSONP CALLBACK
-========================= */
+try{
 
-const callbackName =
-"login_callback_" + Date.now();
+const response =
+await fetch(
 
-window[callbackName] = function(response){
+`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+
+);
+
+const data =
+await response.json();
 
 ocultarLoader();
 
-try{
-
-if(response.status){
-
-/* =========================
-GUARDAR SESION
-========================= */
+if(data.status){
 
 localStorage.setItem(
 
 "user",
-
-JSON.stringify(
-response.user
-)
+JSON.stringify(data.user)
 
 );
-
-/* =========================
-REDIRECT
-========================= */
 
 window.location.href =
 "dashboard.html";
@@ -62,13 +54,15 @@ window.location.href =
 Swal.fire({
 
 icon:"error",
-title:response.message
+title:data.message
 
 });
 
 }
 
 }catch(error){
+
+ocultarLoader();
 
 Swal.fire({
 
@@ -78,42 +72,6 @@ title:error.toString()
 });
 
 }
-
-/* =========================
-LIMPIAR CALLBACK
-========================= */
-
-delete window[callbackName];
-
-script.remove();
-
-};
-
-/* =========================
-SCRIPT JSONP
-========================= */
-
-const script =
-document.createElement("script");
-
-script.src =
-
-`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&callback=${callbackName}`;
-
-script.onerror = function(){
-
-ocultarLoader();
-
-Swal.fire({
-
-icon:"error",
-title:"Error conexión Apps Script"
-
-});
-
-};
-
-document.body.appendChild(script);
 
 }
 
@@ -135,10 +93,25 @@ document.body.insertAdjacentHTML(
 
 `
 
-<div class="loader-overlay"
-id="loader">
+<div id="loader"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,.7);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+">
 
-<div class="loader"></div>
+<div class="spinner-border text-primary"
+style="
+width:4rem;
+height:4rem;
+"></div>
 
 </div>
 
