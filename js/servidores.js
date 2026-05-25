@@ -5,21 +5,20 @@ let fotoBase64 = "";
 CARGAR SERVIDORES
 ===================================================== */
 
-async function cargarServidores(){
+function cargarServidores(){
 
 mostrarLoader();
 
+const callbackName =
+"servidores_callback_" + Date.now();
+
+/* =====================================================
+CALLBACK GLOBAL
+===================================================== */
+
+window[callbackName] = function(result){
+
 try{
-
-const response =
-await fetch(
-
-`${API_URL}?action=getServidores`
-
-);
-
-const result =
-await response.json();
 
 if(!result.status){
 
@@ -28,7 +27,7 @@ ocultarLoader();
 Swal.fire({
 
 icon:"error",
-title:result.message || "Error cargando servidores"
+title:result.message
 
 });
 
@@ -140,7 +139,7 @@ document.getElementById(
 ).innerHTML = html;
 
 /* =====================================================
-CREAR DATATABLE
+DATATABLE
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
@@ -148,6 +147,7 @@ tabla = $('#tabla').DataTable({
 responsive:true,
 pageLength:10,
 destroy:true,
+
 language:{
 url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
 }
@@ -156,11 +156,19 @@ url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
 
 ocultarLoader();
 
+/* =====================================================
+LIMPIAR CALLBACK
+===================================================== */
+
+delete window[callbackName];
+
+script.remove();
+
 }catch(error){
 
-console.error(error);
-
 ocultarLoader();
+
+console.error(error);
 
 Swal.fire({
 
@@ -170,6 +178,34 @@ title:error.toString()
 });
 
 }
+
+};
+
+/* =====================================================
+SCRIPT JSONP
+===================================================== */
+
+const script =
+document.createElement("script");
+
+script.src =
+
+`${API_URL}?action=getServidores&callback=${callbackName}`;
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:"Error conexión Apps Script"
+
+});
+
+};
+
+document.body.appendChild(script);
 
 }
 
@@ -182,9 +218,7 @@ async function activarCamara(){
 try{
 
 const video =
-document.getElementById(
-"camera"
-);
+document.getElementById("camera");
 
 const stream =
 await navigator.mediaDevices.getUserMedia({
@@ -218,34 +252,21 @@ TOMAR FOTO
 function tomarFoto(){
 
 const video =
-document.getElementById(
-"camera"
-);
+document.getElementById("camera");
 
 const canvas =
-document.getElementById(
-"canvas"
-);
+document.getElementById("canvas");
 
 const preview =
-document.getElementById(
-"previewFoto"
-);
+document.getElementById("previewFoto");
 
-canvas.width =
-video.videoWidth;
-
-canvas.height =
-video.videoHeight;
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
 
 const ctx =
 canvas.getContext("2d");
 
-ctx.drawImage(
-video,
-0,
-0
-);
+ctx.drawImage(video,0,0);
 
 fotoBase64 =
 canvas.toDataURL(
@@ -272,44 +293,28 @@ mostrarLoader();
 const body = {
 
 numeroServidor:
-document.getElementById(
-"numeroServidor"
-).value,
+document.getElementById("numeroServidor").value,
 
 nombre:
-document.getElementById(
-"nombre"
-).value,
+document.getElementById("nombre").value,
 
 apellidos:
-document.getElementById(
-"apellidos"
-).value,
+document.getElementById("apellidos").value,
 
 telefono:
-document.getElementById(
-"telefono"
-).value,
+document.getElementById("telefono").value,
 
 email:
-document.getElementById(
-"email"
-).value,
+document.getElementById("email").value,
 
 ministerio:
-document.getElementById(
-"ministerio"
-).value,
+document.getElementById("ministerio").value,
 
 grupoConexion:
-document.getElementById(
-"grupoConexion"
-).value,
+document.getElementById("grupoConexion").value,
 
 fechaIngreso:
-document.getElementById(
-"fechaIngreso"
-).value,
+document.getElementById("fechaIngreso").value,
 
 foto:fotoBase64
 
@@ -344,35 +349,18 @@ title:"Servidor guardado correctamente"
 
 });
 
-/* =====================================================
-CERRAR MODAL
-===================================================== */
-
-const modalElement =
-document.getElementById(
-"modalServidor"
-);
-
 const modal =
 bootstrap.Modal.getInstance(
-modalElement
+document.getElementById(
+"modalServidor"
+)
 );
 
 if(modal){
-
 modal.hide();
-
 }
 
-/* =====================================================
-LIMPIAR FORMULARIO
-===================================================== */
-
 limpiarFormulario();
-
-/* =====================================================
-RECARGAR TABLA
-===================================================== */
 
 setTimeout(()=>{
 
@@ -425,22 +413,16 @@ const campos = [
 
 ];
 
-campos.forEach(id => {
+campos.forEach(id=>{
 
 const el =
 document.getElementById(id);
 
 if(el){
-
 el.value = "";
-
 }
 
 });
-
-/* =====================================================
-RESET FOTO
-===================================================== */
 
 fotoBase64 = "";
 
@@ -458,10 +440,6 @@ preview.src = "";
 
 }
 
-/* =====================================================
-DETENER CAMARA
-===================================================== */
-
 const video =
 document.getElementById(
 "camera"
@@ -471,11 +449,7 @@ if(video && video.srcObject){
 
 video.srcObject
 .getTracks()
-.forEach(track => {
-
-track.stop();
-
-});
+.forEach(track=>track.stop());
 
 video.srcObject = null;
 
@@ -484,7 +458,7 @@ video.srcObject = null;
 }
 
 /* =====================================================
-EDITAR SERVIDOR
+EDITAR
 ===================================================== */
 
 function editarServidor(id){
@@ -499,7 +473,7 @@ title:"Módulo editar próximamente"
 }
 
 /* =====================================================
-ELIMINAR SERVIDOR
+ELIMINAR
 ===================================================== */
 
 function eliminarServidor(id){
@@ -507,29 +481,10 @@ function eliminarServidor(id){
 Swal.fire({
 
 title:"¿Eliminar servidor?",
-
 text:"Esta acción no se puede deshacer",
-
 icon:"warning",
-
 showCancelButton:true,
-
-confirmButtonText:"Eliminar",
-
-cancelButtonText:"Cancelar"
-
-}).then((result)=>{
-
-if(result.isConfirmed){
-
-Swal.fire({
-
-icon:"success",
-title:"Servidor eliminado"
-
-});
-
-}
+confirmButtonText:"Eliminar"
 
 });
 
@@ -542,9 +497,7 @@ EXPORTAR EXCEL
 function exportarExcel(){
 
 const tablaHTML =
-document.getElementById(
-"tabla"
-);
+document.getElementById("tabla");
 
 const workbook =
 XLSX.utils.table_to_book(
@@ -618,21 +571,13 @@ height:4rem;
 
 }
 
-/* =====================================================
-OCULTAR LOADER
-===================================================== */
-
 function ocultarLoader(){
 
 const loader =
-document.getElementById(
-"loader"
-);
+document.getElementById("loader");
 
 if(loader){
-
 loader.remove();
-
 }
 
 }
