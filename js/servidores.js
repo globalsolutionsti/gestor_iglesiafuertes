@@ -1,11 +1,18 @@
-let tabla;
+let tabla = null;
 let fotoBase64 = "";
+let cargandoTabla = false;
 
 /* =========================================
 CARGAR SERVIDORES
 ========================================= */
 
-async function cargarServidores(){
+function cargarServidores(){
+
+if(cargandoTabla){
+return;
+}
+
+cargandoTabla = true;
 
 mostrarLoader();
 
@@ -14,7 +21,9 @@ const callbackName =
 
 window[callbackName] = function(response){
 
-const data = response.data;
+try{
+
+const data = response.data || [];
 
 let html = "";
 
@@ -47,15 +56,15 @@ ${s[2]} ${s[3]}
 
 </td>
 
-<td>${s[6]}</td>
+<td>${s[6] || ''}</td>
 
-<td>${s[7]}</td>
+<td>${s[7] || ''}</td>
 
 <td>
 
 <span class="badge bg-success">
 
-${s[9]}
+${s[9] || 'ACTIVO'}
 
 </span>
 
@@ -83,28 +92,64 @@ ${s[9]}
 
 }
 
+/* =========================
+DESTRUIR DATATABLE
+========================= */
+
+if($.fn.DataTable.isDataTable('#tabla')){
+
+$('#tabla').DataTable().destroy();
+
+}
+
+/* =========================
+RENDER TABLA
+========================= */
+
 document.getElementById(
 "tablaServidores"
 ).innerHTML = html;
 
-if(tabla){
-
-tabla.destroy();
-
-}
+/* =========================
+CREAR DATATABLE NUEVO
+========================= */
 
 tabla = $("#tabla").DataTable({
 
 responsive:true,
-pageLength:10
+pageLength:10,
+destroy:true
 
 });
 
+}catch(error){
+
+console.error(error);
+
+Swal.fire({
+
+icon:"error",
+title:"Error cargando servidores"
+
+});
+
+}
+
 ocultarLoader();
 
-document.body.removeChild(script);
+cargandoTabla = false;
+
+/* =========================
+LIMPIAR JSONP
+========================= */
+
+try{
 
 delete window[callbackName];
+
+script.remove();
+
+}catch(e){}
 
 };
 
@@ -176,11 +221,7 @@ canvas.height = video.videoHeight;
 const ctx =
 canvas.getContext("2d");
 
-ctx.drawImage(
-video,
-0,
-0
-);
+ctx.drawImage(video,0,0);
 
 fotoBase64 =
 canvas.toDataURL(
@@ -278,16 +319,25 @@ title:"Servidor guardado"
 
 });
 
-bootstrap.Modal
-.getInstance(
+/* =========================
+CERRAR MODAL
+========================= */
+
+const modal =
+bootstrap.Modal.getInstance(
 document.getElementById(
 "modalServidor"
 )
-)
-.hide();
+);
+
+if(modal){
+
+modal.hide();
+
+}
 
 /* =========================
-LIMPIAR FORM
+LIMPIAR FORMULARIO
 ========================= */
 
 document.getElementById(
@@ -315,7 +365,7 @@ document.getElementById(
 ).value = "";
 
 document.getElementById(
-"groupoConexion"
+"grupoConexion"
 ).value = "";
 
 document.getElementById(
@@ -332,7 +382,11 @@ document.getElementById(
 RECARGAR TABLA
 ========================= */
 
+setTimeout(()=>{
+
 cargarServidores();
+
+},500);
 
 }else{
 
@@ -408,4 +462,14 @@ loader.remove();
 INIT
 ========================================= */
 
+document.addEventListener(
+
+"DOMContentLoaded",
+
+function(){
+
 cargarServidores();
+
+}
+
+);
