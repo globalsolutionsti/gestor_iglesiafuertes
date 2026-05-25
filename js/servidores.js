@@ -1,4 +1,9 @@
 let tabla;
+let fotoBase64 = "";
+
+/* =========================================
+CARGAR SERVIDORES
+========================================= */
 
 async function cargarServidores(){
 
@@ -114,7 +119,85 @@ document.body.appendChild(script);
 
 }
 
-cargarServidores();
+/* =========================================
+ACTIVAR CAMARA
+========================================= */
+
+async function activarCamara(){
+
+try{
+
+const video =
+document.getElementById("camera");
+
+const stream =
+await navigator.mediaDevices.getUserMedia({
+
+video:{
+facingMode:"user"
+},
+audio:false
+
+});
+
+video.srcObject = stream;
+
+}catch(error){
+
+Swal.fire({
+
+icon:"error",
+title:"No se pudo activar cámara"
+
+});
+
+}
+
+}
+
+/* =========================================
+TOMAR FOTO
+========================================= */
+
+function tomarFoto(){
+
+const video =
+document.getElementById("camera");
+
+const canvas =
+document.getElementById("canvas");
+
+const preview =
+document.getElementById("previewFoto");
+
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+
+const ctx =
+canvas.getContext("2d");
+
+ctx.drawImage(
+video,
+0,
+0
+);
+
+fotoBase64 =
+canvas.toDataURL(
+"image/jpeg",
+0.8
+);
+
+preview.src = fotoBase64;
+
+preview.style.display =
+"block";
+
+}
+
+/* =========================================
+GUARDAR SERVIDOR
+========================================= */
 
 async function guardarServidor(){
 
@@ -123,28 +206,44 @@ mostrarLoader();
 const body = {
 
 numeroServidor:
-document.getElementById("numeroServidor").value,
+document.getElementById(
+"numeroServidor"
+).value,
 
 nombre:
-document.getElementById("nombre").value,
+document.getElementById(
+"nombre"
+).value,
 
 apellidos:
-document.getElementById("apellidos").value,
+document.getElementById(
+"apellidos"
+).value,
 
 telefono:
-document.getElementById("telefono").value,
+document.getElementById(
+"telefono"
+).value,
 
 email:
-document.getElementById("email").value,
+document.getElementById(
+"email"
+).value,
 
 ministerio:
-document.getElementById("ministerio").value,
+document.getElementById(
+"ministerio"
+).value,
 
 grupoConexion:
-document.getElementById("grupoConexion").value,
+document.getElementById(
+"grupoConexion"
+).value,
 
 fechaIngreso:
-document.getElementById("fechaIngreso").value,
+document.getElementById(
+"fechaIngreso"
+).value,
 
 foto:fotoBase64
 
@@ -152,9 +251,11 @@ foto:fotoBase64
 
 try{
 
-const response = await fetch(
+const response =
+await fetch(
 
-API_URL + "?action=guardarServidor",
+API_URL +
+"?action=guardarServidor",
 
 {
 method:"POST",
@@ -185,61 +286,53 @@ document.getElementById(
 )
 .hide();
 
-// LIMPIAR TABLA
+/* =========================
+LIMPIAR FORM
+========================= */
 
-if(tabla){
-
-tabla.destroy();
-
-}
-
-// RECARGAR LISTADO
-
-cargarServidores();
-
-// LIMPIAR FORMULARIO
-
-document
-.getElementById(
+document.getElementById(
 "numeroServidor"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "nombre"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "apellidos"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "telefono"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "email"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "ministerio"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "groupoConexion"
 ).value = "";
 
-document
-.getElementById(
+document.getElementById(
 "fechaIngreso"
 ).value = "";
 
 fotoBase64 = "";
+
+document.getElementById(
+"previewFoto"
+).style.display = "none";
+
+/* =========================
+RECARGAR TABLA
+========================= */
+
+cargarServidores();
 
 }else{
 
@@ -266,3 +359,53 @@ title:error.toString()
 }
 
 }
+
+/* =========================================
+LOADER
+========================================= */
+
+function mostrarLoader(){
+
+if(document.getElementById("loader")){
+return;
+}
+
+document.body.insertAdjacentHTML(
+
+"beforeend",
+
+`
+
+<div class="loader-overlay"
+id="loader">
+
+<div class="loader"></div>
+
+</div>
+
+`
+
+);
+
+}
+
+function ocultarLoader(){
+
+const loader =
+document.getElementById(
+"loader"
+);
+
+if(loader){
+
+loader.remove();
+
+}
+
+}
+
+/* =========================================
+INIT
+========================================= */
+
+cargarServidores();
