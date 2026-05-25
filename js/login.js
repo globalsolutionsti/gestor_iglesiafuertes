@@ -1,13 +1,11 @@
 const form =
-document.getElementById(
-"loginForm"
-);
+document.getElementById("loginForm");
 
 form.addEventListener(
 
 "submit",
 
-async function(e){
+function(e){
 
 e.preventDefault();
 
@@ -23,26 +21,32 @@ document.getElementById(
 "password"
 ).value;
 
-try{
+/* =====================================================
+CALLBACK JSONP
+===================================================== */
 
-const response =
-await fetch(
+const callbackName =
+"login_callback_" + Date.now();
 
-`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+/* =====================================================
+FUNCIÓN GLOBAL
+===================================================== */
 
-);
-
-const data =
-await response.json();
+window[callbackName] = function(response){
 
 ocultarLoader();
 
-if(data.status){
+try{
+
+if(response.status){
 
 localStorage.setItem(
 
 "user",
-JSON.stringify(data.user)
+
+JSON.stringify(
+response.user
+)
 
 );
 
@@ -54,15 +58,13 @@ window.location.href =
 Swal.fire({
 
 icon:"error",
-title:data.message
+title:response.message
 
 });
 
 }
 
 }catch(error){
-
-ocultarLoader();
 
 Swal.fire({
 
@@ -72,6 +74,46 @@ title:error.toString()
 });
 
 }
+
+/* =====================================================
+LIMPIAR
+===================================================== */
+
+try{
+
+delete window[callbackName];
+
+script.remove();
+
+}catch(e){}
+
+};
+
+/* =====================================================
+SCRIPT JSONP
+===================================================== */
+
+const script =
+document.createElement("script");
+
+script.src =
+
+`${API_URL}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&callback=${callbackName}`;
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:"Error conexión Apps Script"
+
+});
+
+};
+
+document.body.appendChild(script);
 
 }
 
@@ -93,7 +135,8 @@ document.body.insertAdjacentHTML(
 
 `
 
-<div id="loader"
+<div class="loader-overlay"
+id="loader"
 style="
 position:fixed;
 top:0;
@@ -111,7 +154,9 @@ z-index:99999;
 style="
 width:4rem;
 height:4rem;
-"></div>
+">
+
+</div>
 
 </div>
 
