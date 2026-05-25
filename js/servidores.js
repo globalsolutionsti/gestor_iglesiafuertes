@@ -53,14 +53,20 @@ html += `
 s[10] || 'https://i.pravatar.cc/150'
 }"
 
-class="avatar">
+class="avatar rounded-circle"
+style="
+width:50px;
+height:50px;
+object-fit:cover;
+border:2px solid #0d6efd;
+">
 
 </td>
 
 <td>
 
 <a href="perfil.html?id=${s[1]}"
-class="perfil-link">
+class="perfil-link fw-bold text-decoration-none">
 
 ${s[2]} ${s[3]}
 
@@ -84,13 +90,15 @@ ${s[9] || 'ACTIVO'}
 
 <td>
 
-<button class="btn btn-primary btn-sm">
+<button
+class="btn btn-primary btn-sm">
 
 <i class="fa fa-edit"></i>
 
 </button>
 
-<button class="btn btn-danger btn-sm">
+<button
+class="btn btn-danger btn-sm">
 
 <i class="fa fa-trash"></i>
 
@@ -105,7 +113,7 @@ ${s[9] || 'ACTIVO'}
 }
 
 /* =========================
-DESTRUIR TABLA
+DESTRUIR DATATABLE
 ========================= */
 
 if($.fn.DataTable.isDataTable('#tabla')){
@@ -130,7 +138,10 @@ tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
-destroy:true
+destroy:true,
+language:{
+url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+}
 
 });
 
@@ -153,14 +164,22 @@ ocultarLoader();
 LIMPIAR CALLBACK
 ========================= */
 
+try{
+
 delete window[callbackName];
 
 script.remove();
 
+}catch(e){
+
+console.log(e);
+
+}
+
 };
 
 /* =========================
-CREAR SCRIPT JSONP
+SCRIPT JSONP
 ========================= */
 
 const script =
@@ -354,7 +373,7 @@ if(data.status){
 Swal.fire({
 
 icon:"success",
-title:"Servidor guardado"
+title:"Servidor guardado correctamente"
 
 });
 
@@ -376,19 +395,77 @@ modal.hide();
 }
 
 /* =========================
-LIMPIAR FORM
+LIMPIAR CAMPOS
 ========================= */
 
-document.getElementById(
-"formServidor"
-).reset();
+const campos = [
+
+"numeroServidor",
+"nombre",
+"apellidos",
+"telefono",
+"email",
+"ministerio",
+"grupoConexion",
+"fechaIngreso"
+
+];
+
+campos.forEach(id => {
+
+const el =
+document.getElementById(id);
+
+if(el){
+
+el.value = "";
+
+}
+
+});
+
+/* =========================
+RESET FOTO
+========================= */
 
 fotoBase64 = "";
 
+const preview =
 document.getElementById(
 "previewFoto"
-).style.display =
+);
+
+if(preview){
+
+preview.style.display =
 "none";
+
+preview.src = "";
+
+}
+
+/* =========================
+DETENER CAMARA
+========================= */
+
+const video =
+document.getElementById(
+"camera"
+);
+
+if(video && video.srcObject){
+
+video.srcObject
+.getTracks()
+.forEach(track => {
+
+track.stop();
+
+});
+
+video.srcObject = null;
+
+}
 
 /* =========================
 RECARGAR TABLA
@@ -439,9 +516,27 @@ document.body.insertAdjacentHTML(
 `
 
 <div class="loader-overlay"
-id="loader">
+id="loader"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,.7);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+">
 
-<div class="loader"></div>
+<div class="spinner-border text-primary"
+style="
+width:4rem;
+height:4rem;
+">
+
+</div>
 
 </div>
 
