@@ -5,60 +5,39 @@ let fotoBase64 = "";
 CARGAR SERVIDORES
 ===================================================== */
 
-function cargarServidores(){
+async function cargarServidores(){
 
 mostrarLoader();
 
-const callbackName =
-"jsonp_callback_" + Date.now();
-
-const script =
-document.createElement("script");
-
-/* =====================================================
-TIMEOUT SEGURIDAD
-===================================================== */
-
-const timeout = setTimeout(()=>{
-
-ocultarLoader();
-
-Swal.fire({
-
-icon:"error",
-title:"Apps Script tardó demasiado"
-
-});
-
-},15000);
-
-/* =====================================================
-CALLBACK JSONP
-===================================================== */
-
-window[callbackName] = function(response){
-
-clearTimeout(timeout);
-
 try{
 
-if(!response.status){
+const response =
+await fetch(
+
+`${API_URL}?action=getServidores`
+
+);
+
+const result =
+await response.json();
+
+if(!result.status){
+
+ocultarLoader();
 
 Swal.fire({
 
 icon:"error",
-title:response.message ||
-"Error cargando servidores"
+title:result.message || "Error cargando servidores"
 
 });
 
-ocultarLoader();
 return;
 
 }
 
 const data =
-response.data || [];
+result.data || [];
 
 let html = "";
 
@@ -116,17 +95,19 @@ ${s[9] || 'ACTIVO'}
 
 </td>
 
-<td>
+<td class="d-flex gap-2">
 
 <button
-class="btn btn-primary btn-sm">
+class="btn btn-primary btn-sm"
+onclick="editarServidor('${s[0]}')">
 
 <i class="fa fa-edit"></i>
 
 </button>
 
 <button
-class="btn btn-danger btn-sm">
+class="btn btn-danger btn-sm"
+onclick="eliminarServidor('${s[0]}')">
 
 <i class="fa fa-trash"></i>
 
@@ -141,7 +122,7 @@ class="btn btn-danger btn-sm">
 }
 
 /* =====================================================
-DESTRUIR TABLA
+DESTRUIR DATATABLE
 ===================================================== */
 
 if($.fn.DataTable.isDataTable('#tabla')){
@@ -159,34 +140,21 @@ document.getElementById(
 ).innerHTML = html;
 
 /* =====================================================
-DATATABLE
+CREAR DATATABLE
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
-destroy:true
+destroy:true,
+language:{
+url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+}
 
 });
 
-/* =====================================================
-OCULTAR LOADER
-===================================================== */
-
 ocultarLoader();
-
-/* =====================================================
-LIMPIAR CALLBACK
-===================================================== */
-
-delete window[callbackName];
-
-if(script.parentNode){
-
-script.parentNode.removeChild(script);
-
-}
 
 }catch(error){
 
@@ -202,22 +170,6 @@ title:error.toString()
 });
 
 }
-
-};
-
-/* =====================================================
-URL JSONP
-===================================================== */
-
-script.src =
-
-`${API_URL}?action=getServidores&callback=${callbackName}`;
-
-/* =====================================================
-INSERTAR SCRIPT
-===================================================== */
-
-document.body.appendChild(script);
 
 }
 
@@ -388,7 +340,7 @@ if(data.status){
 Swal.fire({
 
 icon:"success",
-title:"Servidor guardado"
+title:"Servidor guardado correctamente"
 
 });
 
@@ -396,11 +348,14 @@ title:"Servidor guardado"
 CERRAR MODAL
 ===================================================== */
 
-const modal =
-bootstrap.Modal.getInstance(
+const modalElement =
 document.getElementById(
 "modalServidor"
-)
+);
+
+const modal =
+bootstrap.Modal.getInstance(
+modalElement
 );
 
 if(modal){
@@ -410,10 +365,55 @@ modal.hide();
 }
 
 /* =====================================================
-LIMPIAR CAMPOS
+LIMPIAR FORMULARIO
 ===================================================== */
 
-[
+limpiarFormulario();
+
+/* =====================================================
+RECARGAR TABLA
+===================================================== */
+
+setTimeout(()=>{
+
+cargarServidores();
+
+},500);
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+title:data.message
+
+});
+
+}
+
+}catch(error){
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:error.toString()
+
+});
+
+}
+
+}
+
+/* =====================================================
+LIMPIAR FORMULARIO
+===================================================== */
+
+function limpiarFormulario(){
+
+const campos = [
+
 "numeroServidor",
 "nombre",
 "apellidos",
@@ -423,7 +423,9 @@ LIMPIAR CAMPOS
 "grupoConexion",
 "fechaIngreso"
 
-].forEach(id => {
+];
+
+campos.forEach(id => {
 
 const el =
 document.getElementById(id);
@@ -469,45 +471,101 @@ if(video && video.srcObject){
 
 video.srcObject
 .getTracks()
-.forEach(track=>track.stop());
+.forEach(track => {
+
+track.stop();
+
+});
 
 video.srcObject = null;
 
 }
 
+}
+
 /* =====================================================
-RECARGAR TABLA
+EDITAR SERVIDOR
 ===================================================== */
 
-setTimeout(()=>{
-
-cargarServidores();
-
-},800);
-
-}else{
+function editarServidor(id){
 
 Swal.fire({
 
-icon:"error",
-title:data.message
+icon:"info",
+title:"Módulo editar próximamente"
 
 });
 
 }
 
-}catch(error){
+/* =====================================================
+ELIMINAR SERVIDOR
+===================================================== */
 
-ocultarLoader();
+function eliminarServidor(id){
 
 Swal.fire({
 
-icon:"error",
-title:error.toString()
+title:"¿Eliminar servidor?",
+
+text:"Esta acción no se puede deshacer",
+
+icon:"warning",
+
+showCancelButton:true,
+
+confirmButtonText:"Eliminar",
+
+cancelButtonText:"Cancelar"
+
+}).then((result)=>{
+
+if(result.isConfirmed){
+
+Swal.fire({
+
+icon:"success",
+title:"Servidor eliminado"
 
 });
 
 }
+
+});
+
+}
+
+/* =====================================================
+EXPORTAR EXCEL
+===================================================== */
+
+function exportarExcel(){
+
+const tablaHTML =
+document.getElementById(
+"tabla"
+);
+
+const workbook =
+XLSX.utils.table_to_book(
+tablaHTML,
+{sheet:"Servidores"}
+);
+
+XLSX.writeFile(
+workbook,
+"servidores.xlsx"
+);
+
+}
+
+/* =====================================================
+EXPORTAR PDF
+===================================================== */
+
+function exportarPDF(){
+
+window.print();
 
 }
 
@@ -527,7 +585,8 @@ document.body.insertAdjacentHTML(
 
 `
 
-<div id="loader"
+<div class="loader-overlay"
+id="loader"
 
 style="
 position:fixed;
@@ -543,6 +602,7 @@ z-index:99999;
 ">
 
 <div class="spinner-border text-primary"
+
 style="
 width:4rem;
 height:4rem;
@@ -557,6 +617,10 @@ height:4rem;
 );
 
 }
+
+/* =====================================================
+OCULTAR LOADER
+===================================================== */
 
 function ocultarLoader(){
 
@@ -581,7 +645,7 @@ document.addEventListener(
 
 "DOMContentLoaded",
 
-()=>{
+function(){
 
 cargarServidores();
 
