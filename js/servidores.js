@@ -12,18 +12,33 @@ mostrarLoader();
 const callbackName =
 "jsonp_callback_" + Date.now();
 
-/* =========================
-CREAR SCRIPT
-========================= */
-
 const script =
 document.createElement("script");
 
-/* =========================
+/* =====================================================
+TIMEOUT SEGURIDAD
+===================================================== */
+
+const timeout = setTimeout(()=>{
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+title:"Apps Script tardó demasiado"
+
+});
+
+},15000);
+
+/* =====================================================
 CALLBACK JSONP
-========================= */
+===================================================== */
 
 window[callbackName] = function(response){
+
+clearTimeout(timeout);
 
 try{
 
@@ -32,7 +47,8 @@ if(!response.status){
 Swal.fire({
 
 icon:"error",
-title:response.message || "Error cargando servidores"
+title:response.message ||
+"Error cargando servidores"
 
 });
 
@@ -46,9 +62,9 @@ response.data || [];
 
 let html = "";
 
-/* =========================
-RECORRER DATOS
-========================= */
+/* =====================================================
+RECORRER SERVIDORES
+===================================================== */
 
 for(let i=1;i<data.length;i++){
 
@@ -64,7 +80,8 @@ html += `
 s[10] || 'https://i.pravatar.cc/150'
 }"
 
-class="avatar rounded-circle"
+class="rounded-circle"
+
 style="
 width:50px;
 height:50px;
@@ -77,7 +94,7 @@ border:2px solid #0d6efd;
 <td>
 
 <a href="perfil.html?id=${s[1]}"
-class="perfil-link fw-bold text-decoration-none">
+class="fw-bold text-decoration-none">
 
 ${s[2]} ${s[3]}
 
@@ -123,9 +140,9 @@ class="btn btn-danger btn-sm">
 
 }
 
-/* =========================
-DESTRUIR DATATABLE
-========================= */
+/* =====================================================
+DESTRUIR TABLA
+===================================================== */
 
 if($.fn.DataTable.isDataTable('#tabla')){
 
@@ -133,32 +150,49 @@ $('#tabla').DataTable().destroy();
 
 }
 
-/* =========================
+/* =====================================================
 RENDER TABLA
-========================= */
+===================================================== */
 
 document.getElementById(
 "tablaServidores"
 ).innerHTML = html;
 
-/* =========================
-CREAR DATATABLE
-========================= */
+/* =====================================================
+DATATABLE
+===================================================== */
 
 tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
-destroy:true,
-language:{
-url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
-}
+destroy:true
 
 });
+
+/* =====================================================
+OCULTAR LOADER
+===================================================== */
+
+ocultarLoader();
+
+/* =====================================================
+LIMPIAR CALLBACK
+===================================================== */
+
+delete window[callbackName];
+
+if(script.parentNode){
+
+script.parentNode.removeChild(script);
+
+}
 
 }catch(error){
 
 console.error(error);
+
+ocultarLoader();
 
 Swal.fire({
 
@@ -169,62 +203,19 @@ title:error.toString()
 
 }
 
-/* =========================
-OCULTAR LOADER
-========================= */
-
-ocultarLoader();
-
-/* =========================
-LIMPIAR CALLBACK
-========================= */
-
-try{
-
-delete window[callbackName];
-
-if(script.parentNode){
-
-script.parentNode.removeChild(script);
-
-}
-
-}catch(e){
-
-console.log(e);
-
-}
-
 };
 
-/* =========================
-ERROR SCRIPT
-========================= */
-
-script.onerror = function(){
-
-ocultarLoader();
-
-Swal.fire({
-
-icon:"error",
-title:"Error conexión Apps Script"
-
-});
-
-};
-
-/* =========================
+/* =====================================================
 URL JSONP
-========================= */
+===================================================== */
 
 script.src =
 
 `${API_URL}?action=getServidores&callback=${callbackName}`;
 
-/* =========================
+/* =====================================================
 INSERTAR SCRIPT
-========================= */
+===================================================== */
 
 document.body.appendChild(script);
 
@@ -397,13 +388,13 @@ if(data.status){
 Swal.fire({
 
 icon:"success",
-title:"Servidor guardado correctamente"
+title:"Servidor guardado"
 
 });
 
-/* =========================
+/* =====================================================
 CERRAR MODAL
-========================= */
+===================================================== */
 
 const modal =
 bootstrap.Modal.getInstance(
@@ -418,12 +409,11 @@ modal.hide();
 
 }
 
-/* =========================
+/* =====================================================
 LIMPIAR CAMPOS
-========================= */
+===================================================== */
 
-const campos = [
-
+[
 "numeroServidor",
 "nombre",
 "apellidos",
@@ -433,9 +423,7 @@ const campos = [
 "grupoConexion",
 "fechaIngreso"
 
-];
-
-campos.forEach(id => {
+].forEach(id => {
 
 const el =
 document.getElementById(id);
@@ -448,9 +436,9 @@ el.value = "";
 
 });
 
-/* =========================
+/* =====================================================
 RESET FOTO
-========================= */
+===================================================== */
 
 fotoBase64 = "";
 
@@ -468,9 +456,9 @@ preview.src = "";
 
 }
 
-/* =========================
+/* =====================================================
 DETENER CAMARA
-========================= */
+===================================================== */
 
 const video =
 document.getElementById(
@@ -481,21 +469,21 @@ if(video && video.srcObject){
 
 video.srcObject
 .getTracks()
-.forEach(track => {
-
-track.stop();
-
-});
+.forEach(track=>track.stop());
 
 video.srcObject = null;
 
 }
 
-/* =========================
+/* =====================================================
 RECARGAR TABLA
-========================= */
+===================================================== */
+
+setTimeout(()=>{
 
 cargarServidores();
+
+},800);
 
 }else{
 
@@ -539,8 +527,8 @@ document.body.insertAdjacentHTML(
 
 `
 
-<div class="loader-overlay"
-id="loader"
+<div id="loader"
+
 style="
 position:fixed;
 top:0;
@@ -593,7 +581,7 @@ document.addEventListener(
 
 "DOMContentLoaded",
 
-function(){
+()=>{
 
 cargarServidores();
 
