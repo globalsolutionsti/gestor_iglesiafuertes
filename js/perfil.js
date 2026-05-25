@@ -3,30 +3,29 @@ new URLSearchParams(
 window.location.search
 );
 
-const id = params.get("id");
+const id =
+params.get("id");
 
-cargarPerfil();
+async function cargarPerfil(){
 
-function cargarPerfil(){
+try{
 
-mostrarLoader();
+const response =
+await fetch(
 
-const callbackName =
-"jsonp_callback_" + Date.now();
+`${API_URL}?action=getPerfilServidor&id=${id}`
 
-window[callbackName] = function(response){
+);
 
-const data = response.data;
+const result =
+await response.json();
 
-const servidor =
-data.find(s => s[1] == id);
-
-if(!servidor){
+if(!result.status){
 
 Swal.fire({
 
 icon:"error",
-title:"Servidor no encontrado"
+title:result.message
 
 });
 
@@ -34,142 +33,178 @@ return;
 
 }
 
+const s =
+result.servidor;
+
+/* ======================================
+HEADER
+====================================== */
+
 document.getElementById(
 "fotoServidor"
-).src = servidor[10];
+).src =
+s.foto || "https://i.pravatar.cc/200";
 
 document.getElementById(
 "nombreServidor"
 ).innerText =
-servidor[2] + " " + servidor[3];
+`${s.nombre} ${s.apellidos}`;
 
 document.getElementById(
-"ministerioServidor"
+"ministerioPrincipal"
 ).innerText =
-servidor[6];
+s.ministerio;
 
 document.getElementById(
 "numeroServidor"
 ).innerText =
-servidor[1];
+s.numero;
 
 document.getElementById(
-"emailServidor"
+"email"
 ).innerText =
-servidor[5];
+s.email;
 
 document.getElementById(
-"telefonoServidor"
+"telefono"
 ).innerText =
-servidor[4];
+s.telefono;
 
 document.getElementById(
-"grupoServidor"
+"grupo"
 ).innerText =
-servidor[7];
+s.grupo;
 
 document.getElementById(
 "fechaIngreso"
 ).innerText =
-servidor[8];
+s.fecha;
 
-// ASISTENCIAS DEMO
+/* ======================================
+TIMELINE
+====================================== */
 
-document.getElementById(
-"historialAsistencias"
-).innerHTML = `
+let timelineHTML = "";
 
-<div class="timeline-item">
+result.timeline.forEach(item=>{
 
-<h6>Grupo Conexión</h6>
-
-<p>Asistencia registrada</p>
-
-</div>
+timelineHTML += `
 
 <div class="timeline-item">
 
-<h6>Evento General</h6>
+<h6>${item.evento}</h6>
 
-<p>Participó en reunión especial</p>
+<small class="text-muted">
+${item.fecha}
+</small>
 
 </div>
 
 `;
 
-// FORMACIÓN DEMO
+});
 
 document.getElementById(
-"historialFormacion"
-).innerHTML = `
+"timelineContent"
+).innerHTML =
+timelineHTML;
 
-<div class="curso-card">
+/* ======================================
+FORMACION
+====================================== */
 
-<h6>Fundamentos</h6>
+let formacionHTML = "";
 
-<p>Completado</p>
+result.formacion.forEach(item=>{
+
+let clase = "";
+
+let icono = "";
+
+if(item.estado === "APROBADO"){
+
+clase = "status-aprobado";
+icono = "fa-circle-check";
+
+}
+
+else if(item.estado === "CURSANDO"){
+
+clase = "status-cursando";
+icono = "fa-clock";
+
+}
+
+else{
+
+clase = "status-pendiente";
+icono = "fa-circle";
+
+}
+
+formacionHTML += `
+
+<div class="level-card">
+
+<div>
+
+<h6>${item.nivel}</h6>
+
+<small>${item.fecha || ''}</small>
 
 </div>
 
-<div class="curso-card">
+<div class="${clase}">
 
-<h6>Liderazgo</h6>
+<i class="fa ${icono}"></i>
 
-<p>En progreso</p>
+${item.estado}
+
+</div>
 
 </div>
 
 `;
 
-ocultarLoader();
+});
 
-document.body.removeChild(script);
+document.getElementById(
+"formacionContent"
+).innerHTML =
+formacionHTML;
 
-delete window[callbackName];
+/* ======================================
+ASISTENCIA
+====================================== */
 
-};
+document.getElementById(
+"porcentajeAsistencia"
+).innerText =
+result.asistencia + "%";
 
-const script =
-document.createElement("script");
+document.getElementById(
+"barraAsistencia"
+).style.width =
+result.asistencia + "%";
 
-script.src =
+document.getElementById(
+"barraAsistencia"
+).innerText =
+result.asistencia + "%";
 
-`${API_URL}?action=getServidores&callback=${callbackName}`;
+}catch(error){
 
-document.body.appendChild(script);
+console.error(error);
 
-}
+Swal.fire({
 
-function mostrarLoader(){
+icon:"error",
+title:error.toString()
 
-document.body.insertAdjacentHTML(
-
-"beforeend",
-
-`
-
-<div class="loader-overlay"
-id="loader">
-
-<div class="loader"></div>
-
-</div>
-
-`
-
-);
-
-}
-
-function ocultarLoader(){
-
-const loader =
-document.getElementById("loader");
-
-if(loader){
-
-loader.remove();
+});
 
 }
 
 }
+
+cargarPerfil();
