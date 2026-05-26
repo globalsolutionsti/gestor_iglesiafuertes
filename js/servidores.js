@@ -46,6 +46,7 @@ if(data.length <= 1){
 html = `
 
 <tr>
+
 <td colspan="6" class="text-center py-5">
 
 <i class="fa fa-users fa-3x text-muted mb-3"></i>
@@ -55,19 +56,60 @@ No hay registros
 </div>
 
 </td>
+
 </tr>
 
 `;
 
 }else{
 
+/* =====================================================
+RECORRER FILAS
+===================================================== */
+
 for(let i=1;i<data.length;i++){
 
-const s = data[i];
+let s = data[i] || [];
 
-if(!s || s.length < 14){
+/* =====================================================
+NORMALIZAR COLUMNAS
+===================================================== */
+
+while(s.length < 14){
+s.push("");
+}
+
+/* =====================================================
+IGNORAR FILAS VACIAS
+===================================================== */
+
+const filaVacia =
+s.every(campo => campo === "");
+
+if(filaVacia){
 continue;
 }
+
+/* =====================================================
+COLUMNAS
+=====================================================
+
+0 ID
+1 NUMERO
+2 NOMBRE
+3 APELLIDOS
+4 TELEFONO
+5 EMAIL
+6 MINISTERIO PRINCIPAL
+7 MINISTERIO SEC1
+8 MINISTERIO SEC2
+9 MINISTERIO SEC3
+10 GRUPO
+11 FECHA
+12 ESTADO
+13 FOTO
+
+===================================================== */
 
 const foto =
 s[13] && s[13] !== ""
@@ -201,15 +243,14 @@ tbody.innerHTML = html;
 DESTRUIR DATATABLE
 ===================================================== */
 
-if(tabla){
+if($.fn.DataTable.isDataTable('#tabla')){
 
-tabla.destroy();
-tabla = null;
+$('#tabla').DataTable().clear().destroy();
 
 }
 
 /* =====================================================
-REINICIALIZAR
+REINICIALIZAR DATATABLE
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
