@@ -26,7 +26,9 @@ ocultarLoader();
 Swal.fire({
 icon:"error",
 title:
-result.message || "Error obteniendo servidores"
+(result && result.message)
+? result.message
+: "Error obteniendo servidores"
 });
 
 return;
@@ -74,7 +76,6 @@ let s = data[i] || [];
 
 /* =====================================================
 NORMALIZAR COLUMNAS
-SIEMPRE 14
 ===================================================== */
 
 while(s.length < 14){
@@ -116,12 +117,12 @@ COLUMNAS
 ===================================================== */
 
 const foto =
-s[13] && s[13] !== ""
+s[13] && String(s[13]).trim() !== ""
 ? s[13]
 : "https://i.pravatar.cc/150?img=12";
 
 const nombre =
-`${s[2] || ""} ${s[3] || ""}`;
+`${s[2] || ""} ${s[3] || ""}`.trim();
 
 const ministerios = [
 
@@ -149,8 +150,7 @@ ${m}
 });
 
 /* =====================================================
-IMPORTANTE:
-SIEMPRE EXACTAMENTE 6 TD
+SIEMPRE EXACTAMENTE 6 COLUMNAS
 ===================================================== */
 
 html += `
@@ -248,7 +248,17 @@ RENDER TABLA
 const tbody =
 document.getElementById("tablaServidores");
 
-tbody.innerHTML = html;
+if(!tbody){
+
+ocultarLoader();
+
+console.error(
+"No existe tbody #tablaServidores"
+);
+
+return;
+
+}
 
 /* =====================================================
 DESTRUIR DATATABLE
@@ -256,24 +266,31 @@ DESTRUIR DATATABLE
 
 if($.fn.DataTable.isDataTable('#tabla')){
 
-$('#tabla').DataTable().destroy();
+$('#tabla').DataTable().clear().destroy();
 
 }
 
 /* =====================================================
-LIMPIAR ESTRUCTURA
+LIMPIAR TABLA
 ===================================================== */
 
-$('#tabla tbody').empty();
+tbody.innerHTML = "";
+
+/* =====================================================
+INSERTAR HTML
+===================================================== */
 
 tbody.innerHTML = html;
 
 /* =====================================================
 VALIDAR COLUMNAS
+EVITA ERROR _DT_CellIndex
 ===================================================== */
 
 const filas =
-document.querySelectorAll("#tabla tbody tr");
+document.querySelectorAll(
+"#tabla tbody tr"
+);
 
 filas.forEach(fila=>{
 
@@ -294,15 +311,15 @@ fila.remove();
 });
 
 /* =====================================================
-INICIALIZAR DATATABLE
+REINICIALIZAR DATATABLE
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
-autoWidth:false,
 destroy:true,
+autoWidth:false,
 
 language:{
 url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
@@ -371,7 +388,7 @@ window[callbackName] = function(result){
 
 try{
 
-if(!result.status){
+if(!result || !result.status){
 return;
 }
 
@@ -558,6 +575,9 @@ await fetch(
 API_URL + "?action=guardarServidor",
 {
 method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify(body)
 }
 );
@@ -569,31 +589,77 @@ ocultarLoader();
 
 if(data.status){
 
+/* =====================================================
+CERRAR MODAL CORRECTAMENTE
+EVITA ERROR aria-hidden
+===================================================== */
+
+const modalElement =
+document.getElementById("modalServidor");
+
+const modal =
+bootstrap.Modal.getInstance(modalElement);
+
+if(modal){
+
+modal.hide();
+
+document.body.classList.remove("modal-open");
+
+document.body.style.overflow = "";
+
+document.body.style.paddingRight = "";
+
+const backdrops =
+document.querySelectorAll(".modal-backdrop");
+
+backdrops.forEach(b=>b.remove());
+
+}
+
+/* =====================================================
+DETENER CAMARA
+===================================================== */
+
+const video =
+document.getElementById("camera");
+
+if(video && video.srcObject){
+
+video.srcObject
+.getTracks()
+.forEach(track=>track.stop());
+
+video.srcObject = null;
+
+}
+
+/* =====================================================
+ALERTA EXITO
+===================================================== */
+
 Swal.fire({
 icon:"success",
 title:"Servidor guardado correctamente"
 });
 
-const modal =
-bootstrap.Modal.getInstance(
-document.getElementById("modalServidor")
-);
-
-if(modal){
-modal.hide();
-}
-
 limpiarFormulario();
 
+/* =====================================================
+RECARGAR TABLA
+===================================================== */
+
 setTimeout(()=>{
+
 cargarServidores();
+
 },500);
 
 }else{
 
 Swal.fire({
 icon:"error",
-title:data.message
+title:data.message || "Error guardando servidor"
 });
 
 }
@@ -601,6 +667,8 @@ title:data.message
 }catch(error){
 
 ocultarLoader();
+
+console.error(error);
 
 Swal.fire({
 icon:"error",
