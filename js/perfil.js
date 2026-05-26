@@ -46,83 +46,82 @@ result.servidor || {};
 NORMALIZAR CAMPOS
 ====================================== */
 
-const foto =
-s.foto ||
-s.FOTO ||
-s[13] ||
-"https://i.pravatar.cc/200";
+/* ======================================
+NORMALIZAR CAMPOS
+COMPATIBLE CON ARRAY Y OBJETO
+====================================== */
 
-const nombre =
-s.nombre ||
-s.NOMBRE ||
-s[2] ||
-"";
+const esArray = Array.isArray(s);
 
-const apellidos =
-s.apellidos ||
-s.APELLIDOS ||
-s[3] ||
-"";
+/* ======================================
+CAMPOS
+====================================== */
 
-const numero =
-s.numero ||
-s.NUMERO ||
-s[1] ||
-"";
+const foto = esArray
+? (s[13] || "")
+: (s.foto || s.FOTO || "");
 
-const telefono =
-s.telefono ||
-s.TELEFONO ||
-s[4] ||
-"";
+const nombre = esArray
+? (s[2] || "")
+: (s.nombre || s.NOMBRE || "");
 
-const email =
-s.email ||
-s.EMAIL ||
-s[5] ||
-"";
+const apellidos = esArray
+? (s[3] || "")
+: (s.apellidos || s.APELLIDOS || "");
 
-const ministerio1 =
+const numero = esArray
+? (s[1] || "")
+: (s.numero || s.NUMERO || "");
+
+const telefono = esArray
+? (s[4] || "")
+: (s.telefono || s.TELEFONO || "");
+
+const email = esArray
+? (s[5] || "")
+: (s.email || s.EMAIL || "");
+
+const ministerio1 = esArray
+? (s[6] || "")
+: (
 s.ministerio1 ||
 s.MINISTERIO1 ||
-s[6] ||
-"";
+s.ministerio ||
+s.MINISTERIO ||
+""
+);
 
-const ministerio2 =
-s.ministerio2 ||
-s.MINISTERIO2 ||
-s[7] ||
-"";
+const ministerio2 = esArray
+? (s[7] || "")
+: (s.ministerio2 || s.MINISTERIO2 || "");
 
-const ministerio3 =
-s.ministerio3 ||
-s.MINISTERIO3 ||
-s[8] ||
-"";
+const ministerio3 = esArray
+? (s[8] || "")
+: (s.ministerio3 || s.MINISTERIO3 || "");
 
-const ministerio4 =
-s.ministerio4 ||
-s.MINISTERIO4 ||
-s[9] ||
-"";
+const ministerio4 = esArray
+? (s[9] || "")
+: (s.ministerio4 || s.MINISTERIO4 || "");
 
-const grupo =
-s.grupo ||
-s.GRUPO ||
-s[10] ||
-"";
+const grupo = esArray
+? (s[10] || "")
+: (s.grupo || s.GRUPO || "");
 
-const fecha =
-s.fecha ||
-s.FECHA ||
-s[11] ||
-"";
+const fecha = esArray
+? (s[11] || "")
+: (s.fecha || s.FECHA || "");
 
-const estado =
-s.estado ||
-s.ESTADO ||
-s[12] ||
-"ACTIVO";
+const estado = esArray
+? (s[12] || "ACTIVO")
+: (s.estado || s.ESTADO || "ACTIVO");
+
+/* ======================================
+DEBUG
+====================================== */
+
+console.log("Servidor:", s);
+console.log("Foto:", foto);
+console.log("Ministerio:", ministerio1);
 
 /* ======================================
 HEADER
@@ -130,7 +129,10 @@ HEADER
 
 document.getElementById(
 "fotoServidor"
-).src = foto;
+).src =
+foto && foto !== ""
+? foto
+: "https://i.pravatar.cc/200";
 
 document.getElementById(
 "nombreServidor"
@@ -150,7 +152,7 @@ Ministerio Principal
 </div>
 
 <div class="fs-5 fw-bold text-primary">
-${ministerio1}
+${ministerio1 || "Sin Ministerio"}
 </div>
 `;
 
