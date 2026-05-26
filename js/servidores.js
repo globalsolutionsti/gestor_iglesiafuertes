@@ -10,7 +10,7 @@ function cargarServidores(){
 mostrarLoader();
 
 const callbackName =
-"servidores_callback_" + Date.now();
+"cb_" + Date.now();
 
 window[callbackName] = function(result){
 
@@ -21,10 +21,8 @@ if(!result.status){
 ocultarLoader();
 
 Swal.fire({
-
 icon:"error",
 title:result.message
-
 });
 
 return;
@@ -36,28 +34,16 @@ result.data || [];
 
 let html = "";
 
-/* =====================================================
-VALIDAR DATOS
-===================================================== */
-
 if(data.length <= 1){
 
-document.getElementById(
-"tablaServidores"
-).innerHTML = `
+html = `
 
 <tr>
 
 <td colspan="6"
 class="text-center py-5">
 
-<i class="fa fa-users fa-3x text-muted mb-3"></i>
-
-<div class="fw-bold">
-
-No hay servidores registrados
-
-</div>
+No hay registros
 
 </td>
 
@@ -65,32 +51,7 @@ No hay servidores registrados
 
 `;
 
-ocultarLoader();
-
-return;
-
-}
-
-/* =====================================================
-ESTRUCTURA REAL
-=====================================================
-
-0  ID
-1  NUMERO
-2  NOMBRE
-3  APELLIDOS
-4  TELEFONO
-5  EMAIL
-6  MINISTERIO PRINCIPAL
-7  MINISTERIO SEC1
-8  MINISTERIO SEC2
-9  MINISTERIO SEC3
-10 GRUPO
-11 FECHA
-12 ESTADO
-13 FOTO
-
-===================================================== */
+}else{
 
 for(let i=1;i<data.length;i++){
 
@@ -100,72 +61,63 @@ if(!s || s.length === 0){
 continue;
 }
 
-/* =====================================================
-DATOS
-===================================================== */
-
 const foto =
 s[13] && s[13] !== ""
 ? s[13]
 : "https://i.pravatar.cc/150";
 
-const nombreCompleto =
+const nombre =
 `${s[2] || ''} ${s[3] || ''}`;
 
-const ministerioPrincipal =
-s[6] || '';
+const ministerios = [
 
-const ministeriosSecundarios = [
-
+s[6],
 s[7],
 s[8],
 s[9]
 
 ]
-.filter(item => item && item !== "")
-.join(" • ");
+.filter(x => x && x !== "");
 
-const grupo =
-s[10] || '';
+let ministeriosHTML = "";
 
-const estado =
-s[12] || 'ACTIVO';
+ministerios.forEach(m=>{
 
-/* =====================================================
-ROW HTML
-===================================================== */
+ministeriosHTML += `
+
+<span class="ministerio-chip">
+
+${m}
+
+</span>
+
+`;
+
+});
 
 html += `
 
 <tr>
 
-<td class="align-middle text-center">
+<td class="text-center">
 
-<img src="${foto}"
-
-style="
-width:60px;
-height:60px;
-object-fit:cover;
-border-radius:50%;
-border:3px solid #0d6efd;
-box-shadow:0 4px 12px rgba(0,0,0,.18);
-">
+<img
+src="${foto}"
+class="servidor-foto">
 
 </td>
 
-<td class="align-middle">
+<td>
 
-<a href="perfil.html?id=${s[0]}"
-class="fw-bold text-decoration-none text-dark fs-6">
+<div class="fw-bold">
 
-${nombreCompleto}
+${nombre}
 
-</a>
+</div>
 
-<div class="small text-muted mt-1">
+<div class="small text-muted">
 
-<i class="fa fa-id-badge"></i>
+<i class="fa fa-id-card"></i>
 ${s[1] || ''}
 
 </div>
@@ -186,51 +138,35 @@ ${s[5] || ''}
 
 </td>
 
-<td class="align-middle">
+<td>
 
-<div class="fw-bold text-primary mb-1">
-
-${ministerioPrincipal}
-
-</div>
-
-${
-ministeriosSecundarios
-? `
-<div class="small text-muted">
-
-${ministeriosSecundarios}
-
-</div>
-`
-: ''
-}
+${ministeriosHTML}
 
 </td>
 
-<td class="align-middle">
+<td>
 
-<span class="badge bg-light text-dark border px-3 py-2">
+<span class="badge bg-light text-dark border">
 
-${grupo}
+${s[10] || ''}
 
 </span>
 
 </td>
 
-<td class="align-middle">
+<td>
 
-<span class="badge bg-success px-3 py-2">
+<span class="badge bg-success">
 
-${estado}
+${s[12] || 'ACTIVO'}
 
 </span>
 
 </td>
 
-<td class="align-middle">
+<td>
 
-<div class="d-flex gap-2 justify-content-center">
+<div class="d-flex gap-2">
 
 <button
 class="btn btn-primary btn-sm"
@@ -258,27 +194,17 @@ onclick="eliminarServidor('${s[0]}')">
 
 }
 
-/* =====================================================
-RENDER TABLA
-===================================================== */
+}
 
 document.getElementById(
 "tablaServidores"
 ).innerHTML = html;
-
-/* =====================================================
-DESTRUIR DATATABLE
-===================================================== */
 
 if($.fn.DataTable.isDataTable('#tabla')){
 
 $('#tabla').DataTable().destroy();
 
 }
-
-/* =====================================================
-DATATABLE
-===================================================== */
 
 tabla = $('#tabla').DataTable({
 
@@ -305,19 +231,13 @@ ocultarLoader();
 console.error(error);
 
 Swal.fire({
-
 icon:"error",
 title:error.toString()
-
 });
 
 }
 
 };
-
-/* =====================================================
-SCRIPT JSONP
-===================================================== */
 
 const script =
 document.createElement("script");
@@ -326,25 +246,78 @@ script.src =
 
 `${API_URL}?action=getServidores&callback=${callbackName}`;
 
-script.onerror = function(){
+document.body.appendChild(script);
 
-ocultarLoader();
+}
 
-Swal.fire({
+/* =====================================================
+CARGAR MINISTERIOS
+===================================================== */
 
-icon:"error",
-title:"Error conexión Apps Script"
+function cargarMinisterios(){
+
+const callbackName =
+"ministerios_" + Date.now();
+
+window[callbackName] = function(result){
+
+if(!result.status){
+return;
+}
+
+const ministerios =
+result.data || [];
+
+const selects = [
+
+"ministerioPrincipal",
+"ministerioSec1",
+"ministerioSec2",
+"ministerioSec3"
+
+];
+
+selects.forEach(id=>{
+
+const select =
+document.getElementById(id);
+
+if(!select){
+return;
+}
+
+select.innerHTML =
+`<option value="">Seleccionar</option>`;
+
+ministerios.forEach(m=>{
+
+select.innerHTML += `
+
+<option value="${m}">
+${m}
+</option>
+
+`;
+
+});
 
 });
 
 };
+
+const script =
+document.createElement("script");
+
+script.src =
+
+`${API_URL}?action=getMinisterios&callback=${callbackName}`;
 
 document.body.appendChild(script);
 
 }
 
 /* =====================================================
-ACTIVAR CAMARA
+CAMARA
 ===================================================== */
 
 async function activarCamara(){
@@ -367,10 +340,8 @@ video.srcObject = stream;
 }catch(error){
 
 Swal.fire({
-
 icon:"error",
 title:"No se pudo activar cámara"
-
 });
 
 }
@@ -418,16 +389,12 @@ preview.style.display =
 }
 
 /* =====================================================
-GUARDAR SERVIDOR
+GUARDAR
 ===================================================== */
 
 async function guardarServidor(){
 
 mostrarLoader();
-
-/* =====================================================
-NUEVA ESTRUCTURA MINISTERIOS
-===================================================== */
 
 const body = {
 
@@ -491,40 +458,27 @@ ocultarLoader();
 if(data.status){
 
 Swal.fire({
-
 icon:"success",
-title:"Servidor guardado correctamente"
-
+title:"Servidor guardado"
 });
 
-const modal =
-bootstrap.Modal.getInstance(
+bootstrap.Modal
+.getInstance(
 document.getElementById(
 "modalServidor"
 )
-);
-
-if(modal){
-
-modal.hide();
-
-}
+)
+.hide();
 
 limpiarFormulario();
 
-setTimeout(()=>{
-
 cargarServidores();
-
-},500);
 
 }else{
 
 Swal.fire({
-
 icon:"error",
 title:data.message
-
 });
 
 }
@@ -534,10 +488,8 @@ title:data.message
 ocultarLoader();
 
 Swal.fire({
-
 icon:"error",
 title:error.toString()
-
 });
 
 }
@@ -545,7 +497,7 @@ title:error.toString()
 }
 
 /* =====================================================
-LIMPIAR FORMULARIO
+LIMPIAR
 ===================================================== */
 
 function limpiarFormulario(){
@@ -581,72 +533,14 @@ el.value = "";
 
 fotoBase64 = "";
 
-const preview =
 document.getElementById(
 "previewFoto"
-);
-
-if(preview){
-
-preview.style.display =
-"none";
-
-preview.src = "";
-
-}
-
-const video =
-document.getElementById(
-"camera"
-);
-
-if(video && video.srcObject){
-
-video.srcObject
-.getTracks()
-.forEach(track=>track.stop());
-
-video.srcObject = null;
-
-}
+).style.display = "none";
 
 }
 
 /* =====================================================
-EDITAR
-===================================================== */
-
-function editarServidor(id){
-
-Swal.fire({
-
-icon:"info",
-title:"Módulo edición próximamente"
-
-});
-
-}
-
-/* =====================================================
-ELIMINAR
-===================================================== */
-
-function eliminarServidor(id){
-
-Swal.fire({
-
-title:"¿Eliminar servidor?",
-text:"Esta acción no se puede deshacer",
-icon:"warning",
-showCancelButton:true,
-confirmButtonText:"Eliminar"
-
-});
-
-}
-
-/* =====================================================
-EXPORTAR EXCEL
+EXPORTAR
 ===================================================== */
 
 function exportarExcel(){
@@ -666,10 +560,6 @@ workbook,
 );
 
 }
-
-/* =====================================================
-EXPORTAR PDF
-===================================================== */
 
 function exportarPDF(){
 
@@ -693,7 +583,7 @@ document.body.insertAdjacentHTML(
 
 `
 
-<div class="loader-overlay"
+<div
 id="loader"
 
 style="
@@ -710,7 +600,6 @@ z-index:99999;
 ">
 
 <div class="spinner-border text-primary"
-
 style="
 width:4rem;
 height:4rem;
@@ -750,6 +639,7 @@ document.addEventListener(
 function(){
 
 cargarServidores();
+cargarMinisterios();
 
 }
 
