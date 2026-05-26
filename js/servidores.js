@@ -490,6 +490,11 @@ TOMAR FOTO
 OPTIMIZADA PARA APPS SCRIPT
 ===================================================== */
 
+/* =====================================================
+TOMAR FOTO
+ULTRA OPTIMIZADA JSONP
+===================================================== */
+
 function tomarFoto(){
 
 const video =
@@ -502,10 +507,10 @@ const preview =
 document.getElementById("previewFoto");
 
 /* =====================================================
-REDUCIR TAMAÑO
+REDUCIR TAMAÑO EXTREMADAMENTE
 ===================================================== */
 
-const MAX_WIDTH = 480;
+const MAX_WIDTH = 250;
 
 const scale =
 MAX_WIDTH / video.videoWidth;
@@ -520,15 +525,15 @@ const ctx =
 canvas.getContext("2d");
 
 /* =====================================================
-MEJORAR CALIDAD
+SUAVIZAR IMAGEN
 ===================================================== */
 
 ctx.imageSmoothingEnabled = true;
 
-ctx.imageSmoothingQuality = "high";
+ctx.imageSmoothingQuality = "medium";
 
 /* =====================================================
-CAPTURAR FOTO
+CAPTURAR
 ===================================================== */
 
 ctx.drawImage(
@@ -540,26 +545,33 @@ canvas.height
 );
 
 /* =====================================================
-COMPRESION JPEG
+COMPRESION MUY ALTA
 ===================================================== */
 
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.5
+0.2
 );
 
 /* =====================================================
-VALIDAR TAMAÑO
+VALIDAR
 ===================================================== */
 
-if(fotoBase64.length > 180000){
+console.log(
+"Tamaño Base64:",
+fotoBase64.length
+);
+
+if(fotoBase64.length > 90000){
 
 Swal.fire({
 icon:"warning",
-title:"La imagen sigue siendo muy grande",
-text:"Acércate más a la cámara e intenta nuevamente"
+title:"Imagen demasiado grande",
+text:"Intenta acercarte más a la cámara"
 });
+
+fotoBase64 = "";
 
 return;
 
