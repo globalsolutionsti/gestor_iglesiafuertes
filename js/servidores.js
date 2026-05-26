@@ -12,6 +12,9 @@ mostrarLoader();
 const callbackName =
 "cb_" + Date.now();
 
+const script =
+document.createElement("script");
+
 window[callbackName] = function(result){
 
 try{
@@ -43,9 +46,7 @@ if(data.length <= 1){
 html = `
 
 <tr>
-
-<td colspan="6"
-class="text-center py-5">
+<td colspan="6" class="text-center py-5">
 
 <i class="fa fa-users fa-3x text-muted mb-3"></i>
 
@@ -54,45 +55,19 @@ No hay registros
 </div>
 
 </td>
-
 </tr>
 
 `;
 
 }else{
 
-/* =====================================================
-RECORRER FILAS
-===================================================== */
-
 for(let i=1;i<data.length;i++){
 
 const s = data[i];
 
-if(!s || s.length === 0){
+if(!s || s.length < 14){
 continue;
 }
-
-/* =====================================================
-COLUMNAS
-=====================================================
-
-0 ID
-1 NUMERO
-2 NOMBRE
-3 APELLIDOS
-4 TELEFONO
-5 EMAIL
-6 MINISTERIO PRINCIPAL
-7 MINISTERIO SEC1
-8 MINISTERIO SEC2
-9 MINISTERIO SEC3
-10 GRUPO
-11 FECHA
-12 ESTADO
-13 FOTO
-
-===================================================== */
 
 const foto =
 s[13] && s[13] !== ""
@@ -109,8 +84,7 @@ s[7],
 s[8],
 s[9]
 
-]
-.filter(x => x && x !== "");
+].filter(x => x && x !== "");
 
 let ministeriosHTML = "";
 
@@ -119,9 +93,7 @@ ministerios.forEach(m=>{
 ministeriosHTML += `
 
 <span class="ministerio-chip">
-
 ${m}
-
 </span>
 
 `;
@@ -144,46 +116,34 @@ onerror="this.src='https://i.pravatar.cc/150?img=12'">
 <td class="align-middle">
 
 <div class="fw-bold fs-6">
-
 ${nombre}
-
 </div>
 
 <div class="small text-muted">
-
 <i class="fa fa-id-card"></i>
 ${s[1] || ''}
-
 </div>
 
 <div class="small text-muted">
-
 <i class="fa fa-phone"></i>
 ${s[4] || ''}
-
 </div>
 
 <div class="small text-muted">
-
 <i class="fa fa-envelope"></i>
 ${s[5] || ''}
-
 </div>
 
 </td>
 
 <td class="align-middle">
-
 ${ministeriosHTML}
-
 </td>
 
 <td class="align-middle">
 
 <span class="badge bg-light text-dark border">
-
 ${s[10] || ''}
-
 </span>
 
 </td>
@@ -191,9 +151,7 @@ ${s[10] || ''}
 <td class="align-middle">
 
 <span class="badge bg-success">
-
 ${s[12] || 'ACTIVO'}
-
 </span>
 
 </td>
@@ -234,22 +192,24 @@ onclick="eliminarServidor('${s[0]}')">
 RENDER TABLA
 ===================================================== */
 
-document.getElementById(
-"tablaServidores"
-).innerHTML = html;
+const tbody =
+document.getElementById("tablaServidores");
+
+tbody.innerHTML = html;
 
 /* =====================================================
-REINICIAR DATATABLE
+DESTRUIR DATATABLE
 ===================================================== */
 
-if($.fn.DataTable.isDataTable('#tabla')){
+if(tabla){
 
-$('#tabla').DataTable().destroy();
+tabla.destroy();
+tabla = null;
 
 }
 
 /* =====================================================
-DATATABLE
+REINICIALIZAR
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
@@ -257,6 +217,7 @@ tabla = $('#tabla').DataTable({
 responsive:true,
 pageLength:10,
 destroy:true,
+autoWidth:false,
 
 language:{
 url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
@@ -267,7 +228,7 @@ url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
 ocultarLoader();
 
 /* =====================================================
-LIMPIAR CALLBACK
+LIMPIEZA
 ===================================================== */
 
 delete window[callbackName];
@@ -291,15 +252,7 @@ title:error.toString()
 
 };
 
-/* =====================================================
-SCRIPT JSONP
-===================================================== */
-
-const script =
-document.createElement("script");
-
 script.src =
-
 `${API_URL}?action=getServidores&callback=${callbackName}`;
 
 script.onerror = function(){
@@ -326,15 +279,15 @@ function cargarMinisterios(){
 const callbackName =
 "ministerios_" + Date.now();
 
+const script =
+document.createElement("script");
+
 window[callbackName] = function(result){
 
 try{
 
 if(!result.status){
-
-console.error(result.message);
 return;
-
 }
 
 const ministerios =
@@ -364,11 +317,9 @@ select.innerHTML =
 ministerios.forEach(m=>{
 
 select.innerHTML += `
-
 <option value="${m}">
 ${m}
 </option>
-
 `;
 
 });
@@ -389,20 +340,8 @@ console.error(error);
 
 };
 
-const script =
-document.createElement("script");
-
 script.src =
-
 `${API_URL}?action=getMinisterios&callback=${callbackName}`;
-
-script.onerror = function(){
-
-console.error(
-"Error cargando ministerios"
-);
-
-};
 
 document.body.appendChild(script);
 
@@ -531,15 +470,11 @@ try{
 
 const response =
 await fetch(
-
-API_URL +
-"?action=guardarServidor",
-
+API_URL + "?action=guardarServidor",
 {
 method:"POST",
 body:JSON.stringify(body)
 }
-
 );
 
 const data =
@@ -556,9 +491,7 @@ title:"Servidor guardado correctamente"
 
 const modal =
 bootstrap.Modal.getInstance(
-document.getElementById(
-"modalServidor"
-)
+document.getElementById("modalServidor")
 );
 
 if(modal){
@@ -568,9 +501,7 @@ modal.hide();
 limpiarFormulario();
 
 setTimeout(()=>{
-
 cargarServidores();
-
 },500);
 
 }else{
@@ -623,9 +554,7 @@ const el =
 document.getElementById(id);
 
 if(el){
-
 el.value = "";
-
 }
 
 });
@@ -633,9 +562,7 @@ el.value = "";
 fotoBase64 = "";
 
 const preview =
-document.getElementById(
-"previewFoto"
-);
+document.getElementById("previewFoto");
 
 if(preview){
 
@@ -643,10 +570,6 @@ preview.style.display = "none";
 preview.src = "";
 
 }
-
-/* =====================================================
-DETENER CAMARA
-===================================================== */
 
 const video =
 document.getElementById("camera");
@@ -744,7 +667,6 @@ document.body.insertAdjacentHTML(
 
 <div
 id="loader"
-
 style="
 position:fixed;
 top:0;
@@ -758,12 +680,12 @@ align-items:center;
 z-index:99999;
 ">
 
-<div class="spinner-border text-primary"
+<div
+class="spinner-border text-primary"
 style="
 width:4rem;
 height:4rem;
 ">
-
 </div>
 
 </div>
@@ -780,9 +702,7 @@ const loader =
 document.getElementById("loader");
 
 if(loader){
-
 loader.remove();
-
 }
 
 }
@@ -792,14 +712,11 @@ INIT
 ===================================================== */
 
 document.addEventListener(
-
 "DOMContentLoaded",
-
 function(){
 
 cargarServidores();
 cargarMinisterios();
 
 }
-
 );
