@@ -124,9 +124,11 @@ s[13] && String(s[13]).trim() !== ""
 const nombre =
 `${s[2] || ""} ${s[3] || ""}`.trim();
 
-const ministerios = [
+const ministerioPrincipal =
+s[6] || "";
 
-s[6],
+const ministeriosSecundarios = [
+
 s[7],
 s[8],
 s[9]
@@ -137,7 +139,7 @@ x && String(x).trim() !== ""
 
 let ministeriosHTML = "";
 
-ministerios.forEach(m=>{
+ministeriosSecundarios.forEach(m=>{
 
 ministeriosHTML += `
 
@@ -186,6 +188,14 @@ ${s[4] || ""}
 <i class="fa fa-envelope"></i>
 ${s[5] || ""}
 </div>
+
+</td>
+
+<td class="align-middle">
+
+<span class="badge bg-primary">
+${ministerioPrincipal}
+</span>
 
 </td>
 
