@@ -171,7 +171,15 @@ onerror="this.src='https://i.pravatar.cc/150?img=12'">
 <td class="align-middle">
 
 <div class="fw-bold fs-6">
+
+<a
+href="perfil.html?id=${s[0]}"
+class="text-decoration-none">
+
 ${nombre}
+
+</a>
+
 </div>
 
 <div class="small text-muted">
