@@ -12,10 +12,6 @@ mostrarLoader();
 const callbackName =
 "servidores_callback_" + Date.now();
 
-/* =====================================================
-CALLBACK GLOBAL
-===================================================== */
-
 window[callbackName] = function(result){
 
 try{
@@ -41,7 +37,7 @@ result.data || [];
 let html = "";
 
 /* =====================================================
-RECORRER SERVIDORES
+RECORRER DATOS
 ===================================================== */
 
 for(let i=1;i<data.length;i++){
@@ -55,40 +51,77 @@ html += `
 <td>
 
 <img src="${
-s[10] || 'https://i.pravatar.cc/150'
+s[13] || 'https://i.pravatar.cc/150'
 }"
 
 class="rounded-circle"
 
 style="
-width:50px;
-height:50px;
+width:55px;
+height:55px;
 object-fit:cover;
-border:2px solid #0d6efd;
+border:3px solid #0d6efd;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
 ">
 
 </td>
 
 <td>
 
-<a href="perfil.html?id=${s[1]}"
+<a href="perfil.html?id=${s[0]}"
 class="fw-bold text-decoration-none">
 
 ${s[2]} ${s[3]}
 
 </a>
 
+<div class="text-muted small">
+
+${s[1]}
+
+</div>
+
 </td>
 
-<td>${s[6] || ''}</td>
+<td>
 
-<td>${s[7] || ''}</td>
+<div class="fw-bold">
+
+${s[6] || ''}
+
+</div>
+
+<div class="small text-muted">
+
+${s[7] || ''}
+
+</div>
+
+<div class="small text-muted">
+
+${s[8] || ''}
+
+</div>
+
+<div class="small text-muted">
+
+${s[9] || ''}
+
+</div>
+
+</td>
+
+<td>
+
+${s[10] || ''}
+
+</td>
 
 <td>
 
 <span class="badge bg-success">
 
-${s[9] || 'ACTIVO'}
+${s[12] || 'ACTIVO'}
 
 </span>
 
@@ -156,10 +189,6 @@ url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
 
 ocultarLoader();
 
-/* =====================================================
-LIMPIAR CALLBACK
-===================================================== */
-
 delete window[callbackName];
 
 script.remove();
@@ -180,10 +209,6 @@ title:error.toString()
 }
 
 };
-
-/* =====================================================
-SCRIPT JSONP
-===================================================== */
 
 const script =
 document.createElement("script");
@@ -223,9 +248,7 @@ document.getElementById("camera");
 const stream =
 await navigator.mediaDevices.getUserMedia({
 
-video:{
-facingMode:"user"
-},
+video:true,
 audio:false
 
 });
@@ -260,8 +283,11 @@ document.getElementById("canvas");
 const preview =
 document.getElementById("previewFoto");
 
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
+canvas.width =
+video.videoWidth;
+
+canvas.height =
+video.videoHeight;
 
 const ctx =
 canvas.getContext("2d");
@@ -357,7 +383,9 @@ document.getElementById(
 );
 
 if(modal){
+
 modal.hide();
+
 }
 
 limpiarFormulario();
@@ -408,7 +436,7 @@ const campos = [
 "telefono",
 "email",
 "ministerio",
-"grupoConexion",
+"groupoConexion",
 "fechaIngreso"
 
 ];
@@ -419,7 +447,9 @@ const el =
 document.getElementById(id);
 
 if(el){
+
 el.value = "";
+
 }
 
 });
@@ -466,7 +496,7 @@ function editarServidor(id){
 Swal.fire({
 
 icon:"info",
-title:"Módulo editar próximamente"
+title:"Próximamente"
 
 });
 
@@ -481,17 +511,15 @@ function eliminarServidor(id){
 Swal.fire({
 
 title:"¿Eliminar servidor?",
-text:"Esta acción no se puede deshacer",
 icon:"warning",
-showCancelButton:true,
-confirmButtonText:"Eliminar"
+showCancelButton:true
 
 });
 
 }
 
 /* =====================================================
-EXPORTAR EXCEL
+EXPORTAR
 ===================================================== */
 
 function exportarExcel(){
@@ -511,10 +539,6 @@ workbook,
 );
 
 }
-
-/* =====================================================
-EXPORTAR PDF
-===================================================== */
 
 function exportarPDF(){
 
@@ -555,7 +579,6 @@ z-index:99999;
 ">
 
 <div class="spinner-border text-primary"
-
 style="
 width:4rem;
 height:4rem;
@@ -577,7 +600,9 @@ const loader =
 document.getElementById("loader");
 
 if(loader){
+
 loader.remove();
+
 }
 
 }
