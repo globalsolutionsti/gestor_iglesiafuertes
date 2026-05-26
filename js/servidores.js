@@ -22,7 +22,7 @@ ocultarLoader();
 
 Swal.fire({
 icon:"error",
-title:result.message
+title:result.message || "Error obteniendo servidores"
 });
 
 return;
@@ -34,6 +34,10 @@ result.data || [];
 
 let html = "";
 
+/* =====================================================
+SIN REGISTROS
+===================================================== */
+
 if(data.length <= 1){
 
 html = `
@@ -43,7 +47,11 @@ html = `
 <td colspan="6"
 class="text-center py-5">
 
+<i class="fa fa-users fa-3x text-muted mb-3"></i>
+
+<div class="fw-bold">
 No hay registros
+</div>
 
 </td>
 
@@ -53,6 +61,10 @@ No hay registros
 
 }else{
 
+/* =====================================================
+RECORRER FILAS
+===================================================== */
+
 for(let i=1;i<data.length;i++){
 
 const s = data[i];
@@ -61,10 +73,31 @@ if(!s || s.length === 0){
 continue;
 }
 
+/* =====================================================
+COLUMNAS
+=====================================================
+
+0 ID
+1 NUMERO
+2 NOMBRE
+3 APELLIDOS
+4 TELEFONO
+5 EMAIL
+6 MINISTERIO PRINCIPAL
+7 MINISTERIO SEC1
+8 MINISTERIO SEC2
+9 MINISTERIO SEC3
+10 GRUPO
+11 FECHA
+12 ESTADO
+13 FOTO
+
+===================================================== */
+
 const foto =
 s[13] && s[13] !== ""
 ? s[13]
-: "https://i.pravatar.cc/150";
+: "https://i.pravatar.cc/150?img=12";
 
 const nombre =
 `${s[2] || ''} ${s[3] || ''}`;
@@ -99,17 +132,18 @@ html += `
 
 <tr>
 
-<td class="text-center">
+<td class="text-center align-middle">
 
 <img
 src="${foto}"
-class="servidor-foto">
+class="servidor-foto"
+onerror="this.src='https://i.pravatar.cc/150?img=12'">
 
 </td>
 
-<td>
+<td class="align-middle">
 
-<div class="fw-bold">
+<div class="fw-bold fs-6">
 
 ${nombre}
 
@@ -138,13 +172,13 @@ ${s[5] || ''}
 
 </td>
 
-<td>
+<td class="align-middle">
 
 ${ministeriosHTML}
 
 </td>
 
-<td>
+<td class="align-middle">
 
 <span class="badge bg-light text-dark border">
 
@@ -154,7 +188,7 @@ ${s[10] || ''}
 
 </td>
 
-<td>
+<td class="align-middle">
 
 <span class="badge bg-success">
 
@@ -164,9 +198,9 @@ ${s[12] || 'ACTIVO'}
 
 </td>
 
-<td>
+<td class="align-middle">
 
-<div class="d-flex gap-2">
+<div class="d-flex gap-2 justify-content-center">
 
 <button
 class="btn btn-primary btn-sm"
@@ -196,15 +230,27 @@ onclick="eliminarServidor('${s[0]}')">
 
 }
 
+/* =====================================================
+RENDER TABLA
+===================================================== */
+
 document.getElementById(
 "tablaServidores"
 ).innerHTML = html;
+
+/* =====================================================
+REINICIAR DATATABLE
+===================================================== */
 
 if($.fn.DataTable.isDataTable('#tabla')){
 
 $('#tabla').DataTable().destroy();
 
 }
+
+/* =====================================================
+DATATABLE
+===================================================== */
 
 tabla = $('#tabla').DataTable({
 
@@ -220,9 +266,15 @@ url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
 
 ocultarLoader();
 
+/* =====================================================
+LIMPIAR CALLBACK
+===================================================== */
+
 delete window[callbackName];
 
+if(script){
 script.remove();
+}
 
 }catch(error){
 
@@ -239,12 +291,27 @@ title:error.toString()
 
 };
 
+/* =====================================================
+SCRIPT JSONP
+===================================================== */
+
 const script =
 document.createElement("script");
 
 script.src =
 
 `${API_URL}?action=getServidores&callback=${callbackName}`;
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error conexión Apps Script"
+});
+
+};
 
 document.body.appendChild(script);
 
@@ -261,8 +328,13 @@ const callbackName =
 
 window[callbackName] = function(result){
 
+try{
+
 if(!result.status){
+
+console.error(result.message);
 return;
+
 }
 
 const ministerios =
@@ -303,6 +375,18 @@ ${m}
 
 });
 
+delete window[callbackName];
+
+if(script){
+script.remove();
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
 };
 
 const script =
@@ -312,12 +396,20 @@ script.src =
 
 `${API_URL}?action=getMinisterios&callback=${callbackName}`;
 
+script.onerror = function(){
+
+console.error(
+"Error cargando ministerios"
+);
+
+};
+
 document.body.appendChild(script);
 
 }
 
 /* =====================================================
-CAMARA
+ACTIVAR CAMARA
 ===================================================== */
 
 async function activarCamara(){
@@ -389,7 +481,7 @@ preview.style.display =
 }
 
 /* =====================================================
-GUARDAR
+GUARDAR SERVIDOR
 ===================================================== */
 
 async function guardarServidor(){
@@ -459,20 +551,27 @@ if(data.status){
 
 Swal.fire({
 icon:"success",
-title:"Servidor guardado"
+title:"Servidor guardado correctamente"
 });
 
-bootstrap.Modal
-.getInstance(
+const modal =
+bootstrap.Modal.getInstance(
 document.getElementById(
 "modalServidor"
 )
-)
-.hide();
+);
+
+if(modal){
+modal.hide();
+}
 
 limpiarFormulario();
 
+setTimeout(()=>{
+
 cargarServidores();
+
+},500);
 
 }else{
 
@@ -497,7 +596,7 @@ title:error.toString()
 }
 
 /* =====================================================
-LIMPIAR
+LIMPIAR FORMULARIO
 ===================================================== */
 
 function limpiarFormulario(){
@@ -533,14 +632,70 @@ el.value = "";
 
 fotoBase64 = "";
 
+const preview =
 document.getElementById(
 "previewFoto"
-).style.display = "none";
+);
+
+if(preview){
+
+preview.style.display = "none";
+preview.src = "";
 
 }
 
 /* =====================================================
-EXPORTAR
+DETENER CAMARA
+===================================================== */
+
+const video =
+document.getElementById("camera");
+
+if(video && video.srcObject){
+
+video.srcObject
+.getTracks()
+.forEach(track=>track.stop());
+
+video.srcObject = null;
+
+}
+
+}
+
+/* =====================================================
+EDITAR
+===================================================== */
+
+function editarServidor(id){
+
+Swal.fire({
+icon:"info",
+title:"Módulo edición próximamente"
+});
+
+}
+
+/* =====================================================
+ELIMINAR
+===================================================== */
+
+function eliminarServidor(id){
+
+Swal.fire({
+
+title:"¿Eliminar servidor?",
+text:"Esta acción no se puede deshacer",
+icon:"warning",
+showCancelButton:true,
+confirmButtonText:"Eliminar"
+
+});
+
+}
+
+/* =====================================================
+EXPORTAR EXCEL
 ===================================================== */
 
 function exportarExcel(){
@@ -560,6 +715,10 @@ workbook,
 );
 
 }
+
+/* =====================================================
+EXPORTAR PDF
+===================================================== */
 
 function exportarPDF(){
 
