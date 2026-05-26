@@ -19,13 +19,14 @@ window[callbackName] = function(result){
 
 try{
 
-if(!result.status){
+if(!result || !result.status){
 
 ocultarLoader();
 
 Swal.fire({
 icon:"error",
-title:result.message || "Error obteniendo servidores"
+title:
+result.message || "Error obteniendo servidores"
 });
 
 return;
@@ -63,12 +64,17 @@ No hay registros
 
 }else{
 
-for(let i=1;i<data.length;i++){
+/* =====================================================
+RECORRER FILAS
+===================================================== */
+
+for(let i = 1; i < data.length; i++){
 
 let s = data[i] || [];
 
 /* =====================================================
 NORMALIZAR COLUMNAS
+SIEMPRE 14
 ===================================================== */
 
 while(s.length < 14){
@@ -76,18 +82,37 @@ s.push("");
 }
 
 /* =====================================================
-IGNORAR FILAS TOTALMENTE VACIAS
+IGNORAR FILAS VACIAS
 ===================================================== */
 
 const filaVacia =
-s.every(campo => String(campo).trim() === "");
+s.every(campo =>
+String(campo).trim() === ""
+);
 
 if(filaVacia){
 continue;
 }
 
 /* =====================================================
-DATOS
+COLUMNAS
+=====================================================
+
+0 ID
+1 NUMERO
+2 NOMBRE
+3 APELLIDOS
+4 TELEFONO
+5 EMAIL
+6 MINISTERIO PRINCIPAL
+7 MINISTERIO SEC1
+8 MINISTERIO SEC2
+9 MINISTERIO SEC3
+10 GRUPO
+11 FECHA
+12 ESTADO
+13 FOTO
+
 ===================================================== */
 
 const foto =
@@ -96,7 +121,7 @@ s[13] && s[13] !== ""
 : "https://i.pravatar.cc/150?img=12";
 
 const nombre =
-`${s[2] || ''} ${s[3] || ''}`;
+`${s[2] || ""} ${s[3] || ""}`;
 
 const ministerios = [
 
@@ -105,7 +130,9 @@ s[7],
 s[8],
 s[9]
 
-].filter(x => x && x !== "");
+].filter(x =>
+x && String(x).trim() !== ""
+);
 
 let ministeriosHTML = "";
 
@@ -123,7 +150,7 @@ ${m}
 
 /* =====================================================
 IMPORTANTE:
-SIEMPRE 6 COLUMNAS EXACTAS
+SIEMPRE EXACTAMENTE 6 TD
 ===================================================== */
 
 html += `
@@ -147,17 +174,17 @@ ${nombre}
 
 <div class="small text-muted">
 <i class="fa fa-id-card"></i>
-${s[1] || ''}
+${s[1] || ""}
 </div>
 
 <div class="small text-muted">
 <i class="fa fa-phone"></i>
-${s[4] || ''}
+${s[4] || ""}
 </div>
 
 <div class="small text-muted">
 <i class="fa fa-envelope"></i>
-${s[5] || ''}
+${s[5] || ""}
 </div>
 
 </td>
@@ -169,7 +196,7 @@ ${ministeriosHTML}
 <td class="align-middle">
 
 <span class="badge bg-light text-dark border">
-${s[10] || ''}
+${s[10] || ""}
 </span>
 
 </td>
@@ -177,7 +204,7 @@ ${s[10] || ''}
 <td class="align-middle">
 
 <span class="badge bg-success">
-${s[12] || 'ACTIVO'}
+${s[12] || "ACTIVO"}
 </span>
 
 </td>
@@ -229,20 +256,53 @@ DESTRUIR DATATABLE
 
 if($.fn.DataTable.isDataTable('#tabla')){
 
-$('#tabla').DataTable().clear().destroy();
+$('#tabla').DataTable().destroy();
 
 }
 
 /* =====================================================
-REINICIALIZAR DATATABLE
+LIMPIAR ESTRUCTURA
+===================================================== */
+
+$('#tabla tbody').empty();
+
+tbody.innerHTML = html;
+
+/* =====================================================
+VALIDAR COLUMNAS
+===================================================== */
+
+const filas =
+document.querySelectorAll("#tabla tbody tr");
+
+filas.forEach(fila=>{
+
+const columnas =
+fila.querySelectorAll("td").length;
+
+if(columnas !== 6){
+
+console.warn(
+"Fila inválida eliminada:",
+fila
+);
+
+fila.remove();
+
+}
+
+});
+
+/* =====================================================
+INICIALIZAR DATATABLE
 ===================================================== */
 
 tabla = $('#tabla').DataTable({
 
 responsive:true,
 pageLength:10,
-destroy:true,
 autoWidth:false,
+destroy:true,
 
 language:{
 url:"https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
