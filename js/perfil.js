@@ -59,7 +59,7 @@ CAMPOS
 
 const foto = esArray
 ? (s[13] || "")
-: (s.foto || s.FOTO || "");
+: (s.foto || s.FOTO || s.Foto || "");
 
 const nombre = esArray
 ? (s[2] || "")
@@ -138,19 +138,28 @@ document.getElementById("fotoServidor");
 VALIDAR FOTO
 ====================================== */
 
-if(
-s.foto &&
-String(s.foto).trim() !== "" &&
-String(s.foto).startsWith("data:image")
-){
+let fotoFinal = foto || "";
 
-fotoServidor.src = s.foto;
+if (fotoFinal && String(fotoFinal).trim() !== "") {
 
-}else{
+    // Si ya es base64
+    if (fotoFinal.startsWith("data:image")) {
+        fotoServidor.src = fotoFinal;
+    }
+    // Si es URL normal
+    else if (
+        fotoFinal.startsWith("http") ||
+        fotoFinal.startsWith("https")
+    ) {
+        fotoServidor.src = fotoFinal;
+    }
+    // Si viene como archivo relativo
+    else {
+        fotoServidor.src = fotoFinal;
+    }
 
-fotoServidor.src =
-"https://i.pravatar.cc/200?img=12";
-
+} else {
+    fotoServidor.src = "https://i.pravatar.cc/200?img=12";
 }
 
 /* ======================================
