@@ -20,6 +20,8 @@ await fetch(
 const result =
 await response.json();
 
+console.log("PERFIL:", result);
+
 if(!result.status){
 
 Swal.fire({
@@ -33,32 +35,107 @@ return;
 
 }
 
-const s =
-result.servidor;
-
 /* ======================================
-FOTO
+DATOS SERVIDOR
 ====================================== */
 
-const fotoServidor =
-s.foto &&
-String(s.foto).trim() !== ""
-? s.foto
-: "https://i.pravatar.cc/200";
+const s =
+result.servidor || {};
+
+/* ======================================
+NORMALIZAR CAMPOS
+====================================== */
+
+const foto =
+s.foto ||
+s.FOTO ||
+s[13] ||
+"https://i.pravatar.cc/200";
+
+const nombre =
+s.nombre ||
+s.NOMBRE ||
+s[2] ||
+"";
+
+const apellidos =
+s.apellidos ||
+s.APELLIDOS ||
+s[3] ||
+"";
+
+const numero =
+s.numero ||
+s.NUMERO ||
+s[1] ||
+"";
+
+const telefono =
+s.telefono ||
+s.TELEFONO ||
+s[4] ||
+"";
+
+const email =
+s.email ||
+s.EMAIL ||
+s[5] ||
+"";
+
+const ministerio1 =
+s.ministerio1 ||
+s.MINISTERIO1 ||
+s[6] ||
+"";
+
+const ministerio2 =
+s.ministerio2 ||
+s.MINISTERIO2 ||
+s[7] ||
+"";
+
+const ministerio3 =
+s.ministerio3 ||
+s.MINISTERIO3 ||
+s[8] ||
+"";
+
+const ministerio4 =
+s.ministerio4 ||
+s.MINISTERIO4 ||
+s[9] ||
+"";
+
+const grupo =
+s.grupo ||
+s.GRUPO ||
+s[10] ||
+"";
+
+const fecha =
+s.fecha ||
+s.FECHA ||
+s[11] ||
+"";
+
+const estado =
+s.estado ||
+s.ESTADO ||
+s[12] ||
+"ACTIVO";
+
+/* ======================================
+HEADER
+====================================== */
 
 document.getElementById(
 "fotoServidor"
-).src =
-fotoServidor;
-
-/* ======================================
-NOMBRE
-====================================== */
+).src = foto;
 
 document.getElementById(
 "nombreServidor"
 ).innerText =
-`${s.nombre || ""} ${s.apellidos || ""}`;
+`${nombre} ${apellidos}`;
 
 /* ======================================
 MINISTERIO PRINCIPAL
@@ -68,12 +145,13 @@ document.getElementById(
 "ministerioPrincipal"
 ).innerHTML =
 `
-<span class="text-muted">
-Ministerio Principal:
-</span>
-<span class="fw-bold text-primary">
-${s.ministerio1 || "SIN MINISTERIO"}
-</span>
+<div class="fw-semibold text-muted mb-1">
+Ministerio Principal
+</div>
+
+<div class="fs-5 fw-bold text-primary">
+${ministerio1}
+</div>
 `;
 
 /* ======================================
@@ -84,20 +162,25 @@ let secundariosHTML = "";
 
 const secundarios = [
 
-s.ministerio2,
-s.ministerio3,
-s.ministerio4
+ministerio2,
+ministerio3,
+ministerio4
 
 ].filter(x =>
 x && String(x).trim() !== ""
 );
 
+if(secundarios.length > 0){
+
+secundariosHTML += `
+<div class="mt-2">
+`;
+
 secundarios.forEach(min=>{
 
 secundariosHTML += `
 
-<span
-class="badge bg-light text-dark border me-1 mb-1">
+<span class="badge bg-light text-dark border me-1 mb-1">
 
 ${min}
 
@@ -107,10 +190,32 @@ ${min}
 
 });
 
+secundariosHTML += `
+</div>
+`;
+
+}
+
 document.getElementById(
 "ministeriosSecundarios"
 ).innerHTML =
 secundariosHTML;
+
+/* ======================================
+ESTADO
+====================================== */
+
+const estadoBadge =
+document.querySelector(
+".badge.bg-success"
+);
+
+if(estadoBadge){
+
+estadoBadge.innerText =
+estado;
+
+}
 
 /* ======================================
 INFO GENERAL
@@ -119,27 +224,27 @@ INFO GENERAL
 document.getElementById(
 "numeroServidor"
 ).innerText =
-s.numero || "";
+numero;
 
 document.getElementById(
 "email"
 ).innerText =
-s.email || "";
+email;
 
 document.getElementById(
 "telefono"
 ).innerText =
-s.telefono || "";
+telefono;
 
 document.getElementById(
 "grupo"
 ).innerText =
-s.grupo || "";
+grupo;
 
 document.getElementById(
 "fechaIngreso"
 ).innerText =
-s.fecha || "";
+fecha;
 
 /* ======================================
 TIMELINE
@@ -156,7 +261,9 @@ timelineHTML += `
 <h6>${item.evento}</h6>
 
 <small class="text-muted">
+
 ${item.fecha}
+
 </small>
 
 </div>
@@ -238,20 +345,23 @@ formacionHTML;
 ASISTENCIA
 ====================================== */
 
+const asistencia =
+result.asistencia || 0;
+
 document.getElementById(
 "porcentajeAsistencia"
 ).innerText =
-(result.asistencia || 0) + "%";
+asistencia + "%";
 
 document.getElementById(
 "barraAsistencia"
 ).style.width =
-(result.asistencia || 0) + "%";
+asistencia + "%";
 
 document.getElementById(
 "barraAsistencia"
 ).innerText =
-(result.asistencia || 0) + "%";
+asistencia + "%";
 
 }catch(error){
 
