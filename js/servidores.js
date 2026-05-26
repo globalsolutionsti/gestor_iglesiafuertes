@@ -63,10 +63,6 @@ No hay registros
 
 }else{
 
-/* =====================================================
-RECORRER FILAS
-===================================================== */
-
 for(let i=1;i<data.length;i++){
 
 let s = data[i] || [];
@@ -80,35 +76,18 @@ s.push("");
 }
 
 /* =====================================================
-IGNORAR FILAS VACIAS
+IGNORAR FILAS TOTALMENTE VACIAS
 ===================================================== */
 
 const filaVacia =
-s.every(campo => campo === "");
+s.every(campo => String(campo).trim() === "");
 
 if(filaVacia){
 continue;
 }
 
 /* =====================================================
-COLUMNAS
-=====================================================
-
-0 ID
-1 NUMERO
-2 NOMBRE
-3 APELLIDOS
-4 TELEFONO
-5 EMAIL
-6 MINISTERIO PRINCIPAL
-7 MINISTERIO SEC1
-8 MINISTERIO SEC2
-9 MINISTERIO SEC3
-10 GRUPO
-11 FECHA
-12 ESTADO
-13 FOTO
-
+DATOS
 ===================================================== */
 
 const foto =
@@ -141,6 +120,11 @@ ${m}
 `;
 
 });
+
+/* =====================================================
+IMPORTANTE:
+SIEMPRE 6 COLUMNAS EXACTAS
+===================================================== */
 
 html += `
 
