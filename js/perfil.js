@@ -127,12 +127,42 @@ console.log("Ministerio:", ministerio1);
 HEADER
 ====================================== */
 
-document.getElementById(
-"fotoServidor"
-).src =
-foto && foto !== ""
-? foto
-: "https://i.pravatar.cc/200";
+/* ======================================
+FOTO SERVIDOR
+====================================== */
+
+const fotoServidor =
+document.getElementById("fotoServidor");
+
+/* ======================================
+VALIDAR FOTO
+====================================== */
+
+if(
+s.foto &&
+String(s.foto).trim() !== "" &&
+String(s.foto).startsWith("data:image")
+){
+
+fotoServidor.src = s.foto;
+
+}else{
+
+fotoServidor.src =
+"https://i.pravatar.cc/200?img=12";
+
+}
+
+/* ======================================
+SI FALLA IMAGEN
+====================================== */
+
+fotoServidor.onerror = function(){
+
+this.src =
+"https://i.pravatar.cc/200?img=12";
+
+};
 
 document.getElementById(
 "nombreServidor"
