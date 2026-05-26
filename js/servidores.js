@@ -523,9 +523,11 @@ preview.style.display =
 
 /* =====================================================
 GUARDAR SERVIDOR
+SIN CORS
+USANDO JSONP
 ===================================================== */
 
-async function guardarServidor(){
+function guardarServidor(){
 
 mostrarLoader();
 
@@ -568,30 +570,23 @@ foto:fotoBase64
 
 };
 
-try{
+/* =====================================================
+CALLBACK
+===================================================== */
 
-const response =
-await fetch(
-API_URL + "?action=guardarServidor",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify(body)
-}
-);
+const callbackName =
+"guardar_" + Date.now();
 
-const data =
-await response.json();
+window[callbackName] = function(data){
 
 ocultarLoader();
+
+try{
 
 if(data.status){
 
 /* =====================================================
-CERRAR MODAL CORRECTAMENTE
-EVITA ERROR aria-hidden
+CERRAR MODAL
 ===================================================== */
 
 const modalElement =
@@ -610,10 +605,9 @@ document.body.style.overflow = "";
 
 document.body.style.paddingRight = "";
 
-const backdrops =
-document.querySelectorAll(".modal-backdrop");
-
-backdrops.forEach(b=>b.remove());
+document
+.querySelectorAll(".modal-backdrop")
+.forEach(el=>el.remove());
 
 }
 
@@ -635,7 +629,7 @@ video.srcObject = null;
 }
 
 /* =====================================================
-ALERTA EXITO
+ALERTA
 ===================================================== */
 
 Swal.fire({
@@ -666,8 +660,6 @@ title:data.message || "Error guardando servidor"
 
 }catch(error){
 
-ocultarLoader();
-
 console.error(error);
 
 Swal.fire({
@@ -676,6 +668,76 @@ title:error.toString()
 });
 
 }
+
+/* =====================================================
+LIMPIEZA
+===================================================== */
+
+delete window[callbackName];
+
+if(script){
+script.remove();
+}
+
+};
+
+/* =====================================================
+ENVIAR DATOS
+===================================================== */
+
+const script =
+document.createElement("script");
+
+/* =====================================================
+PARAMETROS
+===================================================== */
+
+const params =
+new URLSearchParams({
+
+action:"guardarServidor",
+callback:callbackName,
+
+numeroServidor:body.numeroServidor,
+nombre:body.nombre,
+apellidos:body.apellidos,
+telefono:body.telefono,
+email:body.email,
+
+ministerioPrincipal:body.ministerioPrincipal,
+ministerioSec1:body.ministerioSec1,
+ministerioSec2:body.ministerioSec2,
+ministerioSec3:body.ministerioSec3,
+
+grupoConexion:body.grupoConexion,
+fechaIngreso:body.fechaIngreso,
+foto:body.foto
+
+});
+
+/* =====================================================
+URL FINAL
+===================================================== */
+
+script.src =
+`${API_URL}?${params.toString()}`;
+
+/* =====================================================
+ERROR
+===================================================== */
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error conexión Apps Script"
+});
+
+};
+
+document.body.appendChild(script);
 
 }
 
