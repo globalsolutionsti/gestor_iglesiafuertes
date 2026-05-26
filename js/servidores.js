@@ -485,6 +485,11 @@ title:"No se pudo activar cámara"
 TOMAR FOTO
 ===================================================== */
 
+/* =====================================================
+TOMAR FOTO
+OPTIMIZADA PARA APPS SCRIPT
+===================================================== */
+
 function tomarFoto(){
 
 const video =
@@ -496,22 +501,73 @@ document.getElementById("canvas");
 const preview =
 document.getElementById("previewFoto");
 
+/* =====================================================
+REDUCIR TAMAÑO
+===================================================== */
+
+const MAX_WIDTH = 480;
+
+const scale =
+MAX_WIDTH / video.videoWidth;
+
 canvas.width =
-video.videoWidth;
+MAX_WIDTH;
 
 canvas.height =
-video.videoHeight;
+video.videoHeight * scale;
 
 const ctx =
 canvas.getContext("2d");
 
-ctx.drawImage(video,0,0);
+/* =====================================================
+MEJORAR CALIDAD
+===================================================== */
+
+ctx.imageSmoothingEnabled = true;
+
+ctx.imageSmoothingQuality = "high";
+
+/* =====================================================
+CAPTURAR FOTO
+===================================================== */
+
+ctx.drawImage(
+video,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+/* =====================================================
+COMPRESION JPEG
+===================================================== */
 
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.8
+0.5
 );
+
+/* =====================================================
+VALIDAR TAMAÑO
+===================================================== */
+
+if(fotoBase64.length > 180000){
+
+Swal.fire({
+icon:"warning",
+title:"La imagen sigue siendo muy grande",
+text:"Acércate más a la cámara e intenta nuevamente"
+});
+
+return;
+
+}
+
+/* =====================================================
+PREVIEW
+===================================================== */
 
 preview.src =
 fotoBase64;
