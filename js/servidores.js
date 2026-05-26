@@ -37,22 +37,86 @@ result.data || [];
 let html = "";
 
 /* =====================================================
+VALIDAR DATOS
+===================================================== */
+
+if(data.length <= 1){
+
+document.getElementById(
+"tablaServidores"
+).innerHTML = `
+<tr>
+<td colspan="6" class="text-center py-4">
+No hay servidores registrados
+</td>
+</tr>
+`;
+
+ocultarLoader();
+
+return;
+
+}
+
+/* =====================================================
 RECORRER DATOS
+ESTRUCTURA:
+0 ID
+1 NUMERO
+2 NOMBRE
+3 APELLIDOS
+4 TELEFONO
+5 EMAIL
+6 MINISTERIO PRINCIPAL
+7 MINISTERIO SEC1
+8 MINISTERIO SEC2
+9 MINISTERIO SEC3
+10 GRUPO
+11 FECHA
+12 ESTADO
+13 FOTO
 ===================================================== */
 
 for(let i=1;i<data.length;i++){
 
 const s = data[i];
 
+/* =========================================
+VALIDAR FILAS VACIAS
+========================================= */
+
+if(!s || s.length === 0){
+continue;
+}
+
+const foto =
+s[13] && s[13] !== ""
+? s[13]
+: "https://i.pravatar.cc/150";
+
+const nombreCompleto =
+`${s[2] || ''} ${s[3] || ''}`;
+
+const ministerioPrincipal =
+s[6] || '';
+
+const ministeriosSecundarios = [
+
+s[7],
+s[8],
+s[9]
+
+]
+.filter(m => m && m !== "")
+.join(" • ");
+
 html += `
 
 <tr>
 
-<td>
+<td class="align-middle">
 
-<img src="${
-s[13] || 'https://i.pravatar.cc/150'
-}"
+<img src="${foto}"
 
 class="rounded-circle"
 
@@ -66,60 +130,66 @@ box-shadow:0 2px 10px rgba(0,0,0,.15);
 
 </td>
 
-<td>
+<td class="align-middle">
 
 <a href="perfil.html?id=${s[0]}"
-class="fw-bold text-decoration-none">
+class="fw-bold text-decoration-none text-dark">
 
-${s[2]} ${s[3]}
+${nombreCompleto}
 
 </a>
 
+<div class="text-muted small mt-1">
+
+<i class="fa fa-id-badge"></i>
+${s[1] || ''}
+
+</div>
+
 <div class="text-muted small">
 
-${s[1]}
+<i class="fa fa-phone"></i>
+${s[4] || ''}
 
 </div>
 
 </td>
 
-<td>
+<td class="align-middle">
 
-<div class="fw-bold">
+<div class="fw-bold text-primary">
 
-${s[6] || ''}
-
-</div>
-
-<div class="small text-muted">
-
-${s[7] || ''}
+${ministerioPrincipal}
 
 </div>
 
-<div class="small text-muted">
+${
+ministeriosSecundarios
+? `
+<div class="small text-muted mt-1">
 
-${s[8] || ''}
-
-</div>
-
-<div class="small text-muted">
-
-${s[9] || ''}
+${ministeriosSecundarios}
 
 </div>
+`
+: ''
+}
 
 </td>
 
-<td>
+<td class="align-middle">
+
+<span class="badge bg-light text-dark border">
 
 ${s[10] || ''}
 
+</span>
+
 </td>
 
-<td>
+<td class="align-middle">
 
-<span class="badge bg-success">
+<span class="badge bg-success px-3 py-2">
 
 ${s[12] || 'ACTIVO'}
 
@@ -127,7 +197,9 @@ ${s[12] || 'ACTIVO'}
 
 </td>
 
-<td class="d-flex gap-2">
+<td class="align-middle">
+
+<div class="d-flex gap-2">
 
 <button
 class="btn btn-primary btn-sm"
@@ -145,21 +217,13 @@ onclick="eliminarServidor('${s[0]}')">
 
 </button>
 
+</div>
+
 </td>
 
 </tr>
 
 `;
-
-}
-
-/* =====================================================
-DESTRUIR DATATABLE
-===================================================== */
-
-if($.fn.DataTable.isDataTable('#tabla')){
-
-$('#tabla').DataTable().destroy();
 
 }
 
@@ -170,6 +234,16 @@ RENDER TABLA
 document.getElementById(
 "tablaServidores"
 ).innerHTML = html;
+
+/* =====================================================
+DESTRUIR DATATABLE
+===================================================== */
+
+if($.fn.DataTable.isDataTable('#tabla')){
+
+$('#tabla').DataTable().destroy();
+
+}
 
 /* =====================================================
 DATATABLE
@@ -209,6 +283,10 @@ title:error.toString()
 }
 
 };
+
+/* =====================================================
+SCRIPT JSONP
+===================================================== */
 
 const script =
 document.createElement("script");
@@ -436,7 +514,7 @@ const campos = [
 "telefono",
 "email",
 "ministerio",
-"groupoConexion",
+"grupoConexion",
 "fechaIngreso"
 
 ];
@@ -512,7 +590,8 @@ Swal.fire({
 
 title:"¿Eliminar servidor?",
 icon:"warning",
-showCancelButton:true
+showCancelButton:true,
+confirmButtonText:"Eliminar"
 
 });
 
