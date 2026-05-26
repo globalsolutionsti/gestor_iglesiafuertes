@@ -204,6 +204,10 @@ ${ministeriosHTML}
 </td>
 
 <td class="align-middle">
+${ministeriosHTML}
+</td>
+
+<td class="align-middle">
 
 <span class="badge bg-light text-dark border">
 ${s[10] || ""}
@@ -307,7 +311,11 @@ filas.forEach(fila=>{
 const columnas =
 fila.querySelectorAll("td").length;
 
-if(columnas !== 6){
+/* =====================================================
+AHORA SON 7 COLUMNAS
+===================================================== */
+
+if(columnas !== 7){
 
 console.warn(
 "Fila inválida eliminada:",
