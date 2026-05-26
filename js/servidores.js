@@ -45,11 +45,24 @@ if(data.length <= 1){
 document.getElementById(
 "tablaServidores"
 ).innerHTML = `
+
 <tr>
-<td colspan="6" class="text-center py-4">
+
+<td colspan="6"
+class="text-center py-5">
+
+<i class="fa fa-users fa-3x text-muted mb-3"></i>
+
+<div class="fw-bold">
+
 No hay servidores registrados
+
+</div>
+
 </td>
+
 </tr>
+
 `;
 
 ocultarLoader();
@@ -59,35 +72,37 @@ return;
 }
 
 /* =====================================================
-RECORRER DATOS
-ESTRUCTURA:
-0 ID
-1 NUMERO
-2 NOMBRE
-3 APELLIDOS
-4 TELEFONO
-5 EMAIL
-6 MINISTERIO PRINCIPAL
-7 MINISTERIO SEC1
-8 MINISTERIO SEC2
-9 MINISTERIO SEC3
+ESTRUCTURA REAL
+=====================================================
+
+0  ID
+1  NUMERO
+2  NOMBRE
+3  APELLIDOS
+4  TELEFONO
+5  EMAIL
+6  MINISTERIO PRINCIPAL
+7  MINISTERIO SEC1
+8  MINISTERIO SEC2
+9  MINISTERIO SEC3
 10 GRUPO
 11 FECHA
 12 ESTADO
 13 FOTO
+
 ===================================================== */
 
 for(let i=1;i<data.length;i++){
 
 const s = data[i];
 
-/* =========================================
-VALIDAR FILAS VACIAS
-========================================= */
-
 if(!s || s.length === 0){
 continue;
 }
+
+/* =====================================================
+DATOS
+===================================================== */
 
 const foto =
 s[13] && s[13] !== ""
@@ -107,25 +122,34 @@ s[8],
 s[9]
 
 ]
-.filter(m => m && m !== "")
+.filter(item => item && item !== "")
 .join(" • ");
+
+const grupo =
+s[10] || '';
+
+const estado =
+s[12] || 'ACTIVO';
+
+/* =====================================================
+ROW HTML
+===================================================== */
 
 html += `
 
 <tr>
 
-<td class="align-middle">
+<td class="align-middle text-center">
 
 <img src="${foto}"
 
-class="rounded-circle"
-
 style="
-width:55px;
-height:55px;
+width:60px;
+height:60px;
 object-fit:cover;
+border-radius:50%;
 border:3px solid #0d6efd;
-box-shadow:0 2px 10px rgba(0,0,0,.15);
+box-shadow:0 4px 12px rgba(0,0,0,.18);
 ">
 
 </td>
@@ -133,23 +157,30 @@ box-shadow:0 2px 10px rgba(0,0,0,.15);
 <td class="align-middle">
 
 <a href="perfil.html?id=${s[0]}"
-class="fw-bold text-decoration-none text-dark">
+class="fw-bold text-decoration-none text-dark fs-6">
 
 ${nombreCompleto}
 
 </a>
 
-<div class="text-muted small mt-1">
+<div class="small text-muted mt-1">
 
 <i class="fa fa-id-badge"></i>
 ${s[1] || ''}
 
 </div>
 
-<div class="text-muted small">
+<div class="small text-muted">
 
 <i class="fa fa-phone"></i>
 ${s[4] || ''}
+
+</div>
+
+<div class="small text-muted">
+
+<i class="fa fa-envelope"></i>
+${s[5] || ''}
 
 </div>
 
@@ -157,7 +188,7 @@ ${s[4] || ''}
 
 <td class="align-middle">
 
-<div class="fw-bold text-primary">
+<div class="fw-bold text-primary mb-1">
 
 ${ministerioPrincipal}
 
@@ -166,7 +197,7 @@ ${ministerioPrincipal}
 ${
 ministeriosSecundarios
 ? `
-<div class="small text-muted mt-1">
+<div class="small text-muted">
 
 ${ministeriosSecundarios}
 
@@ -179,9 +210,9 @@ ${ministeriosSecundarios}
 
 <td class="align-middle">
 
-<span class="badge bg-light text-dark border">
+<span class="badge bg-light text-dark border px-3 py-2">
 
-${s[10] || ''}
+${grupo}
 
 </span>
 
@@ -191,7 +222,7 @@ ${s[10] || ''}
 
 <span class="badge bg-success px-3 py-2">
 
-${s[12] || 'ACTIVO'}
+${estado}
 
 </span>
 
@@ -199,7 +230,7 @@ ${s[12] || 'ACTIVO'}
 
 <td class="align-middle">
 
-<div class="d-flex gap-2">
+<div class="d-flex gap-2 justify-content-center">
 
 <button
 class="btn btn-primary btn-sm"
@@ -394,6 +425,10 @@ async function guardarServidor(){
 
 mostrarLoader();
 
+/* =====================================================
+NUEVA ESTRUCTURA MINISTERIOS
+===================================================== */
+
 const body = {
 
 numeroServidor:
@@ -411,8 +446,17 @@ document.getElementById("telefono").value,
 email:
 document.getElementById("email").value,
 
-ministerio:
-document.getElementById("ministerio").value,
+ministerioPrincipal:
+document.getElementById("ministerioPrincipal").value,
+
+ministerioSec1:
+document.getElementById("ministerioSec1").value,
+
+ministerioSec2:
+document.getElementById("ministerioSec2").value,
+
+ministerioSec3:
+document.getElementById("ministerioSec3").value,
 
 grupoConexion:
 document.getElementById("grupoConexion").value,
@@ -513,7 +557,10 @@ const campos = [
 "apellidos",
 "telefono",
 "email",
-"ministerio",
+"ministerioPrincipal",
+"ministerioSec1",
+"ministerioSec2",
+"ministerioSec3",
 "grupoConexion",
 "fechaIngreso"
 
@@ -574,7 +621,7 @@ function editarServidor(id){
 Swal.fire({
 
 icon:"info",
-title:"Próximamente"
+title:"Módulo edición próximamente"
 
 });
 
@@ -589,6 +636,7 @@ function eliminarServidor(id){
 Swal.fire({
 
 title:"¿Eliminar servidor?",
+text:"Esta acción no se puede deshacer",
 icon:"warning",
 showCancelButton:true,
 confirmButtonText:"Eliminar"
@@ -598,7 +646,7 @@ confirmButtonText:"Eliminar"
 }
 
 /* =====================================================
-EXPORTAR
+EXPORTAR EXCEL
 ===================================================== */
 
 function exportarExcel(){
@@ -618,6 +666,10 @@ workbook,
 );
 
 }
+
+/* =====================================================
+EXPORTAR PDF
+===================================================== */
 
 function exportarPDF(){
 
@@ -658,6 +710,7 @@ z-index:99999;
 ">
 
 <div class="spinner-border text-primary"
+
 style="
 width:4rem;
 height:4rem;
