@@ -50,7 +50,7 @@ html = `
 
 <tr>
 
-<td colspan="6" class="text-center py-5">
+<td colspan="7" class="text-center py-5">
 
 <i class="fa fa-users fa-3x text-muted mb-3"></i>
 
