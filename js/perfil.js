@@ -37,48 +37,109 @@ const s =
 result.servidor;
 
 /* ======================================
-HEADER
+FOTO
 ====================================== */
+
+const fotoServidor =
+s.foto &&
+String(s.foto).trim() !== ""
+? s.foto
+: "https://i.pravatar.cc/200";
 
 document.getElementById(
 "fotoServidor"
 ).src =
-s.foto || "https://i.pravatar.cc/200";
+fotoServidor;
+
+/* ======================================
+NOMBRE
+====================================== */
 
 document.getElementById(
 "nombreServidor"
 ).innerText =
-`${s.nombre} ${s.apellidos}`;
+`${s.nombre || ""} ${s.apellidos || ""}`;
+
+/* ======================================
+MINISTERIO PRINCIPAL
+====================================== */
 
 document.getElementById(
 "ministerioPrincipal"
-).innerText =
-s.ministerio;
+).innerHTML =
+`
+<span class="text-muted">
+Ministerio Principal:
+</span>
+<span class="fw-bold text-primary">
+${s.ministerio1 || "SIN MINISTERIO"}
+</span>
+`;
+
+/* ======================================
+MINISTERIOS SECUNDARIOS
+====================================== */
+
+let secundariosHTML = "";
+
+const secundarios = [
+
+s.ministerio2,
+s.ministerio3,
+s.ministerio4
+
+].filter(x =>
+x && String(x).trim() !== ""
+);
+
+secundarios.forEach(min=>{
+
+secundariosHTML += `
+
+<span
+class="badge bg-light text-dark border me-1 mb-1">
+
+${min}
+
+</span>
+
+`;
+
+});
+
+document.getElementById(
+"ministeriosSecundarios"
+).innerHTML =
+secundariosHTML;
+
+/* ======================================
+INFO GENERAL
+====================================== */
 
 document.getElementById(
 "numeroServidor"
 ).innerText =
-s.numero;
+s.numero || "";
 
 document.getElementById(
 "email"
 ).innerText =
-s.email;
+s.email || "";
 
 document.getElementById(
 "telefono"
 ).innerText =
-s.telefono;
+s.telefono || "";
 
 document.getElementById(
 "grupo"
 ).innerText =
-s.grupo;
+s.grupo || "";
 
 document.getElementById(
 "fechaIngreso"
 ).innerText =
-s.fecha;
+s.fecha || "";
 
 /* ======================================
 TIMELINE
@@ -86,7 +147,7 @@ TIMELINE
 
 let timelineHTML = "";
 
-result.timeline.forEach(item=>{
+(result.timeline || []).forEach(item=>{
 
 timelineHTML += `
 
@@ -115,7 +176,7 @@ FORMACION
 
 let formacionHTML = "";
 
-result.formacion.forEach(item=>{
+(result.formacion || []).forEach(item=>{
 
 let clase = "";
 
@@ -180,17 +241,17 @@ ASISTENCIA
 document.getElementById(
 "porcentajeAsistencia"
 ).innerText =
-result.asistencia + "%";
+(result.asistencia || 0) + "%";
 
 document.getElementById(
 "barraAsistencia"
 ).style.width =
-result.asistencia + "%";
+(result.asistencia || 0) + "%";
 
 document.getElementById(
 "barraAsistencia"
 ).innerText =
-result.asistencia + "%";
+(result.asistencia || 0) + "%";
 
 }catch(error){
 
