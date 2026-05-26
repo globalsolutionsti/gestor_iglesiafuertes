@@ -204,10 +204,6 @@ ${ministeriosHTML}
 </td>
 
 <td class="align-middle">
-${ministeriosHTML}
-</td>
-
-<td class="align-middle">
 
 <span class="badge bg-light text-dark border">
 ${s[10] || ""}
