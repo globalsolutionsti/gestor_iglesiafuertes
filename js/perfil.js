@@ -140,26 +140,38 @@ VALIDAR FOTO
 
 let fotoFinal = foto || "";
 
+/* ======================================
+MOSTRAR FOTO SOLO SI EXISTE
+====================================== */
+
 if (fotoFinal && String(fotoFinal).trim() !== "") {
 
-    // Si ya es base64
-    if (fotoFinal.startsWith("data:image")) {
-        fotoServidor.src = fotoFinal;
-    }
-    // Si es URL normal
-    else if (
-        fotoFinal.startsWith("http") ||
-        fotoFinal.startsWith("https")
-    ) {
-        fotoServidor.src = fotoFinal;
-    }
-    // Si viene como archivo relativo
-    else {
-        fotoServidor.src = fotoFinal;
-    }
+    fotoServidor.onload = function () {
+        fotoServidor.style.display = "block";
+    };
+
+    fotoServidor.onerror = function () {
+
+        this.style.display = "block";
+
+        this.src =
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(nombre + " " + apellidos) +
+        "&background=0D6EFD&color=fff&size=256";
+
+    };
+
+    fotoServidor.src = fotoFinal;
 
 } else {
-    fotoServidor.src = "https://i.pravatar.cc/200?img=12";
+
+    fotoServidor.style.display = "block";
+
+    fotoServidor.src =
+    "https://ui-avatars.com/api/?name=" +
+    encodeURIComponent(nombre + " " + apellidos) +
+    "&background=0D6EFD&color=fff&size=256";
+
 }
 
 /* ======================================
