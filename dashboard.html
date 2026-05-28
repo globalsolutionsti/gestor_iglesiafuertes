@@ -20,8 +20,6 @@ href="css/styles.css">
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
@@ -104,8 +102,6 @@ Nuevo Evento
 
 <div class="cards">
 
-<!-- SERVIDORES -->
-
 <div
 class="card-dashboard blue"
 id="cardServidores"
@@ -120,8 +116,6 @@ style="cursor:pointer;">
 
 </div>
 
-<!-- EVENTOS -->
-
 <div class="card-dashboard purple">
 
 <div>
@@ -133,26 +127,22 @@ style="cursor:pointer;">
 
 </div>
 
-<!-- ASISTENCIAS -->
-
 <div class="card-dashboard green">
 
 <div>
-<h3 id="totalAsistencias">0</h3>
-<p>Asistencias</p>
+<h3 id="totalActivos">0</h3>
+<p>Servidores Activos</p>
 </div>
 
-<i class="fa fa-chart-column card-icon"></i>
+<i class="fa fa-user-check card-icon"></i>
 
 </div>
-
-<!-- ACTIVIDAD -->
 
 <div class="card-dashboard orange">
 
 <div>
-<h3>98%</h3>
-<p>Actividad</p>
+<h3 id="totalMinisterios">0</h3>
+<p>Ministerios</p>
 </div>
 
 <i class="fa fa-chart-pie card-icon"></i>
@@ -167,9 +157,15 @@ style="cursor:pointer;">
 
 <div class="chart-box">
 
-<h5>Estadísticas Generales</h5>
+<h5>Resumen Formación / Ministerios</h5>
 
-<canvas id="chart"></canvas>
+<div id="estadisticasDashboard">
+
+<div class="activity-item">
+Cargando estadísticas...
+</div>
+
+</div>
 
 </div>
 
@@ -196,6 +192,8 @@ Nuevo evento agregado
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="js/config.js"></script>
 <script src="js/dashboard.js"></script>
