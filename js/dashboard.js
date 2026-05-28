@@ -2,57 +2,190 @@
 DASHBOARD
 ===================================================== */
 
-async function loadDashboard(){
-
-try{
+function loadDashboard(){
 
 mostrarLoader();
 
-/* =====================================================
-OBTENER ESTADISTICAS
-===================================================== */
+const callbackName =
+"dashboard_" + Date.now();
 
-const response = await fetch(
-`${API_URL}?action=estadisticas`
-);
-
-const data = await response.json();
-
-console.log("DASHBOARD:", data);
+const script =
+document.createElement("script");
 
 /* =====================================================
-VALIDAR RESPUESTA
+CALLBACK
 ===================================================== */
 
-if(!data){
+window[callbackName] = function(result){
 
-throw new Error(
-"No se recibieron estadísticas"
-);
+try{
+
+if(!result || !result.status){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error obteniendo datos"
+});
+
+return;
 
 }
 
+const data =
+result.data || [];
+
 /* =====================================================
-TOTALES
+QUITAR ENCABEZADOS
+===================================================== */
+
+const registros =
+data.slice(1);
+
+/* =====================================================
+TOTAL SERVIDORES
 ===================================================== */
 
 document.getElementById(
 "totalServidores"
 ).innerText =
-data.totalServidores || 0;
+registros.length;
+
+/* =====================================================
+SERVIDORES ACTIVOS
+===================================================== */
+
+const activos =
+registros.filter(r=>
+String(r[12] || "")
+.toUpperCase() === "ACTIVO"
+);
+
+document.getElementById(
+"totalActivos"
+).innerText =
+activos.length;
+
+/* =====================================================
+MINISTERIOS UNICOS
+===================================================== */
+
+const ministerios =
+new Set();
+
+registros.forEach(r=>{
+
+if(r[6]){
+ministerios.add(r[6]);
+}
+
+if(r[7]){
+ministerios.add(r[7]);
+}
+
+if(r[8]){
+ministerios.add(r[8]);
+}
+
+if(r[9]){
+ministerios.add(r[9]);
+}
+
+});
+
+document.getElementById(
+"totalMinisterios"
+).innerText =
+ministerios.size;
+
+/* =====================================================
+EVENTOS DEMO
+===================================================== */
 
 document.getElementById(
 "totalEventos"
-).innerText =
-data.totalEventos || 0;
-
-document.getElementById(
-"totalAsistencias"
-).innerText =
-data.totalAsistencias || 0;
+).innerText = 0;
 
 /* =====================================================
-CARD SERVIDORES
+RESUMEN ESTADISTICAS
+===================================================== */
+
+const contenedor =
+document.getElementById(
+"estadisticasDashboard"
+);
+
+let html = "";
+
+/* =====================================================
+CONTAR POR MINISTERIO
+===================================================== */
+
+const conteoMinisterios = {};
+
+registros.forEach(r=>{
+
+const ministerio =
+r[6] || "Sin Ministerio";
+
+if(!conteoMinisterios[ministerio]){
+
+conteoMinisterios[ministerio] = 0;
+
+}
+
+conteoMinisterios[ministerio]++;
+
+});
+
+/* =====================================================
+RENDER
+===================================================== */
+
+Object.keys(conteoMinisterios)
+.forEach(min=>{
+
+html += `
+
+<div class="activity-item d-flex justify-content-between align-items-center">
+
+<div>
+
+<i class="fa fa-users text-primary me-2"></i>
+
+${min}
+
+</div>
+
+<span class="badge bg-primary">
+
+${conteoMinisterios[min]}
+
+</span>
+
+</div>
+
+`;
+
+});
+
+if(html === ""){
+
+html = `
+
+<div class="activity-item">
+No existen estadísticas
+</div>
+
+`;
+
+}
+
+contenedor.innerHTML = html;
+
+/* =====================================================
+CLICK CARD
 ===================================================== */
 
 const cardServidores =
@@ -62,78 +195,26 @@ document.getElementById(
 
 if(cardServidores){
 
-cardServidores.addEventListener(
-"click",
-function(){
+cardServidores.onclick = function(){
 
 window.location.href =
 "servidores.html";
 
-}
-);
+};
 
 }
-
-/* =====================================================
-GRAFICA
-===================================================== */
-
-const ctx =
-document.getElementById('chart');
-
-/* =====================================================
-DESTRUIR CHART PREVIO
-===================================================== */
-
-if(window.dashboardChart){
-
-window.dashboardChart.destroy();
-
-}
-
-/* =====================================================
-CREAR GRAFICA
-===================================================== */
-
-window.dashboardChart =
-new Chart(ctx, {
-
-type:'bar',
-
-data:{
-
-labels:[
-'Servidores',
-'Eventos',
-'Asistencias'
-],
-
-datasets:[{
-
-label:'Sistema',
-
-data:[
-data.totalServidores || 0,
-data.totalEventos || 0,
-data.totalAsistencias || 0
-],
-
-borderWidth:2
-
-}]
-
-},
-
-options:{
-
-responsive:true,
-maintainAspectRatio:false
-
-}
-
-});
 
 ocultarLoader();
+
+/* =====================================================
+LIMPIEZA
+===================================================== */
+
+delete window[callbackName];
+
+if(script){
+script.remove();
+}
 
 }catch(error){
 
@@ -142,13 +223,33 @@ ocultarLoader();
 console.error(error);
 
 Swal.fire({
-
 icon:"error",
 title:error.toString()
-
 });
 
 }
+
+};
+
+/* =====================================================
+LLAMADA JSONP
+===================================================== */
+
+script.src =
+`${API_URL}?action=getServidores&callback=${callbackName}`;
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error conexión Apps Script"
+});
+
+};
+
+document.body.appendChild(script);
 
 }
 
