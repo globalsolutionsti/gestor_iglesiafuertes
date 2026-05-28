@@ -413,3 +413,170 @@ margin-bottom:15px;
 box-shadow:0 2px 10px rgba(0,0,0,.05);
 
 }
+
+/* =====================================================
+MENU HAMBURGUESA RESPONSIVE
+AGREGAR AL FINAL
+===================================================== */
+
+.mobile-menu-btn{
+display:none;
+position:fixed;
+top:15px;
+left:15px;
+z-index:10001;
+width:48px;
+height:48px;
+border:none;
+border-radius:12px;
+background:#2563eb;
+color:white;
+font-size:22px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+/* =====================================================
+OVERLAY
+===================================================== */
+
+.sidebar-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+z-index:9998;
+display:none;
+}
+
+.sidebar-overlay.active{
+display:block;
+}
+
+/* =====================================================
+TRANSICIONES SIDEBAR
+===================================================== */
+
+.sidebar{
+transition:all .3s ease;
+}
+
+.content{
+transition:all .3s ease;
+}
+
+/* =====================================================
+RESPONSIVE TABLET
+===================================================== */
+
+@media(max-width:992px){
+
+.dashboard-grid{
+grid-template-columns:1fr !important;
+}
+
+.cards{
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+
+}
+
+/* =====================================================
+RESPONSIVE MOVIL
+===================================================== */
+
+@media(max-width:768px){
+
+/* BOTON MENU */
+
+.mobile-menu-btn{
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:280px;
+height:100vh;
+transform:translateX(-100%);
+z-index:9999;
+overflow-y:auto;
+}
+
+.sidebar.active{
+transform:translateX(0);
+}
+
+/* CONTENT */
+
+.content{
+margin-left:0 !important;
+width:100% !important;
+padding-top:80px;
+}
+
+/* TOPBAR */
+
+.topbar{
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+}
+
+/* CARDS */
+
+.cards{
+grid-template-columns:1fr;
+}
+
+/* TABLAS */
+
+.table-container{
+overflow-x:auto;
+}
+
+.table{
+min-width:700px;
+}
+
+/* PROFILE */
+
+.profile-header{
+padding:20px;
+}
+
+.profile-avatar{
+width:110px;
+height:110px;
+}
+
+/* INFO CARDS */
+
+.info-card{
+padding:18px;
+}
+
+}
+
+/* =====================================================
+ANIMACIONES
+===================================================== */
+
+.card-dashboard,
+.info-card,
+.chart-box,
+.activity-box,
+.profile-header{
+transition:.3s;
+}
+
+.card-dashboard:hover,
+.info-card:hover,
+.chart-box:hover,
+.activity-box:hover{
+transform:translateY(-2px);
+}
+```
