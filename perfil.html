@@ -306,7 +306,9 @@ style="width:0%">
 <script src="js/config.js"></script>
 <script src="js/perfil.js"></script>
 
+
 <script>
+
 function toggleSidebar(){
 
 const sidebar =
@@ -315,9 +317,19 @@ document.querySelector(".sidebar");
 const overlay =
 document.getElementById("sidebarOverlay");
 
+/* =====================================================
+VALIDAR SI EXISTE SIDEBAR
+===================================================== */
+
+if(!sidebar){
+return;
+}
+
 sidebar.classList.toggle("active");
 
+if(overlay){
 overlay.classList.toggle("active");
+}
 
 }
 
@@ -351,6 +363,7 @@ overlay.classList.remove("active");
 );
 
 </script>
+
 
 
   
