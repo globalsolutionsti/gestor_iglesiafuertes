@@ -579,4 +579,26 @@ transition:.3s;
 .activity-box:hover{
 transform:translateY(-2px);
 }
-```
+
+/* =====================================================
+CARD GRUPOS CONEXION
+===================================================== */
+
+.card-dashboard.teal{
+background:linear-gradient(135deg,#009688,#26a69a);
+color:white;
+}
+
+/* =====================================================
+CARD CLICKEABLE
+===================================================== */
+
+.clickable-card{
+cursor:pointer;
+transition:.3s;
+}
+
+.clickable-card:hover{
+transform:translateY(-5px);
+opacity:.95;
+}
