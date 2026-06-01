@@ -117,21 +117,21 @@ COLUMNAS
 ===================================================== */
 
 const foto =
-s[13] && String(s[13]).trim() !== ""
-? s[13]
+s[16] && String(s[13]).trim() !== ""
+? s[16]
 : "https://i.pravatar.cc/150?img=12";
 
 const nombre =
 `${s[2] || ""} ${s[3] || ""}`.trim();
 
 const ministerioPrincipal =
-s[6] || "";
+s[9] || "";
 
 const ministeriosSecundarios = [
 
-s[7],
-s[8],
-s[9]
+s[10],
+s[11],
+s[12]
 
 ].filter(x =>
 x && String(x).trim() !== ""
@@ -189,12 +189,12 @@ ${s[1] || ""}
 
 <div class="small text-muted">
 <i class="fa fa-phone"></i>
-${s[4] || ""}
+${s[7] || ""}
 </div>
 
 <div class="small text-muted">
 <i class="fa fa-envelope"></i>
-${s[5] || ""}
+${s[8] || ""}
 </div>
 
 </td>
@@ -214,7 +214,7 @@ ${ministeriosHTML}
 <td class="align-middle">
 
 <span class="badge bg-light text-dark border">
-${s[10] || ""}
+${s[13] || ""}
 </span>
 
 </td>
@@ -222,7 +222,7 @@ ${s[10] || ""}
 <td class="align-middle">
 
 <span class="badge bg-success">
-${s[12] || "ACTIVO"}
+${s[15] || "ACTIVO"}
 </span>
 
 </td>
@@ -632,15 +632,15 @@ document.getElementById("nombre").value,
 apellidos:
 document.getElementById("apellidos").value,
 
- const edad =
-document.getElementById("edad").value;
+edad:
+document.getElementById("edad").value,
 
-const estadoCivil =
-document.getElementById("estadoCivil").value;
+estadoCivil:
+document.getElementById("estadoCivil").value,
 
-const anioNacimiento =
-document.getElementById("anioNacimiento").value; 
-  
+anioNacimiento:
+document.getElementById("anioNacimiento").value,
+
 telefono:
 document.getElementById("telefono").value,
 
@@ -668,7 +668,6 @@ document.getElementById("fechaIngreso").value,
 foto:fotoBase64
 
 };
-
 /* =====================================================
 CALLBACK
 ===================================================== */
@@ -800,6 +799,10 @@ callback:callbackName,
 numeroServidor:body.numeroServidor,
 nombre:body.nombre,
 apellidos:body.apellidos,
+edad:body.edad,
+estadoCivil:body.estadoCivil,
+anioNacimiento:body.anioNacimiento,
+ 
 telefono:body.telefono,
 email:body.email,
 
