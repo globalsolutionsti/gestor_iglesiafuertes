@@ -78,7 +78,7 @@ let s = data[i] || [];
 NORMALIZAR COLUMNAS
 ===================================================== */
 
-while(s.length < 14){
+while(s.length < 17){
 s.push("");
 }
 
