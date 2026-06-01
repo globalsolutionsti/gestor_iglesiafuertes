@@ -632,6 +632,15 @@ document.getElementById("nombre").value,
 apellidos:
 document.getElementById("apellidos").value,
 
+ const edad =
+document.getElementById("edad").value;
+
+const estadoCivil =
+document.getElementById("estadoCivil").value;
+
+const anioNacimiento =
+document.getElementById("anioNacimiento").value; 
+  
 telefono:
 document.getElementById("telefono").value,
 
