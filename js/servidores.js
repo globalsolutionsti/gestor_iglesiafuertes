@@ -117,7 +117,7 @@ COLUMNAS
 ===================================================== */
 
 const foto =
-s[16] && String(s[13]).trim() !== ""
+s[16] && String(s[16]).trim() !== ""
 ? s[16]
 : "https://i.pravatar.cc/150?img=12";
 
@@ -531,7 +531,16 @@ document.getElementById("previewFoto");
 /* =====================================================
 REDUCIR TAMAÑO EXTREMADAMENTE
 ===================================================== */
-
+if(
+!video.videoWidth ||
+!video.videoHeight
+){
+   Swal.fire({
+      icon:"warning",
+      title:"La cámara aún no está lista"
+   });
+   return;
+}
 const MAX_WIDTH = 180;
 
 const scale =
@@ -824,9 +833,20 @@ foto:body.foto
 /* =====================================================
 URL FINAL
 ===================================================== */
-
-script.src =
+const urlFinal =
 `${API_URL}?${params.toString()}`;
+
+console.log(
+"LONGITUD URL:",
+urlFinal.length
+);
+
+console.log(
+"LONGITUD FOTO:",
+body.foto.length
+);
+ 
+script.src = urlFinal;
 
 /* =====================================================
 ERROR
