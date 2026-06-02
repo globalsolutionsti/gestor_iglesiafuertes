@@ -821,16 +821,6 @@ foto:body.foto
 URL FINAL
 ===================================================== */
 
-const urlFinal =
-`${API_URL}?${params.toString()}`;
-
-console.log(
-"Tamaño URL:",
-urlFinal.length
-);
-
-script.src = urlFinal;
- 
 script.src =
 `${API_URL}?${params.toString()}`;
 
@@ -838,18 +828,13 @@ script.src =
 ERROR
 ===================================================== */
 
-script.onerror = function(error){
-
-console.error("ERROR JSONP", error);
-
-console.log("URL LENGTH:", script.src.length);
+script.onerror = function(){
 
 ocultarLoader();
 
 Swal.fire({
 icon:"error",
-title:"Error conexión Apps Script",
-text:"Ver consola"
+title:"Error conexión Apps Script"
 });
 
 };
