@@ -87,13 +87,15 @@ title:"Temporada guardada"
 
 cargarTemporadas();
 
-bootstrap.Modal
-.getInstance(
-document.getElementById(
-"modalTemporada"
-)
-)
-.hide();
+const modalElement =
+document.getElementById("modalTemporada");
+
+const modal =
+bootstrap.Modal.getInstance(modalElement);
+
+if(modal){
+    modal.hide();
+}
 
 }else{
 
