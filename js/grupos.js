@@ -76,6 +76,34 @@ return;
 const callback =
 "save_" + Date.now();
 
+Swal.fire({
+
+title:"Creando temporada",
+
+html:`
+
+<div class="mt-3">
+
+<div class="spinner-border text-primary"></div>
+
+<p class="mt-3 mb-0">
+Generando sesiones...
+</p>
+
+<p class="small text-muted">
+Por favor espere
+</p>
+
+</div>
+
+`,
+
+allowOutsideClick:false,
+allowEscapeKey:false,
+showConfirmButton:false
+
+});
+  
 const script =
 document.createElement("script");
 
@@ -86,7 +114,7 @@ console.log("Respuesta Apps Script:", result);
 try{
 
 if(result && result.status){
-
+Swal.close();
 const modalElement =
 document.getElementById("modalTemporada");
 
