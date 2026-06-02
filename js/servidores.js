@@ -532,7 +532,7 @@ document.getElementById("previewFoto");
 REDUCIR TAMAÑO EXTREMADAMENTE
 ===================================================== */
 
-const MAX_WIDTH = 250;
+const MAX_WIDTH = 180;
 
 const scale =
 MAX_WIDTH / video.videoWidth;
@@ -573,7 +573,7 @@ COMPRESION MUY ALTA
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.2
+0.1
 );
 
 /* =====================================================
@@ -585,7 +585,7 @@ console.log(
 fotoBase64.length
 );
 
-if(fotoBase64.length > 90000){
+if(fotoBase64.length > 40000){
 
 Swal.fire({
 icon:"warning",
@@ -602,7 +602,11 @@ return;
 /* =====================================================
 PREVIEW
 ===================================================== */
-
+console.log(
+"Base64 final:",
+fotoBase64.length
+);
+ 
 preview.src =
 fotoBase64;
 
