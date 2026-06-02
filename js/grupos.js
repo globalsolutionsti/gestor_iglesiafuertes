@@ -1,72 +1,3 @@
-/* =====================================================
-CARGAR CATALOGO GRUPOS
-===================================================== */
-
-function cargarGrupos(){
-
-const callbackName =
-"grupos_" + Date.now();
-
-const script =
-document.createElement("script");
-
-window[callbackName] = function(result){
-
-try{
-
-const select =
-document.getElementById("grupo");
-
-if(!select){
-return;
-}
-
-select.innerHTML = "";
-
-if(!result || !result.status){
-
-select.innerHTML =
-"<option>Error cargando grupos</option>";
-
-return;
-
-}
-
-const grupos =
-result.data || [];
-
-grupos.forEach(g=>{
-
-select.innerHTML += `
-
-<option value="${g}">
-${g}
-</option>
-
-`;
-
-});
-
-}catch(error){
-
-console.error(error);
-
-}
-
-delete window[callbackName];
-
-if(script){
-script.remove();
-}
-
-};
-
-script.src =
-`${API_URL}?action=getCatalogoGrupos&callback=${callbackName}`;
-
-document.body.appendChild(script);
-
-}
 
 /* =====================================================
 CARGAR TEMPORADAS
@@ -83,7 +14,9 @@ document.createElement("script");
 window[callbackName] = function(result){
 
 const tbody =
-document.getElementById("tablaTemporadas");
+document.getElementById(
+"tablaTemporadas"
+);
 
 if(!tbody){
 return;
@@ -135,14 +68,17 @@ tbody.innerHTML += `
 <tr>
 
 <td>${row[0]}</td>
+
 <td>${row[1]}</td>
+
 <td>${row[2]}</td>
+
 <td>${row[3]}</td>
 
 <td>
 
 <span class="badge bg-success">
-Activa
+${row[4]}
 </span>
 
 </td>
@@ -151,6 +87,12 @@ Activa
 
 `;
 
+}
+
+delete window[callbackName];
+
+if(script){
+script.remove();
 }
 
 };
@@ -168,14 +110,31 @@ GUARDAR TEMPORADA
 
 function guardarTemporada(){
 
-const temporada =
-document.getElementById("temporada").value;
+const nombre =
+document.getElementById(
+"nombreTemporada"
+).value.trim();
 
 const anio =
-document.getElementById("anio").value;
+document.getElementById(
+"anio"
+).value;
 
-const grupo =
-document.getElementById("grupo").value;
+const numSesiones =
+document.getElementById(
+"numSesiones"
+).value;
+
+if(nombre === ""){
+
+Swal.fire({
+icon:"warning",
+title:"Capture el nombre de la temporada"
+});
+
+return;
+
+}
 
 const callbackName =
 "guardar_" + Date.now();
@@ -185,13 +144,13 @@ document.createElement("script");
 
 window[callbackName] = function(result){
 
+try{
+
 if(result.status){
 
 Swal.fire({
-
 icon:"success",
 title:"Temporada guardada"
-
 });
 
 cargarTemporadas();
@@ -208,19 +167,37 @@ modal.hide();
 }else{
 
 Swal.fire({
-
 icon:"error",
 title:result.message
-
 });
 
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+delete window[callbackName];
+
+if(script){
+script.remove();
 }
 
 };
 
 script.src =
 
-`${API_URL}?action=guardarTemporada&callback=${callbackName}&temporada=${encodeURIComponent(temporada)}&anio=${encodeURIComponent(anio)}&grupo=${encodeURIComponent(grupo)}&sesiones=[]`;
+`${API_URL}?action=guardarTemporada`
++
+`&callback=${callbackName}`
++
+`&nombre=${encodeURIComponent(nombre)}`
++
+`&anio=${encodeURIComponent(anio)}`
++
+`&numSesiones=${encodeURIComponent(numSesiones)}`;
 
 document.body.appendChild(script);
 
@@ -256,7 +233,6 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
-cargarGrupos();
 cargarTemporadas();
 
 }
