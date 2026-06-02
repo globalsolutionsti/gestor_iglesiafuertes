@@ -121,7 +121,7 @@ Agregar Temporada
 <th>ID</th>
 <th>Temporada</th>
 <th>Año</th>
-<th>Grupo</th>
+<th>Sesiones</th>
 <th>Estado</th>
 
 </tr>
@@ -168,18 +168,13 @@ data-bs-dismiss="modal">
 
 <div class="modal-body">
 
-<label>Temporada</label>
+<label>Nombre Temporada</label>
 
-<select
-id="temporada"
-class="form-select mb-3">
-
-<option>1ra Temporada</option>
-<option>2da Temporada</option>
-<option>3ra Temporada</option>
-<option>4ta Temporada</option>
-
-</select>
+<input
+type="text"
+id="nombreTemporada"
+class="form-control mb-3"
+placeholder="Ej. Temporada 1">
 
 <label>Año</label>
 
@@ -189,15 +184,14 @@ id="anio"
 class="form-control mb-3"
 value="2026">
 
-<label>Grupo</label>
+<label>Número de Sesiones</label>
 
-<select
-id="grupo"
-class="form-select">
-
-<option>Cargando...</option>
-
-</select>
+<input
+type="number"
+id="numSesiones"
+class="form-control"
+value="8"
+min="1">
 
 </div>
 
