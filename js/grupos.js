@@ -54,19 +54,24 @@ document.body.appendChild(script);
 function guardarTemporada(){
 
 const nombre =
-document.getElementById(
-"nombreTemporada"
-).value;
+document.getElementById("nombreTemporada").value.trim();
 
 const anio =
-document.getElementById(
-"anio"
-).value;
+document.getElementById("anio").value;
 
 const numSesiones =
-document.getElementById(
-"numSesiones"
-).value;
+document.getElementById("numSesiones").value;
+
+if(nombre === ""){
+
+Swal.fire({
+icon:"warning",
+title:"Capture el nombre de la temporada"
+});
+
+return;
+
+}
 
 const callback =
 "save_" + Date.now();
@@ -76,16 +81,11 @@ document.createElement("script");
 
 window[callback] = function(result){
 
-if(result.status){
+console.log("Respuesta Apps Script:", result);
 
-Swal.fire({
+try{
 
-icon:"success",
-title:"Temporada guardada"
-
-});
-
-cargarTemporadas();
+if(result && result.status){
 
 const modalElement =
 document.getElementById("modalTemporada");
@@ -94,23 +94,57 @@ const modal =
 bootstrap.Modal.getInstance(modalElement);
 
 if(modal){
-    modal.hide();
+modal.hide();
 }
+
+Swal.fire({
+icon:"success",
+title:"Temporada guardada correctamente"
+}).then(()=>{
+
+cargarTemporadas();
+
+});
 
 }else{
 
 Swal.fire({
-
 icon:"error",
-title:result.message
+title:
+(result && result.message)
+? result.message
+: "Error al guardar temporada"
+});
 
+}
+
+}catch(error){
+
+console.error(error);
+
+Swal.fire({
+icon:"error",
+title:error.toString()
 });
 
 }
 
 delete window[callback];
 
+if(script){
 script.remove();
+}
+
+};
+
+script.onerror = function(){
+
+console.error("Error JSONP");
+
+Swal.fire({
+icon:"error",
+title:"Error conexión Apps Script"
+});
 
 };
 
