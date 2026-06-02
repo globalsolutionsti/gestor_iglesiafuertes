@@ -73,48 +73,10 @@ return;
 
 }
 
-const callback =
-"save_" + Date.now();
+/* =====================================================
+CERRAR MODAL
+===================================================== */
 
-Swal.fire({
-
-title:"Creando temporada",
-
-html:`
-
-<div class="mt-3">
-
-<div class="spinner-border text-primary"></div>
-
-<p class="mt-3 mb-0">
-Generando sesiones...
-</p>
-
-<p class="small text-muted">
-Por favor espere
-</p>
-
-</div>
-
-`,
-
-allowOutsideClick:false,
-allowEscapeKey:false,
-showConfirmButton:false
-
-});
-  
-const script =
-document.createElement("script");
-
-window[callback] = function(result){
-
-console.log("Respuesta Apps Script:", result);
-
-try{
-
-if(result && result.status){
-Swal.close();
 const modalElement =
 document.getElementById("modalTemporada");
 
@@ -125,9 +87,67 @@ if(modal){
 modal.hide();
 }
 
+/* =====================================================
+MOSTRAR PROCESO
+===================================================== */
+
 Swal.fire({
+
+title:"Creando temporada",
+
+html:`
+
+<div class="text-center">
+
+<div
+class="spinner-border text-primary"
+style="width:4rem;height:4rem;">
+</div>
+
+<div class="mt-3">
+
+Generando sesiones automáticamente...
+
+</div>
+
+<div class="small text-muted mt-2">
+
+Por favor espere
+
+</div>
+
+</div>
+
+`,
+
+allowOutsideClick:false,
+allowEscapeKey:false,
+showConfirmButton:false
+
+});
+
+const callback =
+"save_" + Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+try{
+
+Swal.close();
+
+if(result && result.status){
+
+Swal.fire({
+
 icon:"success",
-title:"Temporada guardada correctamente"
+
+title:"Temporada guardada correctamente",
+
+text:"Las sesiones fueron generadas automáticamente"
+
 }).then(()=>{
 
 cargarTemporadas();
@@ -137,11 +157,14 @@ cargarTemporadas();
 }else{
 
 Swal.fire({
+
 icon:"error",
+
 title:
 (result && result.message)
 ? result.message
 : "Error al guardar temporada"
+
 });
 
 }
@@ -151,8 +174,11 @@ title:
 console.error(error);
 
 Swal.fire({
+
 icon:"error",
+
 title:error.toString()
+
 });
 
 }
@@ -167,11 +193,14 @@ script.remove();
 
 script.onerror = function(){
 
-console.error("Error JSONP");
+Swal.close();
 
 Swal.fire({
+
 icon:"error",
+
 title:"Error conexión Apps Script"
+
 });
 
 };
@@ -191,7 +220,6 @@ script.src =
 document.body.appendChild(script);
 
 }
-
 document.addEventListener(
 "DOMContentLoaded",
 function(){
