@@ -6,6 +6,23 @@ window.location.search
 const idTemporada =
 params.get("id");
 
+/* ==========================================
+INICIO
+========================================== */
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+cargarSesiones();
+
+}
+);
+
+/* ==========================================
+SESIONES
+========================================== */
+
 function cargarSesiones(){
 
 const callback =
@@ -16,24 +33,17 @@ document.createElement("script");
 
 window[callback] = function(result){
 
-const tbody =
+const contenedor =
 document.getElementById(
-"tablaSesiones"
+"contenedorSesiones"
 );
 
-tbody.innerHTML = "";
+contenedor.innerHTML = "";
 
 if(!result.status){
 
-tbody.innerHTML = `
-
-<tr>
-<td colspan="4">
-Error cargando sesiones
-</td>
-</tr>
-
-`;
+contenedor.innerHTML =
+"Error cargando sesiones";
 
 return;
 
@@ -44,54 +54,47 @@ result.data || [];
 
 if(sesiones.length === 0){
 
-tbody.innerHTML = `
-
-<tr>
-<td colspan="4">
-No existen sesiones
-</td>
-</tr>
-
-`;
+contenedor.innerHTML =
+"No existen sesiones";
 
 return;
 
 }
 
-sesiones.forEach(s=>{
+sesiones.forEach(sesion=>{
 
-tbody.innerHTML += `
+contenedor.innerHTML += `
 
-<tr>
+<div class="card mb-3">
 
-<td>${s[2]}</td>
+<div class="card-header">
 
-<td>${s[3]}</td>
+<h5 class="mb-0">
 
-<td>
+${sesion[3]}
 
-<span class="badge bg-success">
+</h5>
 
-${s[4]}
+</div>
 
-</span>
+<div class="card-body">
 
-</td>
+<div
+id="grupos_${sesion[0]}">
 
-<td>
+Cargando grupos...
 
-<button
-class="btn btn-primary btn-sm">
+</div>
 
-Ver
+</div>
 
-</button>
-
-</td>
-
-</tr>
+</div>
 
 `;
+
+cargarGruposSesion(
+sesion[0]
+);
 
 });
 
@@ -103,21 +106,112 @@ script.remove();
 
 script.src =
 
-`${API_URL}?action=getSesionesTemporada`
+`${API_URL}?action=getSesiones`
 +
 `&callback=${callback}`
 +
-`&idTemporada=${idTemporada}`;
+`&temporadaId=${idTemporada}`;
 
 document.body.appendChild(script);
 
 }
 
-document.addEventListener(
-"DOMContentLoaded",
-function(){
+/* ==========================================
+GRUPOS DE LA SESION
+========================================== */
 
-cargarSesiones();
+function cargarGruposSesion(
+idSesion
+){
+
+const callback =
+"grupos_" + Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+const div =
+document.getElementById(
+`grupos_${idSesion}`
+);
+
+if(!div){
+return;
+}
+
+if(!result.status){
+
+div.innerHTML =
+"Error cargando grupos";
+
+return;
 
 }
-);
+
+const grupos =
+result.data || [];
+
+let html = `
+
+<table class="table table-bordered">
+
+<thead>
+
+<tr>
+
+<th>Grupo</th>
+<th>Estado</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+`;
+
+grupos.forEach(g=>{
+
+html += `
+
+<tr>
+
+<td>${g[4]}</td>
+
+<td>${g[5]}</td>
+
+</tr>
+
+`;
+
+});
+
+html += `
+
+</tbody>
+
+</table>
+
+`;
+
+div.innerHTML = html;
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getSesionGrupos`
++
+`&callback=${callback}`
++
+`&idSesion=${idSesion}`;
+
+document.body.appendChild(script);
+
+}
