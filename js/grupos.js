@@ -28,23 +28,33 @@ tbody.innerHTML += `
 
 <td>${row[0]}</td>
 
-<td>
-
-<a
-href="temporada_detalle.html?id=${row[0]}"
-class="text-decoration-none fw-bold">
-
-${row[1]}
-
-</a>
-
-</td>
+<td>${row[1]}</td>
 
 <td>${row[2]}</td>
 
 <td>${row[3]}</td>
 
-<td>${row[4]}</td>
+<td>
+
+<span class="badge bg-success">
+${row[4]}
+</span>
+
+</td>
+
+<td>
+
+<a
+href="temporada_detalle.html?id=${row[0]}"
+class="btn btn-primary btn-sm">
+
+<i class="fa fa-eye"></i>
+
+Ver
+
+</a>
+
+</td>
 
 </tr>
 
