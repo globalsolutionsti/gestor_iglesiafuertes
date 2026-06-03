@@ -26,7 +26,12 @@ SESIONES
 function cargarSesiones(){
 
 const callback =
-"sesiones_" + Date.now();
+"sesiones_" +
+Date.now() +
+"_" +
+Math.floor(
+Math.random()*100000
+);
 
 const script =
 document.createElement("script");
@@ -125,7 +130,18 @@ idSesion
 ){
 
 const callback =
-"grupos_" + Date.now();
+"grupos_" +
+idSesion.replace(/[^a-zA-Z0-9]/g,"")
++
+"_"
++
+Date.now()
++
+"_"
++
+Math.floor(
+Math.random()*100000
+);
 
 const script =
 document.createElement("script");
