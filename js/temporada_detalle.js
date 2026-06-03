@@ -179,6 +179,9 @@ let html = `
 
 <th>Grupo</th>
 <th>Estado</th>
+<th width="180">
+Acciones
+</th>
 
 </tr>
 
@@ -194,9 +197,30 @@ html += `
 
 <tr>
 
-<td>${g[4]}</td>
+<td>
 
-<td>${g[5]}</td>
+${g[4]}
+
+</td>
+
+<td>
+
+${g[5]}
+
+</td>
+
+<td>
+
+<a
+href="participantes_grupo.html?idTemporada=${g[1]}&idSesion=${g[2]}&idGrupo=${g[3]}"
+class="btn btn-primary btn-sm">
+
+<i class="fa fa-users"></i>
+Participantes
+
+</a>
+
+</td>
 
 </tr>
 
