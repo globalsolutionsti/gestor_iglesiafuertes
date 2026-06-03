@@ -56,11 +56,6 @@ return;
 
 const sesiones =
 result.data || [];
-
-document.getElementById(
-"tituloTemporada"
-).innerHTML =
-"Temporada " + ID_TEMPORADA;
   
 if(sesiones.length === 0){
 
