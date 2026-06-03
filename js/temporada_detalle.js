@@ -38,6 +38,12 @@ document.createElement("script");
 
 window[callback] = function(result){
 
+console.log(
+"GRUPOS SESION",
+idSesion,
+result
+);
+  
 const contenedor =
 document.getElementById(
 "contenedorSesiones"
