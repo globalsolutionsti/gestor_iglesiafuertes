@@ -57,6 +57,11 @@ return;
 const sesiones =
 result.data || [];
 
+document.getElementById(
+"tituloTemporada"
+).innerHTML =
+"Temporada " + nombre;
+  
 if(sesiones.length === 0){
 
 contenedor.innerHTML =
