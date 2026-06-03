@@ -27,9 +27,23 @@ tbody.innerHTML += `
 <tr>
 
 <td>${row[0]}</td>
-<td>${row[1]}</td>
+
+<td>
+
+<a
+href="temporada_detalle.html?id=${row[0]}"
+class="text-decoration-none fw-bold">
+
+${row[1]}
+
+</a>
+
+</td>
+
 <td>${row[2]}</td>
+
 <td>${row[3]}</td>
+
 <td>${row[4]}</td>
 
 </tr>
