@@ -60,7 +60,7 @@ result.data || [];
 document.getElementById(
 "tituloTemporada"
 ).innerHTML =
-"Temporada " + nombre;
+"Temporada " + ID_TEMPORADA;
   
 if(sesiones.length === 0){
 
