@@ -250,6 +250,44 @@ data-bs-dismiss="modal"></button>
 
 <div class="row">
 
+<div class="col-md-6 mb-3">
+
+<label class="fw-bold">
+Tipo de Persona
+</label>
+
+<select
+class="form-select form-select-lg"
+id="tipoPersona">
+
+<option value="SERVIDOR">
+SERVIDOR
+</option>
+
+<option value="CONGREGANTE">
+CONGREGANTE
+</option>
+
+<option value="PASTOR">
+PASTOR
+</option>
+
+<option value="LIDER">
+LÍDER
+</option>
+
+<option value="COORDINADOR">
+COORDINADOR
+</option>
+
+<option value="SUPERVISOR">
+SUPERVISOR
+</option>
+
+</select>
+
+</div>
+  
 <div class="col-md-12 text-center mb-4">
 
 <video id="camera"
@@ -371,40 +409,12 @@ id="telefono">
 class="form-control"
 id="email">
 
-<div class="col-md-4 mb-3">
-
-<label>Tipo Persona</label>
-
-<select
-class="form-select"
-id="tipoPersona">
-
-<option value="CONGREGANTE">
-CONGREGANTE
-</option>
-
-<option value="SERVIDOR" selected>
-SERVIDOR
-</option>
-
-<option value="LIDER">
-LIDER
-</option>
-
-<option value="COORDINADOR">
-COORDINADOR
-</option>
-
-<option value="PASTOR">
-PASTOR
-</option>
-
 </select>
 
 </div>
   
 </div>
-
+<div id="bloqueMinisterios">
 <div
 class="col-md-4 mb-3"
 id="bloqueMinisterioPrincipal">
@@ -460,7 +470,7 @@ id="ministerioSec3">
 </select>
 
 </div>
-
+</div>
 <div class="col-md-4 mb-3">
 
 <label>Fecha Ingreso</label>
