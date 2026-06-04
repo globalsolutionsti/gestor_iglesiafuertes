@@ -408,3 +408,12 @@ text:
 });
 
 }
+
+
+function verPerfil(idPersona){
+
+window.location.href =
+
+`perfil.html?id=${idPersona}`;
+
+}
