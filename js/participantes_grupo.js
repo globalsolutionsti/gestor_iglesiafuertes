@@ -65,13 +65,113 @@ Sin participantes registrados
 
 function abrirModalParticipante(){
 
-Swal.fire({
+const callback =
+"personas_" +
+Date.now();
 
-icon:"info",
+const script =
+document.createElement("script");
 
-title:
-"En el siguiente paso cargaremos los servidores y congregantes"
+window[callback] = function(result){
+
+if(!result.status){
+
+Swal.fire(
+"Error",
+"Cargando personas",
+"error"
+);
+
+return;
+
+}
+
+let opciones = "";
+
+result.data.forEach(p=>{
+
+opciones +=
+
+`
+
+<option
+value="${p.id}"
+data-tipo="${p.tipo}"
+data-nombre="${p.nombre}">
+
+${p.nombre}
+(${p.tipo})
+
+</option>
+
+`;
 
 });
+
+Swal.fire({
+
+title:
+"Agregar Participante",
+
+html:
+
+`
+
+<select
+id="personaSeleccionada"
+class="form-select">
+
+${opciones}
+
+</select>
+
+`,
+
+showCancelButton:true,
+
+confirmButtonText:
+"Agregar"
+
+}).then(r=>{
+
+if(!r.isConfirmed){
+return;
+}
+
+const select =
+document.getElementById(
+"personaSeleccionada"
+);
+
+const option =
+select.options[
+select.selectedIndex
+];
+
+guardarParticipante(
+
+option.value,
+
+option.dataset.nombre,
+
+option.dataset.tipo
+
+);
+
+});
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getPersonas`
++
+`&callback=${callback}`;
+
+document.body.appendChild(script);
 
 }
