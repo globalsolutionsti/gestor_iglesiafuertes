@@ -68,7 +68,7 @@ tbody.innerHTML =
 
 `
 <tr>
-<td colspan="3">
+<td colspan="4">
 
 Error cargando participantes
 
@@ -89,7 +89,7 @@ tbody.innerHTML =
 
 `
 <tr>
-<td colspan="3">
+<td colspan="4">
 
 Sin participantes registrados
 
