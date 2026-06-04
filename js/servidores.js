@@ -678,6 +678,9 @@ document.getElementById("grupoConexion").value,
 fechaIngreso:
 document.getElementById("fechaIngreso").value,
 
+tipoPersona:
+document.getElementById("tipoPersona").value,   
+
 foto:fotoBase64
 
 };
@@ -810,6 +813,7 @@ action:"guardarServidor",
 callback:callbackName,
 
 numeroServidor:body.numeroServidor,
+ tipoPersona:body.tipoPersona,  
 nombre:body.nombre,
 apellidos:body.apellidos,
 edad:body.edad,
@@ -1059,6 +1063,19 @@ function(){
 cargarServidores();
 cargarMinisterios();
 
+/* ==========================
+TIPO PERSONA
+========================== */
+
+document
+.getElementById("tipoPersona")
+.addEventListener(
+"change",
+validarTipoPersona
+);
+
+validarTipoPersona();
+   
 }
 );
 
