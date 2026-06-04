@@ -1061,3 +1061,35 @@ cargarMinisterios();
 
 }
 );
+
+function validarTipoPersona(){
+
+const tipo =
+document.getElementById(
+"tipoPersona"
+).value;
+
+const mostrar =
+tipo !== "CONGREGANTE";
+
+document.getElementById(
+"bloqueMinisterioPrincipal"
+).style.display =
+mostrar ? "block" : "none";
+
+document.getElementById(
+"bloqueMinisterio1"
+).style.display =
+mostrar ? "block" : "none";
+
+document.getElementById(
+"bloqueMinisterio2"
+).style.display =
+mostrar ? "block" : "none";
+
+document.getElementById(
+"bloqueMinisterio3"
+).style.display =
+mostrar ? "block" : "none";
+
+}
