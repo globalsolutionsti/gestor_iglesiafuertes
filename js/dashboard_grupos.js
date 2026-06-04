@@ -168,6 +168,34 @@ document.getElementById(
 ).innerHTML =
 html;
 
+let htmlSesiones = "";
+
+result.sesiones.forEach(s=>{
+
+htmlSesiones +=
+
+`
+<tr>
+
+<td>
+${s.sesion}
+</td>
+
+<td>
+${s.total}
+</td>
+
+</tr>
+`;
+
+});
+
+document.getElementById(
+"tablaSesiones"
+).innerHTML =
+htmlSesiones;
+
+  
 delete window[callback];
 
 script.remove();
