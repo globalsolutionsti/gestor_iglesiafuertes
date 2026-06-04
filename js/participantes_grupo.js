@@ -377,17 +377,15 @@ text:
 
 }
 
-function cambiarGrupo(idRegistro){
+function cambiarGrupo(idParticipante){
 
 Swal.fire({
 
 icon:"info",
 
-title:
-"Próximamente",
+title:"Cambio de grupo",
 
-text:
-"Cambiar participante de grupo"
+text:"Próximo paso: seleccionar nuevo grupo"
 
 });
 
