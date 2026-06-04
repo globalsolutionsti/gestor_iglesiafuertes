@@ -418,16 +418,3 @@ window.location.href =
 
 }
 
-function cambiarGrupo(idParticipante){
-
-Swal.fire({
-
-icon:"info",
-
-title:"Cambio de grupo",
-
-text:"Próximo paso: seleccionar nuevo grupo"
-
-});
-
-}
