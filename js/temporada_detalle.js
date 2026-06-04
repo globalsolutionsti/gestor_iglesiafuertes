@@ -14,6 +14,18 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
+const btn =
+document.getElementById(
+"btnDashboardGeneral"
+);
+
+if(btn){
+
+btn.href =
+`dashboard_grupos.html?id=${idTemporada}`;
+
+}
+
 cargarSesiones();
 
 }
