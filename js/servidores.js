@@ -1052,6 +1052,33 @@ loader.remove();
 
 }
 
+
+function validarTipoPersona(){
+
+const tipo =
+document.getElementById(
+"tipoPersona"
+).value;
+
+const bloque =
+document.getElementById(
+"bloqueMinisterios"
+);
+
+if(tipo === "CONGREGANTE"){
+
+bloque.style.display =
+"none";
+
+}else{
+
+bloque.style.display =
+"block";
+
+}
+
+}
+
 /* =====================================================
 INIT
 ===================================================== */
