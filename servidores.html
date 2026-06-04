@@ -250,44 +250,8 @@ data-bs-dismiss="modal"></button>
 
 <div class="row">
 
-<div class="col-md-6 mb-3">
+<div class="row">
 
-<label class="fw-bold">
-Tipo de Persona
-</label>
-
-<select
-class="form-select form-select-lg"
-id="tipoPersona">
-
-<option value="SERVIDOR">
-SERVIDOR
-</option>
-
-<option value="CONGREGANTE">
-CONGREGANTE
-</option>
-
-<option value="PASTOR">
-PASTOR
-</option>
-
-<option value="LIDER">
-LÍDER
-</option>
-
-<option value="COORDINADOR">
-COORDINADOR
-</option>
-
-<option value="SUPERVISOR">
-SUPERVISOR
-</option>
-
-</select>
-
-</div>
-  
 <div class="col-md-12 text-center mb-4">
 
 <video id="camera"
@@ -325,9 +289,46 @@ Tomar Foto
 
 <div class="col-md-3 mb-3">
 
+<label>Tipo Persona</label>
+
+<select
+class="form-select"
+id="tipoPersona">
+
+<option value="SERVIDOR">
+SERVIDOR
+</option>
+
+<option value="CONGREGANTE">
+CONGREGANTE
+</option>
+
+<option value="PASTOR">
+PASTOR
+</option>
+
+<option value="LIDER">
+LÍDER
+</option>
+
+<option value="COORDINADOR">
+COORDINADOR
+</option>
+
+<option value="SUPERVISOR">
+SUPERVISOR
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
 <label>Número Servidor</label>
 
-<input type="text"
+<input
+type="text"
 class="form-control"
 id="numeroServidor">
 
@@ -337,7 +338,8 @@ id="numeroServidor">
 
 <label>Nombre</label>
 
-<input type="text"
+<input
+type="text"
 class="form-control"
 id="nombre">
 
@@ -347,7 +349,8 @@ id="nombre">
 
 <label>Apellidos</label>
 
-<input type="text"
+<input
+type="text"
 class="form-control"
 id="apellidos">
 
@@ -357,7 +360,8 @@ id="apellidos">
 
 <label>Edad</label>
 
-<input type="number"
+<input
+type="number"
 class="form-control"
 id="edad">
 
@@ -385,7 +389,8 @@ id="estadoCivil">
 
 <label>Año Nacimiento</label>
 
-<input type="number"
+<input
+type="number"
 class="form-control"
 id="anioNacimiento">
 
@@ -395,24 +400,22 @@ id="anioNacimiento">
 
 <label>Teléfono</label>
 
-<input type="text"
+<input
+type="text"
 class="form-control"
 id="telefono">
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
 <label>Email</label>
 
-<input type="email"
+<input
+type="email"
 class="form-control"
 id="email">
 
-</select>
-
-</div>
-  
 </div>
 
 <div
@@ -432,7 +435,8 @@ id="ministerioPrincipal">
 
 <label>Grupo Conexión</label>
 
-<input type="text"
+<input
+type="text"
 class="form-control"
 id="grupoConexion">
 
@@ -441,6 +445,8 @@ id="grupoConexion">
 <div
 class="col-md-4 mb-3"
 id="bloqueMinisterio1">
+
+<label>Ministerio Secundario 1</label>
 
 <select
 class="form-select"
@@ -453,6 +459,8 @@ id="ministerioSec1">
 class="col-md-4 mb-3"
 id="bloqueMinisterio2">
 
+<label>Ministerio Secundario 2</label>
+
 <select
 class="form-select"
 id="ministerioSec2">
@@ -464,21 +472,23 @@ id="ministerioSec2">
 class="col-md-4 mb-3"
 id="bloqueMinisterio3">
 
+<label>Ministerio Secundario 3</label>
+
 <select
 class="form-select"
 id="ministerioSec3">
 </select>
 
 </div>
+
 <div class="col-md-4 mb-3">
 
 <label>Fecha Ingreso</label>
 
-<input type="date"
+<input
+type="date"
 class="form-control"
 id="fechaIngreso">
-
-</div>
 
 </div>
 
