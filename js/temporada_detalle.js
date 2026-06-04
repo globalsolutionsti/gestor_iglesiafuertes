@@ -78,6 +78,16 @@ contenedor.innerHTML += `
 
 ${sesion[3]}
 
+<a
+href="dashboard_grupos.html?id=${idTemporada}"
+class="btn btn-success btn-sm float-end">
+
+<i class="fa fa-chart-pie"></i>
+
+Dashboard
+
+</a>
+
 </h5>
 
 </div>
