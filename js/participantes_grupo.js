@@ -46,20 +46,112 @@ cargarParticipantes();
 
 function cargarParticipantes(){
 
+const callback =
+"participantes_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
 const tbody =
 document.getElementById(
 "tablaParticipantes"
 );
+
+tbody.innerHTML = "";
+
+if(!result.status){
 
 tbody.innerHTML =
 
 `
 <tr>
 <td colspan="3">
-Sin participantes registrados
+
+Error cargando participantes
+
 </td>
 </tr>
 `;
+
+return;
+
+}
+
+const participantes =
+result.data || [];
+
+if(participantes.length === 0){
+
+tbody.innerHTML =
+
+`
+<tr>
+<td colspan="3">
+
+Sin participantes registrados
+
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+participantes.forEach(p=>{
+
+tbody.innerHTML +=
+
+`
+
+<tr>
+
+<td>
+
+${p[6]}
+
+</td>
+
+<td>
+
+${p[4]}
+
+</td>
+
+<td>
+
+${p[7]}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getParticipantesGrupo`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idSesion=${idSesion}`
++
+`&idGrupo=${idGrupo}`;
+
+document.body.appendChild(script);
 
 }
 
