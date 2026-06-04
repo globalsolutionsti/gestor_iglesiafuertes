@@ -465,6 +465,150 @@ document.body.appendChild(script);
 
 }
 
+function cambiarGrupo(idParticipante){
+
+const callback =
+"grupos_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(!result.status){
+
+Swal.fire({
+icon:"error",
+title:"Error obteniendo grupos"
+});
+
+return;
+
+}
+
+const grupos =
+result.data || [];
+
+let opciones = "";
+
+grupos.forEach(g=>{
+
+opciones +=
+`<option value="${g[3]}">
+${g[4]}
+</option>`;
+
+});
+
+Swal.fire({
+
+title:"Cambiar Grupo",
+
+html:
+
+`<select
+id="nuevoGrupo"
+class="form-select">
+
+${opciones}
+
+</select>`,
+
+showCancelButton:true,
+
+confirmButtonText:
+"Cambiar"
+
+}).then(res=>{
+
+if(!res.isConfirmed){
+return;
+}
+
+guardarCambioGrupo(
+idParticipante,
+document.getElementById(
+"nuevoGrupo"
+).value
+);
+
+});
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getGruposTemporada`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`;
+
+document.body.appendChild(script);
+
+}
+
+function guardarCambioGrupo(
+idParticipante,
+idGrupo
+){
+
+const callback =
+"cambio_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
+
+Swal.fire({
+
+icon:"success",
+title:"Grupo actualizado"
+
+});
+
+cargarParticipantes();
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+title:result.message
+
+});
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=cambiarGrupoParticipante`
++
+`&callback=${callback}`
++
+`&idParticipante=${idParticipante}`
++
+`&idGrupo=${idGrupo}`;
+
+document.body.appendChild(script);
+
+}
+
 function darBajaParticipante(idRegistro){
 
 Swal.fire({
