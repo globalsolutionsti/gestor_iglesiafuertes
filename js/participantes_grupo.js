@@ -417,3 +417,17 @@ window.location.href =
 `perfil.html?id=${idPersona}`;
 
 }
+
+function cambiarGrupo(idParticipante){
+
+Swal.fire({
+
+icon:"info",
+
+title:"Cambio de grupo",
+
+text:"Próximo paso: seleccionar nuevo grupo"
+
+});
+
+}
