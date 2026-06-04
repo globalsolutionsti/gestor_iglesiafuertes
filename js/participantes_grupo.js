@@ -360,3 +360,51 @@ script.src =
 document.body.appendChild(script);
 
 }
+
+function verPerfil(idPersona){
+
+Swal.fire({
+
+icon:"info",
+
+title:
+"Próximamente",
+
+text:
+"Ver perfil del participante"
+
+});
+
+}
+
+function cambiarGrupo(idRegistro){
+
+Swal.fire({
+
+icon:"info",
+
+title:
+"Próximamente",
+
+text:
+"Cambiar participante de grupo"
+
+});
+
+}
+
+function darBajaParticipante(idRegistro){
+
+Swal.fire({
+
+icon:"info",
+
+title:
+"Próximamente",
+
+text:
+"Dar de baja participante"
+
+});
+
+}
