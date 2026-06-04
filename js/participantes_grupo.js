@@ -609,17 +609,79 @@ document.body.appendChild(script);
 
 }
 
-function darBajaParticipante(idRegistro){
+function darBajaParticipante(idParticipante){
 
 Swal.fire({
 
-icon:"info",
-
-title:
-"Próximamente",
+title:"¿Dar de baja participante?",
 
 text:
-"Dar de baja participante"
+"El participante dejará de pertenecer al grupo",
+
+icon:"warning",
+
+showCancelButton:true,
+
+confirmButtonText:"Dar de Baja",
+
+cancelButtonText:"Cancelar"
+
+}).then(result=>{
+
+if(!result.isConfirmed){
+return;
+}
+
+const callback =
+"baja_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(resp){
+
+if(resp.status){
+
+Swal.fire({
+
+icon:"success",
+
+title:
+"Participante dado de baja"
+
+});
+
+cargarParticipantes();
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+
+title:
+resp.message
+
+});
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=darBajaParticipante`
++
+`&callback=${callback}`
++
+`&idParticipante=${idParticipante}`;
+
+document.body.appendChild(script);
 
 });
 
