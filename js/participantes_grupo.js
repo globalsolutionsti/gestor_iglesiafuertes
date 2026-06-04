@@ -175,3 +175,68 @@ script.src =
 document.body.appendChild(script);
 
 }
+
+function guardarParticipante(
+idPersona,
+nombre,
+tipo
+){
+
+const callback =
+"guardar_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
+
+Swal.fire({
+
+icon:"success",
+title:"Participante agregado"
+
+});
+
+cargarParticipantes();
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+title:result.message
+
+});
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=guardarParticipanteGrupo`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idSesion=${idSesion}`
++
+`&idGrupo=${idGrupo}`
++
+`&idPersona=${idPersona}`
++
+`&nombre=${encodeURIComponent(nombre)}`
++
+`&tipo=${tipo}`;
+
+document.body.appendChild(script);
+
+}
