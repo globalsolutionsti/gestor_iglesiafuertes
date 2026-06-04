@@ -127,6 +127,34 @@ ${p[7]}
 
 </td>
 
+<td>
+
+<button
+class="btn btn-info btn-sm me-1"
+onclick="verPerfil('${p[5]}')">
+
+<i class="fa fa-user"></i>
+
+</button>
+
+<button
+class="btn btn-warning btn-sm me-1"
+onclick="cambiarGrupo('${p[0]}')">
+
+<i class="fa fa-arrows-rotate"></i>
+
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+onclick="darBajaParticipante('${p[0]}')">
+
+<i class="fa fa-user-slash"></i>
+
+</button>
+
+</td>
+
 </tr>
 
 `;
