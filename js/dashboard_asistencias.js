@@ -183,7 +183,7 @@ let thead =
 sesionesUnicas.forEach(s=>{
 
 thead +=
-`<th>${s}</th>`;
+`<th class="text-center">${s}</th>`;
 
 });
 
