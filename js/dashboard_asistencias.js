@@ -212,7 +212,7 @@ const valor =
 g.sesiones[s] || 0;
 
 htmlTabla +=
-`<td>${valor}%</td>`;
+`<td class="text-center fw-bold">${valor}</td>`;
 
 });
 
