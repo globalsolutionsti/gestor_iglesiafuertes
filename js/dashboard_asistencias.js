@@ -203,7 +203,7 @@ result.grupoSesion.forEach(g=>{
 htmlTabla += "<tr>";
 
 htmlTabla +=
-`<td><b>${g.grupo}</b></td>`;
+`<td class="fw-semibold">${g.grupo}</td>`;
 
 sesionesUnicas.forEach(s=>{
 
