@@ -23,6 +23,66 @@ cargarParticipantesAsistencia();
 }
 );
 
+function cargarInfoGrupo(){
+
+const callback =
+"info_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
+
+document.getElementById(
+"infoGrupo"
+).innerHTML =
+
+`
+<div class="alert alert-primary">
+
+<b>📅 Temporada:</b>
+${result.temporada}
+
+<br>
+
+<b>📖 Sesión:</b>
+${result.sesion}
+
+<br>
+
+<b>👥 Grupo:</b>
+${result.grupo}
+
+</div>
+`;
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getInfoAsistenciaGrupo`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idSesion=${idSesion}`
++
+`&idGrupo=${idGrupo}`;
+
+document.body.appendChild(script);
+
+}
+
 function cargarParticipantesAsistencia(){
 
 const callback =
