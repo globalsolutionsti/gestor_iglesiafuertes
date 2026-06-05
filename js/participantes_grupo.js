@@ -719,3 +719,17 @@ text:"Participante: " + idParticipante
 });
 
 }
+
+function abrirAsistenciaGrupo(){
+
+window.location.href =
+
+"asistencia_grupo.html"
++
+"?idTemporada=" + idTemporada
++
+"&idSesion=" + idSesion
++
+"&idGrupo=" + idGrupo;
+
+}
