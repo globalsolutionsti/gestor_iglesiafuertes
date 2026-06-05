@@ -16,6 +16,26 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
+cargarInformacionGrupo();
+
+cargarParticipantes();
+
+}
+);
+
+function cargarInformacionGrupo(){
+
+const callback =
+"infoGrupo_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
+
 document.getElementById(
 "infoGrupo"
 ).innerHTML =
@@ -24,25 +44,44 @@ document.getElementById(
 <div class="alert alert-info">
 
 <b>Temporada:</b>
-${idTemporada}
+${result.temporada}
 
 <br>
 
 <b>Sesión:</b>
-${idSesion}
+${result.sesion}
 
 <br>
 
 <b>Grupo:</b>
-${idGrupo}
+${result.grupo}
 
 </div>
 `;
 
-cargarParticipantes();
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=getInfoGrupo`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idSesion=${idSesion}`
++
+`&idGrupo=${idGrupo}`;
+
+document.body.appendChild(script);
 
 }
-);
 
 function cargarParticipantes(){
 
