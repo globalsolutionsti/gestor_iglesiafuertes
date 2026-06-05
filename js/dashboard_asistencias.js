@@ -178,8 +178,7 @@ sesionesUnicas.push(s);
 /* CABECERA */
 
 let thead =
-
-"<tr><th>Grupo</th>";
+"<tr><th class='text-center'>Grupo</th>";
 
 sesionesUnicas.forEach(s=>{
 
