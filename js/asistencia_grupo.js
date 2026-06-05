@@ -16,6 +16,8 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
+cargarInfoGrupo();
+
 cargarParticipantesAsistencia();
 
 }
