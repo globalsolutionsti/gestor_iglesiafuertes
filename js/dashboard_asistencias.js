@@ -147,6 +147,81 @@ document.getElementById(
 ).innerHTML =
 htmlPersonas;
 
+/* =====================
+GRUPO VS SESION
+===================== */
+
+if(result.grupoSesion){
+
+let sesionesUnicas = [];
+
+result.grupoSesion.forEach(g=>{
+
+Object.keys(g.sesiones)
+.forEach(s=>{
+
+if(!sesionesUnicas.includes(s)){
+
+sesionesUnicas.push(s);
+
+}
+
+});
+
+});
+
+/* CABECERA */
+
+let thead =
+
+"<tr><th>Grupo</th>";
+
+sesionesUnicas.forEach(s=>{
+
+thead +=
+`<th>${s}</th>`;
+
+});
+
+thead += "</tr>";
+
+document.getElementById(
+"theadGrupoSesion"
+).innerHTML =
+thead;
+
+/* TABLA */
+
+let htmlTabla = "";
+
+result.grupoSesion.forEach(g=>{
+
+htmlTabla += "<tr>";
+
+htmlTabla +=
+`<td><b>${g.grupo}</b></td>`;
+
+sesionesUnicas.forEach(s=>{
+
+const valor =
+g.sesiones[s] || 0;
+
+htmlTabla +=
+`<td>${valor}%</td>`;
+
+});
+
+htmlTabla += "</tr>";
+
+});
+
+document.getElementById(
+"tablaGrupoSesion"
+).innerHTML =
+htmlTabla;
+
+}
+
 delete window[callback];
 
 script.remove();
