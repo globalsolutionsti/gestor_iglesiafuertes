@@ -14,15 +14,27 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
-const btn =
+const btnGeneral =
 document.getElementById(
 "btnDashboardGeneral"
 );
 
-if(btn){
+if(btnGeneral){
 
-btn.href =
+btnGeneral.href =
 `dashboard_grupos.html?id=${idTemporada}`;
+
+}
+
+const btnAsistencias =
+document.getElementById(
+"btnDashboardAsistencias"
+);
+
+if(btnAsistencias){
+
+btnAsistencias.href =
+`dashboard_asistencias.html?id=${idTemporada}`;
 
 }
 
