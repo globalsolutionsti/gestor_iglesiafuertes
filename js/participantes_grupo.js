@@ -131,15 +131,26 @@ ${p[7]}
 
 <button
 class="btn btn-info btn-sm me-1"
-onclick="verPerfil('${p[5]}')">
+onclick="verPerfil('${p[5]}')"
+title="Ver Perfil">
 
 <i class="fa fa-user"></i>
 
 </button>
 
 <button
+class="btn btn-success btn-sm me-1"
+onclick="capturarAsistencia('${p[0]}')"
+title="Asistencia">
+
+<i class="fa fa-clipboard-check"></i>
+
+</button>
+
+<button
 class="btn btn-warning btn-sm me-1"
-onclick="cambiarGrupo('${p[0]}')">
+onclick="cambiarGrupo('${p[0]}')"
+title="Cambiar Grupo">
 
 <i class="fa fa-arrows-rotate"></i>
 
@@ -147,7 +158,8 @@ onclick="cambiarGrupo('${p[0]}')">
 
 <button
 class="btn btn-danger btn-sm"
-onclick="darBajaParticipante('${p[0]}')">
+onclick="darBajaParticipante('${p[0]}')"
+title="Dar Baja">
 
 <i class="fa fa-user-slash"></i>
 
@@ -696,3 +708,14 @@ window.location.href =
 
 }
 
+function capturarAsistencia(idParticipante){
+
+Swal.fire({
+
+icon:"info",
+title:"Módulo de asistencia en construcción",
+text:"Participante: " + idParticipante
+
+});
+
+}
