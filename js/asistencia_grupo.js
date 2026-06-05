@@ -207,26 +207,78 @@ document.querySelectorAll(
 ".participante"
 );
 
-let total = 0;
+let asistencias = [];
 
 checks.forEach(c=>{
 
-if(c.checked){
-total++;
-}
+asistencias.push({
+
+idPersona:
+c.value,
+
+nombre:
+c.dataset.nombre,
+
+asistio:
+c.checked ? "SI" : "NO"
 
 });
+
+});
+
+const callback =
+"guardarAsis_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
 
 Swal.fire({
 
 icon:"success",
 
 title:
-"Asistentes seleccionados",
-
-text:
-total + " participantes"
+"Asistencia guardada correctamente"
 
 });
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+
+title:
+result.message
+
+});
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=guardarAsistenciaGrupo`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idSesion=${idSesion}`
++
+`&idGrupo=${idGrupo}`
++
+`&asistencias=${encodeURIComponent(JSON.stringify(asistencias))}`;
+
+document.body.appendChild(script);
 
 }
