@@ -153,6 +153,11 @@ GRUPO VS SESION
 
 if(result.grupoSesion){
 
+console.log(
+"grupoSesion:",
+result.grupoSesion
+);
+  
 let sesionesUnicas = [];
 
 result.grupoSesion.forEach(g=>{
