@@ -86,6 +86,20 @@ document.getElementById("anio").value;
 const numSesiones =
 document.getElementById("numSesiones").value;
 
+const fechaInicio =
+document.getElementById("fechaInicio").value;
+
+if(fechaInicio === ""){
+
+Swal.fire({
+icon:"warning",
+title:"Seleccione la fecha de inicio"
+});
+
+return;
+
+}
+  
 if(nombre === ""){
 
 Swal.fire({
@@ -239,7 +253,9 @@ script.src =
 +
 `&anio=${encodeURIComponent(anio)}`
 +
-`&numSesiones=${encodeURIComponent(numSesiones)}`;
+`&numSesiones=${encodeURIComponent(numSesiones)}`
++
+`&fechaInicio=${encodeURIComponent(fechaInicio)}`;
 
 document.body.appendChild(script);
 
