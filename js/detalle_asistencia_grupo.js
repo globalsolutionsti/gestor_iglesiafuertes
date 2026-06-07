@@ -162,11 +162,6 @@ tbody +=
 
 });
 
-tbody +=
-`</tr>`;
-
-}
-
 document.getElementById(
 "tbodyDetalle"
 ).innerHTML =
