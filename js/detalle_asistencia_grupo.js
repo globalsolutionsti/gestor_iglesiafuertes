@@ -43,17 +43,48 @@ return;
 ENCABEZADOS
 ====================== */
 
+/* ======================
+ENCABEZADOS
+====================== */
+
 let thead =
-"<tr><th>Participante</th>";
+`
+<tr>
+
+<th>
+Participante
+</th>
+`;
 
 result.sesiones.forEach(s=>{
 
 thead +=
-`<th class="text-center">${s}</th>`;
+`
+<th class="text-center">
+
+${s}
+
+</th>
+`;
 
 });
 
-thead += "</tr>";
+thead +=
+`
+<th class="text-center">
+
+Total
+
+</th>
+
+<th class="text-center">
+
+%
+
+</th>
+
+</tr>
+`;
 
 document.getElementById(
 "theadDetalle"
@@ -68,16 +99,25 @@ let tbody = "";
 
 for(let nombre in result.personas){
 
+const persona =
+result.personas[nombre];
+
 tbody +=
 `<tr>`;
 
 tbody +=
-`<td>${nombre}</td>`;
+`
+<td>
+
+${nombre}
+
+</td>
+`;
 
 result.sesiones.forEach(s=>{
 
 const valor =
-result.personas[nombre][s];
+persona.asistencias[s];
 
 tbody +=
 `
@@ -89,6 +129,36 @@ ${valor=="SI"
 
 </td>
 `;
+
+});
+
+const total =
+persona.total;
+
+const porcentaje =
+Math.round(
+(total /
+result.totalSesiones)
+*100
+);
+
+tbody +=
+`
+<td class="text-center">
+
+${total}
+
+</td>
+
+<td class="text-center">
+
+${porcentaje}%
+
+</td>
+`;
+
+tbody +=
+`</tr>`;
 
 });
 
