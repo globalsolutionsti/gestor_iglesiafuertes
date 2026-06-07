@@ -83,6 +83,12 @@ Total
 
 </th>
 
+<th class="text-center">
+
+Estado
+
+</th>
+
 </tr>
 `;
 
@@ -142,6 +148,26 @@ result.totalSesiones)
 *100
 );
 
+let estado = "";
+let badge = "";
+
+if(porcentaje >= 90){
+
+estado = "Excelente";
+badge = "🟢";
+
+}else if(porcentaje >= 70){
+
+estado = "Regular";
+badge = "🟡";
+
+}else{
+
+estado = "Seguimiento";
+badge = "🔴";
+
+}
+  
 tbody +=
 `
 <td class="text-center">
@@ -155,8 +181,16 @@ ${total}
 ${porcentaje}%
 
 </td>
+
+<td class="text-center">
+
+${badge} ${estado}
+
+</td>
 `;
 
+
+  
 tbody +=
 `</tr>`;
 
