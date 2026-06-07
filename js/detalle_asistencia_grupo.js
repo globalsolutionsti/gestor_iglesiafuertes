@@ -133,10 +133,6 @@ porcentaje:porcentaje
 
 }
 
-participantesOrdenados.sort(
-(a,b)=>a.porcentaje-b.porcentaje
-);
-
 participantesOrdenados.forEach(item=>{
 
 const nombre =
@@ -144,9 +140,6 @@ item.nombre;
 
 const persona =
 item.persona;
-
-const persona =
-result.personas[nombre];
 
 tbody +=
 `<tr>`;
@@ -207,7 +200,7 @@ estado = "Seguimiento";
 badge = "🔴";
 
 }
-  
+
 tbody +=
 `
 <td class="text-center">
@@ -229,8 +222,6 @@ ${badge} ${estado}
 </td>
 `;
 
-
-  
 tbody +=
 `</tr>`;
 
