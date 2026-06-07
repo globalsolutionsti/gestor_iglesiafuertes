@@ -103,7 +103,47 @@ FILAS
 
 let tbody = "";
 
+/* ======================
+ORDENAR POR PORCENTAJE
+====================== */
+
+let participantesOrdenados = [];
+
 for(let nombre in result.personas){
+
+const persona =
+result.personas[nombre];
+
+const porcentaje =
+Math.round(
+(persona.total /
+result.totalSesiones)
+*100
+);
+
+participantesOrdenados.push({
+
+nombre:nombre,
+
+persona:persona,
+
+porcentaje:porcentaje
+
+});
+
+}
+
+participantesOrdenados.sort(
+(a,b)=>a.porcentaje-b.porcentaje
+);
+
+participantesOrdenados.forEach(item=>{
+
+const nombre =
+item.nombre;
+
+const persona =
+item.persona;
 
 const persona =
 result.personas[nombre];
@@ -194,8 +234,8 @@ ${badge} ${estado}
 tbody +=
 `</tr>`;
 
-}
-
+});
+  
 document.getElementById(
 "tbodyDetalle"
 ).innerHTML =
