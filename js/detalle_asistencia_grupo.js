@@ -160,7 +160,7 @@ ${porcentaje}%
 tbody +=
 `</tr>`;
 
-});
+}
 
 document.getElementById(
 "tbodyDetalle"
