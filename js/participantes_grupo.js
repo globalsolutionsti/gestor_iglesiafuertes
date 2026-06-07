@@ -196,6 +196,15 @@ title="Cambiar Grupo">
 </button>
 
 <button
+class="btn btn-dark btn-sm me-1"
+onclick="mostrarQR('${p[5]}','${p[6]}')"
+title="Código QR">
+
+<i class="fa fa-qrcode"></i>
+
+</button>
+
+<button
 class="btn btn-danger btn-sm"
 onclick="darBajaParticipante('${p[0]}')"
 title="Dar Baja">
@@ -682,5 +691,39 @@ window.location.href =
 "&idSesion=" + idSesion
 +
 "&idGrupo=" + idGrupo;
+
+}
+
+function mostrarQR(
+idPersona,
+nombre
+){
+
+const contenidoQR =
+`PERSONA:${idPersona}`;
+
+Swal.fire({
+
+title: nombre,
+
+html:
+
+`
+<div class="text-center">
+
+<img
+src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(contenidoQR)}"
+class="img-fluid mb-3">
+
+<br>
+
+<b>${contenidoQR}</b>
+
+</div>
+`,
+
+width:500
+
+});
 
 }
