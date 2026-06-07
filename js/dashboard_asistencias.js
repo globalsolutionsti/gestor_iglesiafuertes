@@ -203,8 +203,19 @@ result.grupoSesion.forEach(g=>{
 htmlTabla += "<tr>";
 
 htmlTabla +=
-`<td class="fw-semibold">${g.grupo}</td>`;
+`
+<td>
 
+<a
+href="detalle_asistencia_grupo.html?idTemporada=${idTemporada}&idGrupo=${g.idGrupo}"
+class="fw-semibold text-decoration-none">
+
+${g.grupo}
+
+</a>
+
+</td>
+`;
 sesionesUnicas.forEach(s=>{
 
 const valor =
