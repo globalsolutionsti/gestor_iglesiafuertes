@@ -12,7 +12,28 @@ document.addEventListener(
 "DOMContentLoaded",
 async function(){
 
-await cargarCamaras();
+const selector =
+document.getElementById(
+"selectorCamara"
+);
+
+selector.innerHTML =
+
+`
+<option value="frontal">
+Cámara Frontal
+</option>
+
+<option value="trasera">
+Cámara Trasera
+</option>
+`;
+
+camaraActual = {
+facingMode:"user"
+};
+
+await iniciarScanner();
 
 }
 );
@@ -91,6 +112,8 @@ camaraActual = {
 facingMode:"user"
 };
 
+await iniciarScanner();
+
 return;
 
 }
@@ -146,7 +169,7 @@ camaraActual =
 cameras[0].id;
 
 }
-
+await iniciarScanner();
 }
 catch(error){
 
@@ -174,7 +197,7 @@ Cámara Trasera
 camaraActual = {
 facingMode:"user"
 };
-
+await iniciarScanner();
 }
 
 }
@@ -221,6 +244,18 @@ INICIAR SCANNER
 
 async function iniciarScanner(){
 
+try{
+
+if(html5QrCode){
+
+try{
+
+await html5QrCode.stop();
+
+}catch(e){}
+
+}
+
 html5QrCode =
 new Html5Qrcode("reader");
 
@@ -238,6 +273,15 @@ qrbox:300
 onScanSuccess
 
 );
+
+}catch(error){
+
+console.error(
+"ERROR CAMARA:",
+error
+);
+
+}
 
 }
 
