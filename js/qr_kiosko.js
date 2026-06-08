@@ -25,94 +25,84 @@ async function cargarCamaras(){
 
 try{
 
-const devices =
+const selector =
+document.getElementById("selectorCamara");
+
+selector.innerHTML =
+"<option>Cargando cámaras...</option>";
+
+/* ==========================
+DESPERTAR CAMARAS IOS
+========================== */
+
+try{
+
+await navigator.mediaDevices.getUserMedia({
+video:true
+});
+
+}catch(e){}
+
+/* ==========================
+OBTENER CAMARAS
+========================== */
+
+const cameras =
 await Html5Qrcode.getCameras();
 
-const select =
-document.getElementById(
-"cameraSelect"
-);
+selector.innerHTML = "";
 
-select.innerHTML = "";
+if(cameras.length === 0){
 
-if(devices.length === 0){
-
-select.innerHTML =
-"<option>No hay cámaras</option>";
+selector.innerHTML =
+"<option>No se detectaron cámaras</option>";
 
 return;
 
 }
 
-/* ==========================
-LLENAR COMBO
-========================== */
-
-devices.forEach(device=>{
+cameras.forEach(cam=>{
 
 const option =
 document.createElement("option");
 
 option.value =
-device.id;
+cam.id;
 
 option.text =
-device.label ||
-`Cámara ${device.id}`;
+cam.label || "Cámara";
 
-select.appendChild(option);
+selector.appendChild(option);
 
 });
 
 /* ==========================
-SELECCIONAR FRONTAL
-SI EXISTE
+SELECCIONAR FRONTAL IOS
 ========================== */
 
-let frontal = devices.find(d=>
+let frontal = cameras.find(c =>
 
-(d.label || "")
-.toLowerCase()
-.includes("front")
+c.label.toLowerCase().includes("front") ||
+c.label.toLowerCase().includes("frontal")
 
 );
 
 if(frontal){
 
-camaraActual =
+selector.value =
 frontal.id;
 
-select.value =
-frontal.id;
-
-}else{
-
-camaraActual =
-devices[0].id;
-
 }
-
-/* ==========================
-CAMBIO MANUAL
-========================== */
-
-select.addEventListener(
-"change",
-async function(){
-
-camaraActual =
-this.value;
-
-await reiniciarScanner();
-
-}
-);
-
-await iniciarScanner();
 
 }catch(error){
 
 console.error(error);
+
+document.getElementById(
+"selectorCamara"
+).innerHTML =
+
+"<option>Error cargando cámaras</option>";
 
 }
 
