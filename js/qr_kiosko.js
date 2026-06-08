@@ -17,6 +17,22 @@ await cargarCamaras();
 }
 );
 
+document.addEventListener(
+"change",
+function(e){
+
+if(
+e.target &&
+e.target.id === "selectorCamara"
+){
+
+cambiarCamara();
+
+}
+
+}
+);
+
 /* ===================================
 OBTENER CAMARAS
 =================================== */
@@ -31,17 +47,17 @@ document.getElementById("selectorCamara");
 selector.innerHTML =
 "<option>Cargando cámaras...</option>";
 
-/* ==========================
-DESPERTAR CAMARAS IOS
-========================== */
-
 try{
 
 await navigator.mediaDevices.getUserMedia({
 video:true
 });
 
-}catch(e){}
+}catch(e){
+
+console.log(e);
+
+}
 
 /* ==========================
 OBTENER CAMARAS
@@ -52,14 +68,36 @@ await Html5Qrcode.getCameras();
 
 selector.innerHTML = "";
 
-if(cameras.length === 0){
+/* ==========================
+NO DEVOLVIO CAMARAS
+(IPAD ANTIGUO)
+========================== */
+
+if(!cameras || cameras.length === 0){
 
 selector.innerHTML =
-"<option>No se detectaron cámaras</option>";
+
+`
+<option value="frontal">
+Cámara Frontal
+</option>
+
+<option value="trasera">
+Cámara Trasera
+</option>
+`;
+
+camaraActual = {
+facingMode:"user"
+};
 
 return;
 
 }
+
+/* ==========================
+CAMARAS DETECTADAS
+========================== */
 
 cameras.forEach(cam=>{
 
@@ -77,13 +115,20 @@ selector.appendChild(option);
 });
 
 /* ==========================
-SELECCIONAR FRONTAL IOS
+BUSCAR FRONTAL
 ========================== */
 
 let frontal = cameras.find(c =>
 
-c.label.toLowerCase().includes("front") ||
-c.label.toLowerCase().includes("frontal")
+(c.label || "")
+.toLowerCase()
+.includes("front")
+
+||
+
+(c.label || "")
+.toLowerCase()
+.includes("frontal")
 
 );
 
@@ -92,19 +137,81 @@ if(frontal){
 selector.value =
 frontal.id;
 
+camaraActual =
+frontal.id;
+
+}else{
+
+camaraActual =
+cameras[0].id;
+
 }
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
-document.getElementById(
-"selectorCamara"
-).innerHTML =
+/* ==========================
+FALLBACK IOS 12
+========================== */
 
-"<option>Error cargando cámaras</option>";
+const selector =
+document.getElementById("selectorCamara");
+
+selector.innerHTML =
+
+`
+<option value="frontal">
+Cámara Frontal
+</option>
+
+<option value="trasera">
+Cámara Trasera
+</option>
+`;
+
+camaraActual = {
+facingMode:"user"
+};
 
 }
+
+}
+
+async function cambiarCamara(){
+
+const selector =
+document.getElementById("selectorCamara");
+
+const valor =
+selector.value;
+
+/* ==========================
+IOS ANTIGUO
+========================== */
+
+if(valor === "frontal"){
+
+camaraActual = {
+facingMode:"user"
+};
+
+}
+else if(valor === "trasera"){
+
+camaraActual = {
+facingMode:"environment"
+};
+
+}
+else{
+
+camaraActual = valor;
+
+}
+
+await reiniciarScanner();
 
 }
 
@@ -119,7 +226,9 @@ new Html5Qrcode("reader");
 
 await html5QrCode.start(
 
-camaraActual,
+camaraActual || {
+facingMode:"user"
+},
 
 {
 fps:15,
