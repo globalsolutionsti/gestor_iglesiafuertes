@@ -24,9 +24,16 @@ onScanSuccess
 
 function onScanSuccess(texto){
 
-registrarAsistencia(
-texto.trim()
-);
+let idPersona = texto;
+
+if(texto.startsWith("PERSONA:")){
+
+idPersona =
+texto.replace("PERSONA:","").trim();
+
+}
+
+registrarAsistencia(idPersona);
 
 }
 
