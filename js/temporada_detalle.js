@@ -92,6 +92,14 @@ return;
 
 sesiones.forEach(sesion=>{
 
+const badgeEstado =
+
+sesion[4] == "ABIERTA"
+
+? `<span class="badge bg-success ms-2">ABIERTA</span>`
+
+: `<span class="badge bg-danger ms-2">CERRADA</span>`;
+
 contenedor.innerHTML += `
 
 <div class="card mb-3">
@@ -102,15 +110,41 @@ contenedor.innerHTML += `
 
 ${sesion[3]}
 
+${badgeEstado}
+
+<div class="float-end d-flex gap-2">
+
+<button
+class="btn btn-success btn-sm"
+onclick="abrirSesion('${sesion[0]}')">
+
+<i class="fa fa-lock-open"></i>
+
+Abrir
+
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+onclick="cerrarSesion('${sesion[0]}')">
+
+<i class="fa fa-lock"></i>
+
+Cerrar
+
+</button>
+
 <a
 href="dashboard_grupos.html?id=${idTemporada}"
-class="btn btn-success btn-sm float-end">
+class="btn btn-primary btn-sm">
 
 <i class="fa fa-chart-pie"></i>
 
 Dashboard
 
 </a>
+
+</div>
 
 </h5>
 
@@ -150,6 +184,97 @@ script.src =
 `&callback=${callback}`
 +
 `&temporadaId=${idTemporada}`;
+
+document.body.appendChild(script);
+
+}
+
+/* ==========================================
+ABRIR SESION
+========================================== */
+
+function abrirSesion(idSesion){
+
+actualizarEstadoSesion(
+idSesion,
+"abrirSesion"
+);
+
+}
+
+/* ==========================================
+CERRAR SESION
+========================================== */
+
+function cerrarSesion(idSesion){
+
+actualizarEstadoSesion(
+idSesion,
+"cerrarSesion"
+);
+
+}
+
+/* ==========================================
+ACTUALIZAR
+========================================== */
+
+function actualizarEstadoSesion(
+
+idSesion,
+accion
+
+){
+
+const callback =
+
+"estado_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(result.status){
+
+Swal.fire({
+
+icon:"success",
+
+title:"Estado actualizado"
+
+}).then(()=>{
+
+cargarSesiones();
+
+});
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+
+title:result.message
+
+});
+
+}
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=${accion}`
++
+`&callback=${callback}`
++
+`&idSesion=${idSesion}`;
 
 document.body.appendChild(script);
 
