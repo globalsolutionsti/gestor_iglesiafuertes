@@ -25,12 +25,7 @@ onScanSuccess
 
 }
 
-function onScanSuccess(idPersona){
-
-console.log(
-"QR LEIDO:",
-idPersona
-);
+function onScanSuccess(qrTexto){
 
 if(procesando){
 return;
@@ -38,9 +33,25 @@ return;
 
 procesando = true;
 
-registrarAsistencia(
-String(idPersona).trim()
+/* ==========================
+EXTRAER ID DEL QR
+========================== */
+
+let idPersona = qrTexto;
+
+if(qrTexto.startsWith("PERSONA:")){
+
+idPersona =
+qrTexto.replace("PERSONA:","").trim();
+
+}
+
+console.log(
+"ID EXTRAIDO:",
+idPersona
 );
+
+registrarAsistencia(idPersona);
 
 }
 
