@@ -27,21 +27,10 @@ onScanSuccess
 
 function onScanSuccess(idPersona){
 
-const ahora = Date.now();
-
-/* ===================================
-EVITAR DOBLE LECTURA
-=================================== */
-
-if(
-ultimoQR === idPersona &&
-(ahora - ultimoTiempo) < 5000
-){
-return;
-}
-
-ultimoQR = idPersona;
-ultimoTiempo = ahora;
+console.log(
+"QR LEIDO:",
+idPersona
+);
 
 if(procesando){
 return;
@@ -50,7 +39,7 @@ return;
 procesando = true;
 
 registrarAsistencia(
-idPersona.trim()
+String(idPersona).trim()
 );
 
 }
