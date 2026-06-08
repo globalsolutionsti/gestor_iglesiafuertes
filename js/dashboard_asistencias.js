@@ -6,17 +6,40 @@ window.location.search
 const idTemporada =
 params.get("id");
 
+let dashboardTimer = null;
+
 document.addEventListener(
 "DOMContentLoaded",
 function(){
 
 cargarDashboard();
 
+/* =====================
+AUTO REFRESH
+===================== */
+
+dashboardTimer = setInterval(
+
+function(){
+
+cargarDashboard();
+
+},
+
+10000
+
+);
+
 }
 );
 
 function cargarDashboard(){
+if(window.dashboardCargando){
+return;
+}
 
+window.dashboardCargando = true;
+  
 const callback =
 "dashboardAsis_" +
 Date.now();
@@ -28,11 +51,15 @@ window[callback] = function(result){
 
 if(!result.status){
 
-alert(result.message);
+window.dashboardCargando = false;
+
+console.error(
+result.message
+);
+
 return;
 
 }
-
 document.getElementById(
 "totalRegistros"
 ).innerHTML =
@@ -47,6 +74,14 @@ document.getElementById(
 "porcentajeGeneral"
 ).innerHTML =
 result.totales.porcentaje + "%";
+
+document.getElementById(
+"ultimaActualizacion"
+).innerHTML =
+
+"Actualizado: " +
+
+new Date().toLocaleTimeString();
 
 /* =====================
 GRUPOS
@@ -236,6 +271,8 @@ document.getElementById(
 htmlTabla;
 
 }
+
+window.dashboardCargando = false;
 
 delete window[callback];
 
