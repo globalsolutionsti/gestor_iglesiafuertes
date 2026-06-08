@@ -1,5 +1,8 @@
 let procesando = false;
 
+let ultimoQR = "";
+let ultimoTiempo = 0;
+
 const html5QrCode =
 new Html5Qrcode("reader");
 
@@ -12,7 +15,7 @@ facingMode:"environment"
 },
 
 {
-fps:10,
+fps:15,
 qrbox:300
 },
 
@@ -24,13 +27,31 @@ onScanSuccess
 
 function onScanSuccess(idPersona){
 
+const ahora = Date.now();
+
+/* ===================================
+EVITAR DOBLE LECTURA
+=================================== */
+
+if(
+ultimoQR === idPersona &&
+(ahora - ultimoTiempo) < 5000
+){
+return;
+}
+
+ultimoQR = idPersona;
+ultimoTiempo = ahora;
+
 if(procesando){
 return;
 }
 
 procesando = true;
 
-registrarAsistencia(idPersona);
+registrarAsistencia(
+idPersona.trim()
+);
 
 }
 
@@ -55,9 +76,14 @@ mensaje.className =
 mensaje.innerHTML =
 
 `
-✅ Bienvenido<br>
+✅ BIENVENIDO
+
+<br><br>
+
 ${result.nombre}
 `;
+
+reproducirSonidoOK();
 
 }else{
 
@@ -67,8 +93,12 @@ mensaje.className =
 mensaje.innerHTML =
 
 `
-❌ ${result.message}
+❌
+
+${result.message}
 `;
+
+reproducirSonidoError();
 
 }
 
@@ -101,4 +131,33 @@ document.body.appendChild(script);
 
 }
 
+/* ===================================
+SONIDOS
+=================================== */
 
+function reproducirSonidoOK(){
+
+const audio =
+new Audio(
+"https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"
+);
+
+audio.play();
+
+}
+
+function reproducirSonidoError(){
+
+const audio =
+new Audio(
+"https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+);
+
+audio.play();
+
+}
+
+document.addEventListener(
+"DOMContentLoaded",
+iniciarScanner
+);
