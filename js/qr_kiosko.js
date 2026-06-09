@@ -267,7 +267,21 @@ facingMode:"user"
 
 {
 fps:15,
-qrbox:500
+
+qrbox:function(viewfinderWidth,viewfinderHeight){
+
+const size = Math.min(
+viewfinderWidth,
+viewfinderHeight
+) * 0.85;
+
+return {
+width:size,
+height:size
+};
+
+}
+
 },
 
 onScanSuccess
