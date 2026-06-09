@@ -44,22 +44,12 @@ Participantes del Grupo
 
 <div id="infoGrupo"></div>
 
-<div class="mb-3">
+<div class="mb-3 d-flex gap-2 flex-wrap">
 
 <button
 class="btn btn-primary"
 onclick="abrirModalParticipante()">
 
-<button
-class="btn btn-dark ms-2"
-onclick="descargarCredencialesGrupo()">
-
-<i class="fa fa-id-card"></i>
-
-Descargar Credenciales
-
-</button>
-  
 <i class="fa fa-user-plus"></i>
 
 Agregar Participante
@@ -67,7 +57,17 @@ Agregar Participante
 </button>
 
 <button
-class="btn btn-success ms-2"
+class="btn btn-dark"
+onclick="descargarCredencialesGrupo()">
+
+<i class="fa fa-id-card"></i>
+
+Descargar Credenciales
+
+</button>
+
+<button
+class="btn btn-success"
 onclick="abrirAsistenciaGrupo()">
 
 <i class="fa fa-clipboard-check"></i>
@@ -75,7 +75,7 @@ onclick="abrirAsistenciaGrupo()">
 Tomar Asistencia
 
 </button>
-  
+
 </div>
 
 <table
