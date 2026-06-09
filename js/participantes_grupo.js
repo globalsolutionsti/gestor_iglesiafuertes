@@ -702,8 +702,8 @@ window.location.href =
 function mostrarQR(
 idPersona,
 nombre,
-tipo = "PARTICIPANTE",
-grupo = ""
+tipo="PARTICIPANTE",
+grupo=""
 ){
 
 const contenidoQR =
@@ -715,25 +715,70 @@ const urlQR =
 
 Swal.fire({
 
-title:nombre,
+title:"Credencial Digital",
 
-html:
+width:700,
 
-`
-<div class="text-center">
+html:`
+
+<div
+id="credencialWhatsapp"
+style="
+width:540px;
+height:675px;
+margin:auto;
+background:white;
+border-radius:25px;
+padding:30px;
+box-shadow:0 0 15px rgba(0,0,0,.2);
+text-align:center;
+">
+
+<div
+style="
+font-size:32px;
+font-weight:bold;
+margin-bottom:20px;
+">
+
+GRUPOS DE CONEXIÓN
+
+</div>
+
+<div
+style="
+font-size:20px;
+color:#666;
+margin-bottom:25px;
+">
+
+Credencial Digital
+
+</div>
 
 <img
-id="imagenQR"
 src="${urlQR}"
 style="
-width:180px;
-height:180px;
-"
-class="mb-3">
+width:220px;
+height:220px;
+">
 
-<h5>${nombre}</h5>
+<br><br>
 
-<div class="text-muted">
+<h2
+style="
+font-weight:bold;
+">
+
+${nombre}
+
+</h2>
+
+<div
+style="
+font-size:20px;
+color:#555;
+">
 
 ${tipo}
 
@@ -741,41 +786,44 @@ ${tipo}
 
 <br>
 
+<div>
+
 <b>ID:</b>
+
 ${idPersona}
 
-<br><br>
+</div>
 
-<a
-href="${urlQR}"
-download="QR_${idPersona}.png"
-target="_blank"
-class="btn btn-success me-2">
+<br>
+
+<div
+style="
+font-size:18px;
+color:#777;
+">
+
+Presenta este código
+para registrar asistencia
+
+</div>
+
+</div>
+
+<br>
+
+<button
+class="btn btn-success"
+onclick="descargarCredencialPNG(
+'${idPersona}'
+)">
 
 <i class="fa fa-download"></i>
 
-QR
-
-</a>
-
-<button
-class="btn btn-primary"
-onclick="descargarCredencial(
-'${idPersona}',
-'${nombre}',
-'${tipo}'
-)">
-
-<i class="fa fa-id-card"></i>
-
-Credencial
+Descargar Credencial
 
 </button>
 
-</div>
-`,
-
-width:450
+`
 
 });
 
@@ -908,5 +956,36 @@ window.print();
 </html>
 
 `);
+
+}
+
+function descargarCredencialPNG(idPersona){
+
+const credencial =
+document.getElementById(
+"credencialWhatsapp"
+);
+
+html2canvas(
+credencial,
+{
+scale:3
+}
+).then(canvas=>{
+
+const link =
+document.createElement("a");
+
+link.download =
+`Credencial_${idPersona}.png`;
+
+link.href =
+canvas.toDataURL(
+"image/png"
+);
+
+link.click();
+
+});
 
 }
