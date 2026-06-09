@@ -969,9 +969,12 @@ document.getElementById(
 html2canvas(
 credencial,
 {
-scale:3
+scale:3,
+useCORS:true,
+allowTaint:true
 }
-).then(canvas=>{
+)
+.then(canvas=>{
 
 const link =
 document.createElement("a");
