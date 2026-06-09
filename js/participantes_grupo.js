@@ -11,6 +11,7 @@ params.get("idSesion");
 
 const idGrupo =
 params.get("idGrupo");
+let participantesCache = [];
 
 document.addEventListener(
 "DOMContentLoaded",
@@ -121,6 +122,9 @@ return;
 
 const participantes =
 result.data || [];
+
+participantesCache =
+participantes;
 
 if(participantes.length === 0){
 
@@ -990,5 +994,211 @@ canvas.toDataURL(
 link.click();
 
 });
+
+}
+async function descargarCredencialesGrupo(){
+
+if(participantesCache.length === 0){
+
+Swal.fire(
+"Sin datos",
+"No existen participantes",
+"warning"
+);
+
+return;
+
+}
+
+const confirmar =
+await Swal.fire({
+
+title:
+"Descargar credenciales",
+
+text:
+"Se descargarán todas las credenciales del grupo",
+
+icon:"question",
+
+showCancelButton:true,
+
+confirmButtonText:
+"Descargar"
+
+});
+
+if(!confirmar.isConfirmed){
+return;
+}
+
+for(let i=0;i<participantesCache.length;i++){
+
+const p =
+participantesCache[i];
+
+await generarCredencialMasiva(
+
+p[5], // idPersona
+p[6], // nombre
+p[4]  // tipo
+
+);
+
+await esperar(1000);
+
+}
+
+Swal.fire({
+
+icon:"success",
+
+title:
+"Proceso terminado"
+
+});
+
+}
+
+
+function esperar(ms){
+
+return new Promise(resolve=>{
+
+setTimeout(
+resolve,
+ms
+);
+
+});
+
+}
+
+async function generarCredencialMasiva(
+
+idPersona,
+nombre,
+tipo
+
+){
+
+const contenidoQR =
+`PERSONA:${idPersona}`;
+
+const qrURL =
+
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(contenidoQR)}`;
+
+const contenedor =
+document.createElement("div");
+
+contenedor.style.width =
+"540px";
+
+contenedor.style.height =
+"675px";
+
+contenedor.style.background =
+"white";
+
+contenedor.style.padding =
+"30px";
+
+contenedor.style.position =
+"fixed";
+
+contenedor.style.left =
+"-9999px";
+
+contenedor.innerHTML =
+
+`
+
+<div style="text-align:center;">
+
+<h2>
+
+GRUPOS DE CONEXIÓN
+
+</h2>
+
+<p>
+
+Credencial Digital
+
+</p>
+
+<img
+src="${qrURL}"
+style="width:220px;height:220px;">
+
+<br><br>
+
+<h3>
+
+${nombre}
+
+</h3>
+
+<div>
+
+${tipo}
+
+</div>
+
+<br>
+
+<div>
+
+${idPersona}
+
+</div>
+
+</div>
+
+`;
+
+document.body.appendChild(
+contenedor
+);
+
+await new Promise(resolve=>{
+
+setTimeout(
+resolve,
+1500
+);
+
+});
+
+const canvas =
+await html2canvas(
+
+contenedor,
+
+{
+scale:3,
+useCORS:true
+}
+
+);
+
+const link =
+document.createElement("a");
+
+link.download =
+
+`${nombre}.png`;
+
+link.href =
+canvas.toDataURL(
+"image/png"
+);
+
+link.click();
+
+document.body.removeChild(
+contenedor
+);
 
 }
