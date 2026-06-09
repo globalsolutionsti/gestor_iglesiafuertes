@@ -266,7 +266,7 @@ facingMode:"user"
 },
 
 {
-fps:15
+fps:25
 },
 
 onScanSuccess
