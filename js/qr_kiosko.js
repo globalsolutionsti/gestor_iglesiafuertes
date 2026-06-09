@@ -389,6 +389,10 @@ ${result.nombre}
 
 reproducirSonidoOK();
 
+hablarBienvenida(
+result.nombre
+);
+
 }else{
 
 document.body.classList.add(
@@ -469,5 +473,27 @@ new Audio(
 );
 
 audio.play();
+
+}
+function hablarBienvenida(nombre){
+
+if(!("speechSynthesis" in window)){
+return;
+}
+
+speechSynthesis.cancel();
+
+const mensaje =
+new SpeechSynthesisUtterance(
+`Bienvenido ${nombre}. Su asistencia ha sido registrada`
+);
+
+mensaje.lang = "es-MX";
+
+mensaje.rate = 1;
+
+mensaje.pitch = 1;
+
+speechSynthesis.speak(mensaje);
 
 }
