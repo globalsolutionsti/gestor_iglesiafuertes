@@ -740,12 +740,16 @@ text-align:center;
 
 <div
 style="
-font-size:32px;
-font-weight:bold;
 margin-bottom:20px;
 ">
 
-GRUPOS DE CONEXIÓN
+<img
+src="img/logo_conexion.png"
+style="
+max-width:320px;
+width:100%;
+height:auto;
+">
 
 </div>
 
@@ -1116,11 +1120,17 @@ contenedor.innerHTML =
 
 <div style="text-align:center;">
 
-<h2>
+<div style="margin-bottom:20px;">
 
-GRUPOS DE CONEXIÓN
+<img
+src="img/logo_conexion.png"
+style="
+max-width:320px;
+width:100%;
+height:auto;
+">
 
-</h2>
+</div>
 
 <p>
 
