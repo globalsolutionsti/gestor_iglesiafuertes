@@ -431,7 +431,7 @@ document.body.classList.remove(
 
 procesando = false;
 
-},1000);
+},1500);
 delete window[callback];
 
 script.remove();
