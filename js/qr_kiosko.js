@@ -267,7 +267,7 @@ facingMode:"user"
 
 {
 fps:15,
-qrbox:450
+qrbox:500
 },
 
 onScanSuccess
