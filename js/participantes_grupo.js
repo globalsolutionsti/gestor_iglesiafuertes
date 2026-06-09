@@ -701,7 +701,9 @@ window.location.href =
 
 function mostrarQR(
 idPersona,
-nombre
+nombre,
+tipo = "PARTICIPANTE",
+grupo = ""
 ){
 
 const contenidoQR =
@@ -709,7 +711,7 @@ const contenidoQR =
 
 const urlQR =
 
-`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(contenidoQR)}`;
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(contenidoQR)}`;
 
 Swal.fire({
 
@@ -723,11 +725,24 @@ html:
 <img
 id="imagenQR"
 src="${urlQR}"
-class="img-fluid mb-3">
+style="
+width:180px;
+height:180px;
+"
+class="mb-3">
+
+<h5>${nombre}</h5>
+
+<div class="text-muted">
+
+${tipo}
+
+</div>
 
 <br>
 
-<b>${contenidoQR}</b>
+<b>ID:</b>
+${idPersona}
 
 <br><br>
 
@@ -735,19 +750,163 @@ class="img-fluid mb-3">
 href="${urlQR}"
 download="QR_${idPersona}.png"
 target="_blank"
-class="btn btn-success">
+class="btn btn-success me-2">
 
 <i class="fa fa-download"></i>
 
-Descargar QR
+QR
 
 </a>
+
+<button
+class="btn btn-primary"
+onclick="descargarCredencial(
+'${idPersona}',
+'${nombre}',
+'${tipo}'
+)">
+
+<i class="fa fa-id-card"></i>
+
+Credencial
+
+</button>
 
 </div>
 `,
 
-width:550
+width:450
 
 });
+
+}
+
+function descargarCredencial(
+idPersona,
+nombre,
+tipo
+){
+
+const contenidoQR =
+`PERSONA:${idPersona}`;
+
+const urlQR =
+
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(contenidoQR)}`;
+
+const ventana =
+window.open("","_blank");
+
+ventana.document.write(`
+
+<html>
+
+<head>
+
+<title>${nombre}</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+text-align:center;
+padding:20px;
+
+}
+
+.credencial{
+
+border:2px solid #0d6efd;
+border-radius:20px;
+padding:20px;
+max-width:450px;
+margin:auto;
+
+}
+
+.logo{
+
+font-size:24px;
+font-weight:bold;
+margin-bottom:15px;
+
+}
+
+.qr{
+
+width:180px;
+
+}
+
+.nombre{
+
+font-size:22px;
+font-weight:bold;
+
+}
+
+.tipo{
+
+font-size:18px;
+color:#666;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="credencial">
+
+<div class="logo">
+
+GRUPOS DE CONEXIÓN
+
+</div>
+
+<img
+src="${urlQR}"
+class="qr">
+
+<br><br>
+
+<div class="nombre">
+
+${nombre}
+
+</div>
+
+<div class="tipo">
+
+${tipo}
+
+</div>
+
+<br>
+
+<b>ID:</b>
+
+${idPersona}
+
+</div>
+
+<script>
+
+window.onload=function(){
+
+window.print();
+
+}
+
+</script>
+
+</body>
+
+</html>
+
+`);
 
 }
