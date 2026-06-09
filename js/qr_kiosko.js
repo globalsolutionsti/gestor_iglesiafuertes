@@ -268,7 +268,7 @@ facingMode:"user"
 {
 fps:15,
 
-qrbox:function(viewfinderWidth,viewfinderHeight){
+
 
 const size = Math.min(
 viewfinderWidth,
