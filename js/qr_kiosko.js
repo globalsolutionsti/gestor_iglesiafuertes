@@ -385,6 +385,10 @@ document.getElementById(
 
 if(result.status){
 
+document.body.classList.add(
+"success"
+);
+
 mensaje.className =
 "ok";
 
@@ -401,6 +405,10 @@ ${result.nombre}
 reproducirSonidoOK();
 
 }else{
+
+document.body.classList.add(
+"errorbg"
+);
 
 mensaje.className =
 "error";
@@ -424,10 +432,17 @@ mensaje.className = "";
 mensaje.innerHTML =
 "Esperando QR...";
 
+document.body.classList.remove(
+"success"
+);
+
+document.body.classList.remove(
+"errorbg"
+);
+
 procesando = false;
 
 },3000);
-
 delete window[callback];
 
 script.remove();
