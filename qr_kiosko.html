@@ -36,11 +36,33 @@ margin-bottom:20px;
 #reader{
 
 width:100%;
-max-width:800px;
+max-width:1000px;
 margin:auto;
+
+background:white;
+border-radius:20px;
+padding:10px;
 
 }
 
+#reader video{
+
+border-radius:15px;
+
+}
+
+#reader__scan_region{
+
+padding:0 !important;
+
+}
+
+#reader__dashboard{
+
+padding-top:10px;
+
+}
+  
 #selectorCamara{
 
 max-width:400px;
@@ -75,15 +97,29 @@ TABLETS (IPAD)
 
 @media (max-width:1024px){
 
+body{
+
+padding:5px;
+
+}
+
 h1{
 
-font-size:2.5rem;
+font-size:2.2rem;
+
+margin-bottom:10px;
+
+}
+
+#reader{
+
+max-width:95vw;
 
 }
 
 #mensaje{
 
-font-size:1.8rem;
+font-size:1.6rem;
 
 }
 
@@ -180,6 +216,33 @@ max-width:280px;
 }
 
 }
+
+/* ==========================
+MODO KIOSKO
+========================== */
+
+@media (min-width:768px){
+
+.logo-conexion{
+
+max-width:320px;
+
+}
+
+#reader{
+
+margin-top:0px;
+
+}
+
+#mensaje{
+
+margin-top:10px;
+
+}
+
+}
+
   
 </style>
 </head>
