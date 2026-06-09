@@ -767,8 +767,8 @@ Credencial Digital
 <img
 src="${urlQR}"
 style="
-width:280px;
-height:280px;
+width:350px;
+height:350px;
 ">
 
 <br><br>
