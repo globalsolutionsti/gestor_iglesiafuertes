@@ -21,12 +21,29 @@ body{
 background:#f5f7fb;
 text-align:center;
 padding:20px;
+min-height:100vh;
+
+}
+
+h1{
+
+font-size:3rem;
+font-weight:bold;
+margin-bottom:20px;
 
 }
 
 #reader{
 
-width:500px;
+width:100%;
+max-width:500px;
+margin:auto;
+
+}
+
+#selectorCamara{
+
+max-width:400px;
 margin:auto;
 
 }
@@ -36,6 +53,7 @@ margin:auto;
 margin-top:20px;
 font-size:2rem;
 font-weight:bold;
+min-height:100px;
 
 }
 
@@ -51,34 +69,87 @@ color:red;
 
 }
 
-body{
+/* ==========================
+TABLETS (IPAD)
+========================== */
 
-background:#f5f7fb;
-text-align:center;
-padding:20px;
-
-height:100vh;
-
-}
+@media (max-width:1024px){
 
 h1{
 
-font-size:3rem;
-font-weight:bold;
+font-size:2.5rem;
 
 }
 
 #mensaje{
 
-margin-top:20px;
-font-size:2rem;
-font-weight:bold;
-min-height:100px;
+font-size:1.8rem;
 
 }
-  
-</style>
 
+}
+
+/* ==========================
+CELULARES
+========================== */
+
+@media (max-width:768px){
+
+body{
+
+padding:10px;
+
+}
+
+h1{
+
+font-size:2rem;
+
+}
+
+#reader{
+
+max-width:100%;
+
+}
+
+#mensaje{
+
+font-size:1.4rem;
+
+min-height:80px;
+
+}
+
+h5{
+
+font-size:1rem;
+
+}
+
+}
+
+/* ==========================
+CELULARES PEQUEÑOS
+========================== */
+
+@media (max-width:480px){
+
+h1{
+
+font-size:1.6rem;
+
+}
+
+#mensaje{
+
+font-size:1.2rem;
+
+}
+
+}
+
+</style>
 </head>
 
 <body>
