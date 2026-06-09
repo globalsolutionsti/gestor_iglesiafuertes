@@ -266,22 +266,7 @@ facingMode:"user"
 },
 
 {
-fps:15,
-
-
-
-const size = Math.min(
-viewfinderWidth,
-viewfinderHeight
-) * 0.85;
-
-return {
-width:size,
-height:size
-};
-
-}
-
+fps:15
 },
 
 onScanSuccess
