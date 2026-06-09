@@ -497,3 +497,18 @@ mensaje.pitch = 1;
 speechSynthesis.speak(mensaje);
 
 }
+
+function probarVoz(){
+
+const mensaje =
+new SpeechSynthesisUtterance(
+"Prueba de voz del kiosko"
+);
+
+mensaje.lang = "es-MX";
+
+speechSynthesis.speak(
+mensaje
+);
+
+}
