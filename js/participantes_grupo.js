@@ -197,7 +197,12 @@ title="Cambiar Grupo">
 
 <button
 class="btn btn-dark btn-sm me-1"
-onclick="mostrarQR('${p[5]}','${p[6]}')"
+onclick="mostrarQR(
+'${p[5]}',
+'${p[6]}',
+'${p[4]}',
+'${idGrupo}'
+)"
 title="Código QR">
 
 <i class="fa fa-qrcode"></i>
