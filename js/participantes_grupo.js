@@ -702,9 +702,13 @@ nombre
 const contenidoQR =
 `PERSONA:${idPersona}`;
 
+const urlQR =
+
+`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(contenidoQR)}`;
+
 Swal.fire({
 
-title: nombre,
+title:nombre,
 
 html:
 
@@ -712,17 +716,32 @@ html:
 <div class="text-center">
 
 <img
-src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(contenidoQR)}"
+id="imagenQR"
+src="${urlQR}"
 class="img-fluid mb-3">
 
 <br>
 
 <b>${contenidoQR}</b>
 
+<br><br>
+
+<a
+href="${urlQR}"
+download="QR_${idPersona}.png"
+target="_blank"
+class="btn btn-success">
+
+<i class="fa fa-download"></i>
+
+Descargar QR
+
+</a>
+
 </div>
 `,
 
-width:500
+width:550
 
 });
 
