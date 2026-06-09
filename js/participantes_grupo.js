@@ -701,9 +701,7 @@ window.location.href =
 
 function mostrarQR(
 idPersona,
-nombre,
-tipo,
-grupo
+nombre
 ){
 
 const contenidoQR =
@@ -711,7 +709,7 @@ const contenidoQR =
 
 const urlQR =
 
-`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(contenidoQR)}`;
+`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(contenidoQR)}`;
 
 Swal.fire({
 
@@ -720,65 +718,35 @@ title:nombre,
 html:
 
 `
-<div id="credencialQR"
-style="
-background:white;
-padding:20px;
-border-radius:10px;
-text-align:center;
-">
+<div class="text-center">
 
-<h4>
-GRUPOS DE CONEXIÓN
-</h4>
-
-<hr>
-
-<h5>
-${nombre}
-</h5>
-
-<p>
-
-<b>Tipo:</b>
-${tipo}
+<img
+id="imagenQR"
+src="${urlQR}"
+class="img-fluid mb-3">
 
 <br>
 
-<b>Grupo:</b>
-${grupo}
-
-</p>
-
-<img
-src="${urlQR}"
-width="200">
+<b>${contenidoQR}</b>
 
 <br><br>
 
-<button
-class="btn btn-success"
-onclick="
-descargarCredencial(
-'${idPersona}',
-'${nombre}',
-'${tipo}',
-'${grupo}'
-)
-">
+<a
+href="${urlQR}"
+download="QR_${idPersona}.png"
+target="_blank"
+class="btn btn-success">
 
-<i class='fa fa-download'></i>
+<i class="fa fa-download"></i>
 
-Descargar Credencial
+Descargar QR
 
-</button>
+</a>
 
 </div>
 `,
 
-width:500,
-
-showConfirmButton:false
+width:550
 
 });
 
