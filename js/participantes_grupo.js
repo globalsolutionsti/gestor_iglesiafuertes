@@ -182,6 +182,16 @@ title="Ver Perfil">
 </button>
 
 <button
+class="btn btn-secondary btn-sm me-1"
+onclick="verHistorial('${p[5]}')"
+title="Historial">
+
+<i class="fa fa-chart-column"></i>
+
+</button>
+
+
+<button
 class="btn btn-success btn-sm me-1"
 onclick="capturarAsistencia('${p[0]}')"
 title="Asistencia">
