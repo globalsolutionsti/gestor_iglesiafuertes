@@ -1222,3 +1222,15 @@ contenedor
 );
 
 }
+
+function verHistorial(idPersona){
+
+window.location.href =
+
+`historial_participante.html`
++
+`?idPersona=${idPersona}`
++
+`&idTemporada=${idTemporada}`;
+
+}
