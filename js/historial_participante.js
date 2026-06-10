@@ -27,7 +27,19 @@ window[callback] = function(result){
 
 if(!result.status){
 
-alert(result.message);
+document.getElementById(
+"tablaHistorial"
+).innerHTML =
+
+`
+<tr>
+<td colspan="2">
+
+${result.message}
+
+</td>
+</tr>
+`;
 return;
 
 }
