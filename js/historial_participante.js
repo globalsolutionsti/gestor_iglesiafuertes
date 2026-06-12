@@ -24,7 +24,8 @@ const script =
 document.createElement("script");
 
 window[callback] = function(result){
-
+console.log(result);
+ 
 if(!result.status){
 
 document.getElementById(
