@@ -25,6 +25,7 @@ document.createElement("script");
 
 window[callback] = function(result){
 console.log(result);
+console.table(result.historial);
  
 if(!result.status){
 
