@@ -49,26 +49,96 @@ document.getElementById(
 ).innerHTML =
 
 `
-<div class="alert alert-info">
 
-<b>Nombre:</b>
+<div class="card shadow-sm">
+
+<div class="card-body">
+
+<h4>
+
 ${result.nombre}
 
-<br>
+</h4>
 
-<b>Asistencias:</b>
+<hr>
+
+<div class="row text-center">
+
+<div class="col">
+
+<h3>
+
 ${result.asistencias}
 
-de
+</h3>
+
+<div>
+
+Asistencias
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h3>
 
 ${result.totalSesiones}
 
+</h3>
+
+<div>
+
+Sesiones
+
+</div>
+
+</div>
+
+<div class="col">
+
+<h3>
+
+${result.porcentaje}%
+
+</h3>
+
+<div>
+
+Cumplimiento
+
+</div>
+
+</div>
+
+</div>
+
 <br>
 
-<b>Porcentaje:</b>
+<div class="progress">
+
+<div
+
+class="progress-bar
+${result.porcentaje >= 80
+? 'bg-success'
+: result.porcentaje >= 60
+? 'bg-warning'
+: 'bg-danger'}"
+
+style="width:${result.porcentaje}%">
+
 ${result.porcentaje}%
 
 </div>
+
+</div>
+
+</div>
+
+</div>
+
 `;
 
 let html = "";
@@ -100,7 +170,15 @@ html +=
 <tr>
 
 <td>
+
 ${h.sesion}
+
+</td>
+
+<td>
+
+${h.fecha || "-"}
+
 </td>
 
 <td>
@@ -115,11 +193,40 @@ ${h.asistio
 
 </td>
 
+<td>
+
+${h.fechaRegistro || "-"}
+
+</td>
+
 </tr>
 `;
 
 });
 }
+
+ html +=
+
+`
+
+<tr class="table-light">
+
+<td colspan="4">
+
+<b>
+
+Total de registros:
+
+${result.historial.length}
+
+</b>
+
+</td>
+
+</tr>
+
+`; 
+  
 document.getElementById(
 "tablaHistorial"
 ).innerHTML =
