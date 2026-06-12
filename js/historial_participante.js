@@ -73,6 +73,25 @@ ${result.porcentaje}%
 
 let html = "";
 
+if(result.historial.length === 0){
+
+html =
+
+`
+<tr>
+
+<td colspan="4" class="text-center">
+
+No existen asistencias registradas
+
+</td>
+
+</tr>
+`;
+
+}
+else{
+
 result.historial.forEach(h=>{
 
 html +=
@@ -87,8 +106,12 @@ ${h.sesion}
 <td>
 
 ${h.asistio
-? "✅"
-: "❌"}
+
+? '<span class="badge bg-success">PRESENTE</span>'
+
+: '<span class="badge bg-danger">AUSENTE</span>'
+
+}
 
 </td>
 
@@ -96,7 +119,7 @@ ${h.asistio
 `;
 
 });
-
+}
 document.getElementById(
 "tablaHistorial"
 ).innerHTML =
