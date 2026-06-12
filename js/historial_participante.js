@@ -179,7 +179,9 @@ ${h.sesion}
 
 <td>
 
-${h.fecha || "-"}
+${h.fecha
+? formatearFecha(h.fecha)
+: "-"}
 
 </td>
 
@@ -197,7 +199,9 @@ ${h.asistio
 
 <td>
 
-${h.fechaRegistro || "-"}
+${h.fechaRegistro
+? formatearFechaHora(h.fechaRegistro)
+: "-"}
 
 </td>
 
@@ -251,5 +255,48 @@ script.src =
 `&idTemporada=${idTemporada}`;
 
 document.body.appendChild(script);
+
+}
+
+
+function formatearFecha(fechaISO){
+
+const fecha =
+new Date(fechaISO);
+
+const dia =
+String(fecha.getDate()).padStart(2,'0');
+
+const mes =
+String(fecha.getMonth()+1).padStart(2,'0');
+
+const anio =
+fecha.getFullYear();
+
+return `${dia}/${mes}/${anio}`;
+
+}
+
+function formatearFechaHora(fechaISO){
+
+const fecha =
+new Date(fechaISO);
+
+const dia =
+String(fecha.getDate()).padStart(2,'0');
+
+const mes =
+String(fecha.getMonth()+1).padStart(2,'0');
+
+const anio =
+fecha.getFullYear();
+
+const hora =
+String(fecha.getHours()).padStart(2,'0');
+
+const minuto =
+String(fecha.getMinutes()).padStart(2,'0');
+
+return `${dia}/${mes}/${anio} ${hora}:${minuto}`;
 
 }
