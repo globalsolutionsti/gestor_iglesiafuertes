@@ -100,6 +100,79 @@ document.getElementById(
 ).innerHTML =
 result.totales.coordinadores;
 
+document.getElementById(
+"totalGruposActivos"
+).innerHTML =
+result.totales.gruposActivos;
+
+document.getElementById(
+"totalSesionesActivas"
+).innerHTML =
+result.totales.sesiones;
+
+let colorSemaforo =
+"success";
+
+let mensajeSemaforo =
+"Excelente";
+
+if(
+result.totales.participantes < 50
+){
+
+colorSemaforo =
+"danger";
+
+mensajeSemaforo =
+"Atención";
+
+}
+else if(
+result.totales.participantes < 100
+){
+
+colorSemaforo =
+"warning";
+
+mensajeSemaforo =
+"En crecimiento";
+
+}
+
+document.getElementById(
+"semaforoEjecutivo"
+).innerHTML =
+
+`
+
+<div class="alert alert-${colorSemaforo}">
+
+<h5>
+
+<i class="fa fa-chart-line"></i>
+
+Estado General:
+${mensajeSemaforo}
+
+</h5>
+
+Participantes:
+${result.totales.participantes}
+
+|
+
+Grupos:
+${result.totales.gruposActivos}
+
+|
+
+Sesiones:
+${result.totales.sesiones}
+
+</div>
+
+`;
+  
 let ranking = "";
 
 result.grupos
