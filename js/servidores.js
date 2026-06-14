@@ -636,9 +636,6 @@ mostrarLoader();
 
 const body = {
 
-numeroServidor:
-document.getElementById("numeroServidor").value,
-
 nombre:
 document.getElementById("nombre").value,
 
@@ -812,8 +809,7 @@ new URLSearchParams({
 action:"guardarServidor",
 callback:callbackName,
 
-numeroServidor:body.numeroServidor,
- tipoPersona:body.tipoPersona,  
+tipoPersona:body.tipoPersona,  
 nombre:body.nombre,
 apellidos:body.apellidos,
 edad:body.edad,
@@ -879,7 +875,6 @@ function limpiarFormulario(){
 
 const campos = [
 
-"numeroServidor",
 "nombre",
 "apellidos",
 "telefono",
