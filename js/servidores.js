@@ -1382,10 +1382,76 @@ if(!archivo){
 return;
 }
 
+const reader =
+new FileReader();
+
+reader.onload = function(e){
+
+try{
+
+const data =
+new Uint8Array(
+e.target.result
+);
+
+const workbook =
+XLSX.read(
+data,
+{
+type:"array"
+}
+);
+
+const hoja =
+workbook.Sheets[
+workbook.SheetNames[0]
+];
+
+const registros =
+XLSX.utils.sheet_to_json(
+hoja
+);
+
+console.log(
+"REGISTROS:",
+registros
+);
+
 Swal.fire({
-icon:"info",
-title:"Archivo seleccionado",
-text:archivo.name
+
+icon:"success",
+
+title:"Archivo leído",
+
+html:`
+
+<b>Archivo:</b><br>
+${archivo.name}
+
+<br><br>
+
+<b>Registros encontrados:</b><br>
+${registros.length}
+
+`
+
 });
+
+}catch(error){
+
+console.error(error);
+
+Swal.fire({
+icon:"error",
+title:error.toString()
+});
+
+}
+
+};
+
+reader.readAsArrayBuffer(
+archivo
+);
 
 }
