@@ -1495,3 +1495,45 @@ text:
 });
 
 }
+
+function descargarPlantillaImportacion(){
+
+const datos = [
+
+[
+"NOMBRE",
+"APELLIDOS",
+"EDAD",
+"ESTADO_CIVIL",
+"ANIO_NACIMIENTO",
+"TELEFONO",
+"EMAIL",
+"MINISTERIO1",
+"MINISTERIO2",
+"MINISTERIO3",
+"MINISTERIO4",
+"GRUPO",
+"FECHA",
+"TIPO_PERSONA"
+]
+
+];
+
+const hoja =
+XLSX.utils.aoa_to_sheet(datos);
+
+const libro =
+XLSX.utils.book_new();
+
+XLSX.utils.book_append_sheet(
+libro,
+hoja,
+"ASISTENTES"
+);
+
+XLSX.writeFile(
+libro,
+"PLANTILLA_ASISTENTES.xlsx"
+);
+
+}
