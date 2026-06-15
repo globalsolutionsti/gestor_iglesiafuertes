@@ -1024,7 +1024,10 @@ return;
 }
 
 const s = result.servidor;
+console.log("FECHA RECIBIDA:", s.fecha);
+console.log("TIPO:", typeof s.fecha);
 
+   
 modoEdicion = true;
 idEdicion = s.id;
 
@@ -1106,8 +1109,13 @@ String(fecha.getDate()).padStart(2,"0");
 
 }
 
+console.log("VALOR ANTES DE ASIGNAR:", s.fecha);
+
 document.getElementById("fechaIngreso").value =
-fechaFormateada;
+s.fecha;   
+   
+/*document.getElementById("fechaIngreso").value =*/
+/*fechaFormateada;*/
 
 /* ==========================
 FOTO
