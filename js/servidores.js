@@ -648,7 +648,7 @@ console.log(
 Math.round(fotoBase64.length / 1024)
 );
    
-if(fotoBase64.length > 90000){
+if(fotoBase64.length > 70000){
 
 Swal.fire({
 icon:"warning",
