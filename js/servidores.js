@@ -1494,28 +1494,24 @@ return;
 
 mostrarLoader();
 
-fetch(API_URL,{
+/* =====================================
+PARA EVITAR URL DEMASIADO LARGA
+IMPORTAMOS EN BLOQUES DE 20
+===================================== */
 
-method:"POST",
+const lote = registrosImportacion.slice(0,100);
 
-headers:{
-"Content-Type":"application/json"
-},
+const callbackName =
+"importar_" + Date.now();
 
-body:JSON.stringify({
+const script =
+document.createElement("script");
 
-action:"importarServidores",
-
-registros:
-registrosImportacion
-
-})
-
-})
-.then(r=>r.json())
-.then(result=>{
+window[callbackName] = function(result){
 
 ocultarLoader();
+
+try{
 
 if(result.status){
 
@@ -1549,8 +1545,35 @@ result.message || "Error importando"
 
 }
 
-})
-.catch(error=>{
+}catch(error){
+
+Swal.fire({
+
+icon:"error",
+
+title:error.toString()
+
+});
+
+}
+
+delete window[callbackName];
+
+if(script){
+script.remove();
+}
+
+};
+
+const registrosJSON =
+encodeURIComponent(
+JSON.stringify(lote)
+);
+
+script.src =
+`${API_URL}?action=importarServidores&callback=${callbackName}&registros=${registrosJSON}`;
+
+script.onerror = function(){
 
 ocultarLoader();
 
@@ -1558,13 +1581,13 @@ Swal.fire({
 
 icon:"error",
 
-title:"Error de comunicación",
-
-text:error.toString()
+title:"Error conexión Apps Script"
 
 });
 
-});
+};
+
+document.body.appendChild(script);
 
 }
 
