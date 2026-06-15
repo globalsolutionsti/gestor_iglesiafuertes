@@ -214,7 +214,7 @@ ${ministeriosHTML}
 <td class="align-middle">
 
 <span class="badge bg-light text-dark border">
-${s[13] || ""}
+${mapaGrupos[s[13]] || ""}
 </span>
 
 </td>
@@ -494,6 +494,9 @@ select.innerHTML =
 '<option value="">Seleccione Grupo</option>';
 
 result.data.forEach(g=>{
+
+mapaGrupos[g.id] =
+g.nombre;
 
 select.innerHTML += `
 
@@ -1129,6 +1132,7 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
+let mapaGrupos = {};
 cargarServidores();
 cargarMinisterios();
 cargarGrupos();
