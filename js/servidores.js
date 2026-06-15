@@ -804,6 +804,19 @@ icon:"success",
 title:"Asistente guardado correctamente"
 });
 
+modoEdicion = false;
+idEdicion = null;
+
+document.getElementById(
+"tituloModalServidor"
+).innerHTML =
+'<i class="fa fa-user-plus text-primary"></i> Nuevo Asistente';
+
+document.getElementById(
+"btnGuardarServidor"
+).innerText =
+"Guardar Asistente";   
+   
 limpiarFormulario();
 
 /* =====================================================
@@ -865,6 +878,7 @@ new URLSearchParams({
 action:"guardarServidor",
 callback:callbackName,
 
+id:idEdicion || "",
 tipoPersona:body.tipoPersona,  
 nombre:body.nombre,
 apellidos:body.apellidos,
