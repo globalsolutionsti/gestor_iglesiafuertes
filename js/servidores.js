@@ -734,67 +734,32 @@ foto:fotoBase64
 CALLBACK
 ===================================================== */
 
-fetch(API_URL,{
+const callbackName =
+"guardar_" + Date.now();
 
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-action:"guardarServidor",
-
-tipoPersona:body.tipoPersona,
-
-nombre:body.nombre,
-apellidos:body.apellidos,
-
-edad:body.edad,
-estadoCivil:body.estadoCivil,
-anioNacimiento:body.anioNacimiento,
-
-telefono:body.telefono,
-email:body.email,
-
-ministerioPrincipal:body.ministerioPrincipal,
-ministerioSec1:body.ministerioSec1,
-ministerioSec2:body.ministerioSec2,
-ministerioSec3:body.ministerioSec3,
-
-grupoConexion:body.grupoConexion,
-fechaIngreso:body.fechaIngreso,
-
-foto:body.foto
-
-})
-
-})
-
-.then(response => response.json())
-
-.then(data=>{
+window[callbackName] = function(data){
 
 ocultarLoader();
 
+try{
+
 if(data.status){
+
+/* =====================================================
+CERRAR MODAL
+===================================================== */
 
 const modalElement =
 document.getElementById("modalServidor");
 
 const modal =
-bootstrap.Modal.getInstance(
-modalElement
-);
+bootstrap.Modal.getInstance(modalElement);
 
 if(modal){
 
 modal.hide();
 
-document.body.classList.remove(
-"modal-open"
-);
+document.body.classList.remove("modal-open");
 
 document.body.style.overflow = "";
 
@@ -805,6 +770,10 @@ document
 .forEach(el=>el.remove());
 
 }
+
+/* =====================================================
+DETENER CAMARA
+===================================================== */
 
 const video =
 document.getElementById("camera");
@@ -819,15 +788,20 @@ video.srcObject = null;
 
 }
 
+/* =====================================================
+ALERTA
+===================================================== */
+
 Swal.fire({
-
 icon:"success",
-
 title:"Asistente guardado correctamente"
-
 });
 
 limpiarFormulario();
+
+/* =====================================================
+RECARGAR TABLA
+===================================================== */
 
 setTimeout(()=>{
 
@@ -838,35 +812,107 @@ cargarServidores();
 }else{
 
 Swal.fire({
-
 icon:"error",
-
-title:data.message ||
-"Error guardando asistente"
-
+title:data.message || "Error guardando Asistente"
 });
 
 }
 
-})
-
-.catch(error=>{
-
-ocultarLoader();
+}catch(error){
 
 console.error(error);
 
 Swal.fire({
-
 icon:"error",
+title:error.toString()
+});
 
-title:"Error de comunicación",
+}
 
-text:error.toString()
+/* =====================================================
+LIMPIEZA
+===================================================== */
+
+delete window[callbackName];
+
+if(script){
+script.remove();
+}
+
+};
+
+/* =====================================================
+ENVIAR DATOS
+===================================================== */
+
+const script =
+document.createElement("script");
+
+/* =====================================================
+PARAMETROS
+===================================================== */
+
+const params =
+new URLSearchParams({
+
+action:"guardarServidor",
+callback:callbackName,
+
+tipoPersona:body.tipoPersona,  
+nombre:body.nombre,
+apellidos:body.apellidos,
+edad:body.edad,
+estadoCivil:body.estadoCivil,
+anioNacimiento:body.anioNacimiento,
+ 
+telefono:body.telefono,
+email:body.email,
+
+ministerioPrincipal:body.ministerioPrincipal,
+ministerioSec1:body.ministerioSec1,
+ministerioSec2:body.ministerioSec2,
+ministerioSec3:body.ministerioSec3,
+
+grupoConexion:body.grupoConexion,
+fechaIngreso:body.fechaIngreso,
+foto:body.foto
 
 });
 
+/* =====================================================
+URL FINAL
+===================================================== */
+const urlFinal =
+`${API_URL}?${params.toString()}`;
+
+console.log(
+"LONGITUD URL:",
+urlFinal.length
+);
+
+console.log(
+"LONGITUD FOTO:",
+body.foto.length
+);
+ 
+script.src = urlFinal;
+
+/* =====================================================
+ERROR
+===================================================== */
+
+script.onerror = function(){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error conexión Apps Script"
 });
+
+};
+
+document.body.appendChild(script);
 
 }
 
