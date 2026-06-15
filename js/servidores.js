@@ -1359,3 +1359,27 @@ function abrirImportador(){
     .click();
 
 }
+
+document
+.getElementById("archivoImportacion")
+.addEventListener(
+"change",
+leerExcelImportacion
+);
+
+function leerExcelImportacion(event){
+
+const archivo =
+event.target.files[0];
+
+if(!archivo){
+return;
+}
+
+Swal.fire({
+icon:"info",
+title:"Archivo seleccionado",
+text:archivo.name
+});
+
+}
