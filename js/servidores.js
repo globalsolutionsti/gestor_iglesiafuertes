@@ -1089,8 +1089,25 @@ s.ministerio4 || "";
 document.getElementById("grupoConexion").value =
 s.grupo || "";
 
+let fechaFormateada = "";
+
+if(s.fecha){
+
+const fecha = new Date(s.fecha);
+
+if(!isNaN(fecha)){
+
+fechaFormateada =
+fecha.getFullYear() + "-" +
+String(fecha.getMonth()+1).padStart(2,"0") + "-" +
+String(fecha.getDate()).padStart(2,"0");
+
+}
+
+}
+
 document.getElementById("fechaIngreso").value =
-s.fecha || "";
+fechaFormateada;
 
 /* ==========================
 FOTO
