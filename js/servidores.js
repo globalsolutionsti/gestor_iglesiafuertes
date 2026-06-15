@@ -471,6 +471,53 @@ document.body.appendChild(script);
 
 }
 
+function cargarGrupos(){
+
+const callbackName =
+"grupos_" + Date.now();
+
+const script =
+document.createElement("script");
+
+window[callbackName] = function(result){
+
+if(!result.status){
+return;
+}
+
+const select =
+document.getElementById(
+"grupoConexion"
+);
+
+select.innerHTML =
+'<option value="">Seleccione Grupo</option>';
+
+result.data.forEach(g=>{
+
+select.innerHTML += `
+
+<option value="${g.nombre}">
+${g.nombre}
+</option>
+
+`;
+
+});
+
+delete window[callbackName];
+
+script.remove();
+
+};
+
+script.src =
+`${API_URL}?action=getGrupos&callback=${callbackName}`;
+
+document.body.appendChild(script);
+
+}
+
 /* =====================================================
 ACTIVAR CAMARA
 ===================================================== */
@@ -1084,7 +1131,8 @@ function(){
 
 cargarServidores();
 cargarMinisterios();
-
+cargarGrupos();
+   
 /* ==========================
 TIPO PERSONA
 ========================== */
