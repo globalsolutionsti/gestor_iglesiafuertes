@@ -745,7 +745,7 @@ ALERTA
 
 Swal.fire({
 icon:"success",
-title:"Servidor guardado correctamente"
+title:"Asistente guardado correctamente"
 });
 
 limpiarFormulario();
@@ -764,7 +764,7 @@ cargarServidores();
 
 Swal.fire({
 icon:"error",
-title:data.message || "Error guardando servidor"
+title:data.message || "Error guardando Asistente"
 });
 
 }
