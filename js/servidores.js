@@ -1351,3 +1351,11 @@ document.getElementById(
 mostrar ? "block" : "none";
 
 }
+
+function abrirImportador(){
+
+    document
+    .getElementById("archivoImportacion")
+    .click();
+
+}
