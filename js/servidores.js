@@ -590,7 +590,7 @@ if(
    });
    return;
 }
-const MAX_WIDTH = 300;
+const MAX_WIDTH = 350;
 
 const scale =
 MAX_WIDTH / video.videoWidth;
@@ -631,7 +631,7 @@ COMPRESION MUY ALTA
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.20
+0.30
 );
 
 /* =====================================================
