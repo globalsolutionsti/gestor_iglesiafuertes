@@ -643,6 +643,11 @@ console.log(
 fotoBase64.length
 );
 
+console.log(
+"Tamaño KB:",
+Math.round(fotoBase64.length / 1024)
+);
+   
 if(fotoBase64.length > 90000){
 
 Swal.fire({
