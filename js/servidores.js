@@ -1,3 +1,4 @@
+let mapaGrupos = {};
 let tabla = null;
 let fotoBase64 = "";
 
@@ -499,11 +500,9 @@ mapaGrupos[g.id] =
 g.nombre;
 
 select.innerHTML += `
-
-<option value="${g.nombre}">
+<option value="${g.id}">
 ${g.nombre}
 </option>
-
 `;
 
 });
@@ -1132,7 +1131,7 @@ document.addEventListener(
 "DOMContentLoaded",
 function(){
 
-let mapaGrupos = {};
+
 cargarServidores();
 cargarMinisterios();
 cargarGrupos();
