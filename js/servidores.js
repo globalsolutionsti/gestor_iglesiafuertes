@@ -1478,19 +1478,91 @@ archivo
 
 function importarRegistrosExcel(){
 
-console.log(
-"REGISTROS A IMPORTAR:",
+if(
+!registrosImportacion ||
+registrosImportacion.length === 0
+){
+
+Swal.fire({
+icon:"warning",
+title:"No hay registros para importar"
+});
+
+return;
+
+}
+
+mostrarLoader();
+
+fetch(API_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+action:"importarServidores",
+
+registros:
 registrosImportacion
-);
+
+})
+
+})
+.then(r=>r.json())
+.then(result=>{
+
+ocultarLoader();
+
+if(result.status){
 
 Swal.fire({
 
-icon:"info",
+icon:"success",
 
-title:"Siguiente paso",
+title:"Importación completada",
 
 text:
-"Ya tenemos los registros listos para enviarlos a Apps Script"
+`${result.total} asistentes importados correctamente`
+
+});
+
+registrosImportacion = [];
+
+cargarServidores();
+
+}else{
+
+Swal.fire({
+
+icon:"error",
+
+title:"Error",
+
+text:
+result.message || "Error importando"
+
+});
+
+}
+
+})
+.catch(error=>{
+
+ocultarLoader();
+
+Swal.fire({
+
+icon:"error",
+
+title:"Error de comunicación",
+
+text:error.toString()
+
+});
 
 });
 
