@@ -3,6 +3,7 @@ let tabla = null;
 let fotoBase64 = "";
 let modoEdicion = false;
 let idEdicion = null;
+let registrosImportacion = [];
 
 /* =====================================================
 CARGAR SERVIDORES
@@ -1412,6 +1413,8 @@ XLSX.utils.sheet_to_json(
 hoja
 );
 
+registrosImportacion = registros;
+   
 console.log(
 "REGISTROS:",
 registros
@@ -1433,7 +1436,24 @@ ${archivo.name}
 <b>Registros encontrados:</b><br>
 ${registros.length}
 
-`
+`,
+
+showCancelButton:true,
+
+confirmButtonText:
+"Importar Registros",
+
+cancelButtonText:
+"Cancelar"
+
+})
+.then(result=>{
+
+if(result.isConfirmed){
+
+importarRegistrosExcel();
+
+}
 
 });
 
@@ -1453,5 +1473,25 @@ title:error.toString()
 reader.readAsArrayBuffer(
 archivo
 );
+
+}
+
+function importarRegistrosExcel(){
+
+console.log(
+"REGISTROS A IMPORTAR:",
+registrosImportacion
+);
+
+Swal.fire({
+
+icon:"info",
+
+title:"Siguiente paso",
+
+text:
+"Ya tenemos los registros listos para enviarlos a Apps Script"
+
+});
 
 }
