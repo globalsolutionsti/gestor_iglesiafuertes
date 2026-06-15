@@ -590,7 +590,7 @@ if(
    });
    return;
 }
-const MAX_WIDTH = 500;
+const MAX_WIDTH = 400;
 
 const scale =
 MAX_WIDTH / video.videoWidth;
