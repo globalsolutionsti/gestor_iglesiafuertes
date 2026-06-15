@@ -631,7 +631,7 @@ COMPRESION MUY ALTA
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.60
+0.30
 );
 
 /* =====================================================
