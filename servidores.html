@@ -171,6 +171,15 @@ Excel
 
 </button>
 
+<button
+    class="btn btn-warning"
+    onclick="abrirImportador()">
+
+    <i class="fa fa-upload"></i>
+    Importar
+
+</button>
+  
 <button class="btn btn-danger"
 onclick="exportarPDF()">
 
@@ -567,5 +576,11 @@ overlay.classList.remove("active");
 
 </script>
 
+<input
+    type="file"
+    id="archivoImportacion"
+    accept=".xlsx,.xls"
+    style="display:none;">
+  
 </body>
 </html>
