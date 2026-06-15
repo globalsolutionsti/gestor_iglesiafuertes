@@ -1,6 +1,8 @@
 let mapaGrupos = {};
 let tabla = null;
 let fotoBase64 = "";
+let modoEdicion = false;
+let idEdicion = null;
 
 /* =====================================================
 CARGAR SERVIDORES
@@ -986,9 +988,131 @@ EDITAR
 
 function editarServidor(id){
 
+mostrarLoader();
+
+fetch(
+`${API_URL}?action=getPerfilServidor&id=${id}`
+)
+.then(r=>r.json())
+.then(result=>{
+
+ocultarLoader();
+
+if(!result.status){
+
 Swal.fire({
-icon:"info",
-title:"Módulo edición próximamente"
+icon:"error",
+title:result.message
+});
+
+return;
+
+}
+
+const s = result.servidor;
+
+modoEdicion = true;
+idEdicion = s.id;
+
+/* ==========================
+TITULO MODAL
+========================== */
+
+document.getElementById(
+"tituloModalServidor"
+).innerHTML =
+'<i class="fa fa-user-edit text-primary"></i> Editar Asistente';
+
+/* ==========================
+BOTON
+========================== */
+
+document.getElementById(
+"btnGuardarServidor"
+).innerText =
+"Actualizar Asistente";
+
+/* ==========================
+DATOS
+========================== */
+
+document.getElementById("tipoPersona").value =
+s.tipoPersona || "SERVIDOR";
+
+document.getElementById("nombre").value =
+s.nombre || "";
+
+document.getElementById("apellidos").value =
+s.apellidos || "";
+
+document.getElementById("edad").value =
+s.edad || "";
+
+document.getElementById("estadoCivil").value =
+s.estadoCivil || "";
+
+document.getElementById("anioNacimiento").value =
+s.anioNacimiento || "";
+
+document.getElementById("telefono").value =
+s.telefono || "";
+
+document.getElementById("email").value =
+s.email || "";
+
+document.getElementById("ministerioPrincipal").value =
+s.ministerio || "";
+
+document.getElementById("ministerioSec1").value =
+s.ministerio2 || "";
+
+document.getElementById("ministerioSec2").value =
+s.ministerio3 || "";
+
+document.getElementById("ministerioSec3").value =
+s.ministerio4 || "";
+
+document.getElementById("grupoConexion").value =
+s.grupo || "";
+
+document.getElementById("fechaIngreso").value =
+s.fecha || "";
+
+/* ==========================
+FOTO
+========================== */
+
+if(s.foto){
+
+const preview =
+document.getElementById("previewFoto");
+
+preview.src = s.foto;
+preview.style.display = "block";
+
+}
+
+/* ==========================
+ABRIR MODAL
+========================== */
+
+const modal =
+new bootstrap.Modal(
+document.getElementById("modalServidor")
+);
+
+modal.show();
+
+})
+.catch(error=>{
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:error.toString()
+});
+
 });
 
 }
