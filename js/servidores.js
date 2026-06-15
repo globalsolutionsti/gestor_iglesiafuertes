@@ -590,7 +590,7 @@ if(
    });
    return;
 }
-const MAX_WIDTH = 250;
+const MAX_WIDTH = 300;
 
 const scale =
 MAX_WIDTH / video.videoWidth;
@@ -631,7 +631,7 @@ COMPRESION MUY ALTA
 fotoBase64 =
 canvas.toDataURL(
 "image/jpeg",
-0.25
+0.20
 );
 
 /* =====================================================
@@ -643,7 +643,7 @@ console.log(
 fotoBase64.length
 );
 
-if(fotoBase64.length > 150000){
+if(fotoBase64.length > 90000){
 
 Swal.fire({
 icon:"warning",
