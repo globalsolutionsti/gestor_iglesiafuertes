@@ -1315,6 +1315,19 @@ document
 validarTipoPersona
 );
 
+const archivoImportacion =
+document.getElementById(
+"archivoImportacion"
+);
+
+if(archivoImportacion){
+
+archivoImportacion.addEventListener(
+"change",
+leerExcelImportacion
+);
+
+}   
 validarTipoPersona();
    
 }
@@ -1359,13 +1372,6 @@ function abrirImportador(){
     .click();
 
 }
-
-document
-.getElementById("archivoImportacion")
-.addEventListener(
-"change",
-leerExcelImportacion
-);
 
 function leerExcelImportacion(event){
 
