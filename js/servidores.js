@@ -1499,7 +1499,7 @@ PARA EVITAR URL DEMASIADO LARGA
 IMPORTAMOS EN BLOQUES DE 20
 ===================================== */
 
-const lote = registrosImportacion.slice(0,100);
+const lote = registrosImportacion.slice(0,20);
 
 const callbackName =
 "importar_" + Date.now();
