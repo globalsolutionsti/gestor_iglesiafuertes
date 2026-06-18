@@ -1498,7 +1498,7 @@ mostrarLoader();
 IMPORTAR EN LOTES DE 20 REGISTROS
 ========================================== */
 
-const TAMANO_LOTE = 200;
+const TAMANO_LOTE = 10;
 
 let totalImportados = 0;
 
