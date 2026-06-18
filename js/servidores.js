@@ -1231,7 +1231,7 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(255,255,255,.7);
+background:rgba(255,255,255,.85);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -1239,11 +1239,52 @@ z-index:99999;
 ">
 
 <div
+style="
+background:white;
+padding:30px;
+border-radius:15px;
+width:400px;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+text-align:center;
+">
+
+<div class="mb-3">
+
+<div
 class="spinner-border text-primary"
 style="
-width:4rem;
-height:4rem;
+width:3rem;
+height:3rem;
 ">
+</div>
+
+</div>
+
+<h5>
+Importando asistentes...
+</h5>
+
+<div class="progress mt-3">
+
+<div
+id="barraImportacion"
+class="progress-bar progress-bar-striped progress-bar-animated"
+style="width:0%;">
+
+0%
+
+</div>
+
+</div>
+
+<div
+id="textoImportacion"
+class="mt-2 small text-muted">
+
+Preparando...
+
+</div>
+
 </div>
 
 </div>
@@ -1265,6 +1306,39 @@ loader.remove();
 
 }
 
+function actualizarProgresoImportacion(
+porcentaje,
+texto
+){
+
+const barra =
+document.getElementById(
+"barraImportacion"
+);
+
+const etiqueta =
+document.getElementById(
+"textoImportacion"
+);
+
+if(barra){
+
+barra.style.width =
+porcentaje + "%";
+
+barra.innerText =
+Math.round(porcentaje) + "%";
+
+}
+
+if(etiqueta){
+
+etiqueta.innerText =
+texto;
+
+}
+
+}
 
 function validarTipoPersona(){
 
@@ -1501,6 +1575,8 @@ IMPORTAR EN LOTES DE 20 REGISTROS
 const TAMANO_LOTE = 8;
 
 let totalImportados = 0;
+const totalRegistros =
+registrosImportacion.length;
 
 for(
 let inicio = 0;
@@ -1520,6 +1596,18 @@ await enviarLoteImportacion(lote);
 
 totalImportados += lote.length;
 
+const porcentaje =
+(totalImportados /
+totalRegistros) * 100;
+
+actualizarProgresoImportacion(
+
+porcentaje,
+
+`Importados ${totalImportados} de ${totalRegistros} asistentes`
+
+);
+   
 }catch(error){
 
 ocultarLoader();
