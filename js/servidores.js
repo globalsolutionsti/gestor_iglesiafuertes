@@ -1476,7 +1476,7 @@ archivo
 
 }
 
-function importarRegistrosExcel(){
+async function importarRegistrosExcel(){
 
 if(
 !registrosImportacion ||
@@ -1494,26 +1494,49 @@ return;
 
 mostrarLoader();
 
-/* =====================================
-PARA EVITAR URL DEMASIADO LARGA
-IMPORTAMOS EN BLOQUES DE 20
-===================================== */
+/* ==========================================
+IMPORTAR EN LOTES DE 20 REGISTROS
+========================================== */
 
-const lote = registrosImportacion.slice(0,20);
+const TAMANO_LOTE = 200;
 
-const callbackName =
-"importar_" + Date.now();
+let totalImportados = 0;
 
-const script =
-document.createElement("script");
+for(
+let inicio = 0;
+inicio < registrosImportacion.length;
+inicio += TAMANO_LOTE
+){
 
-window[callbackName] = function(result){
-
-ocultarLoader();
+const lote =
+registrosImportacion.slice(
+inicio,
+inicio + TAMANO_LOTE
+);
 
 try{
 
-if(result.status){
+await enviarLoteImportacion(lote);
+
+totalImportados += lote.length;
+
+}catch(error){
+
+ocultarLoader();
+
+Swal.fire({
+icon:"error",
+title:"Error importando lote",
+text:error.toString()
+});
+
+return;
+
+}
+
+}
+
+ocultarLoader();
 
 Swal.fire({
 
@@ -1521,8 +1544,12 @@ icon:"success",
 
 title:"Importación completada",
 
-text:
-`${result.total} asistentes importados correctamente`
+html:`
+
+<b>Total importados:</b><br>
+${totalImportados}
+
+`
 
 });
 
@@ -1530,30 +1557,39 @@ registrosImportacion = [];
 
 cargarServidores();
 
+}
+
+function enviarLoteImportacion(lote){
+
+return new Promise((resolve,reject)=>{
+
+const callbackName =
+"importar_" + Date.now() +
+Math.floor(Math.random()*9999);
+
+const script =
+document.createElement("script");
+
+window[callbackName] = function(result){
+
+try{
+
+if(result.status){
+
+resolve(result);
+
 }else{
 
-Swal.fire({
-
-icon:"error",
-
-title:"Error",
-
-text:
-result.message || "Error importando"
-
-});
+reject(
+result.message ||
+"Error importando registros"
+);
 
 }
 
 }catch(error){
 
-Swal.fire({
-
-icon:"error",
-
-title:error.toString()
-
-});
+reject(error);
 
 }
 
@@ -1575,21 +1611,18 @@ script.src =
 
 script.onerror = function(){
 
-ocultarLoader();
-
-Swal.fire({
-
-icon:"error",
-
-title:"Error conexión Apps Script"
-
-});
+reject(
+"Error conexión Apps Script"
+);
 
 };
 
 document.body.appendChild(script);
 
+});
+
 }
+
 
 function descargarPlantillaImportacion(){
 
