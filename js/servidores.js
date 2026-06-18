@@ -1609,6 +1609,10 @@ JSON.stringify(lote)
 script.src =
 `${API_URL}?action=importarServidores&callback=${callbackName}&registros=${registrosJSON}`;
 
+console.log(
+`${API_URL}?action=importarServidores&callback=${callbackName}&registros=${registrosJSON}`
+);
+   
 script.onerror = function(){
 
 reject(
