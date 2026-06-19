@@ -4,7 +4,7 @@ let fotoBase64 = "";
 let modoEdicion = false;
 let idEdicion = null;
 let registrosImportacion = [];
-
+let mapaMinisterios = {};
 /* =====================================================
 CARGAR SERVIDORES
 ===================================================== */
@@ -131,7 +131,7 @@ const nombre =
 const ministerioPrincipal =
 mapaMinisterios[s[9]] || "";
 
-cconst ministeriosSecundarios = [
+const ministeriosSecundarios = [
 
 mapaMinisterios[s[10]],
 mapaMinisterios[s[11]],
