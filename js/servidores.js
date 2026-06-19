@@ -129,13 +129,13 @@ const nombre =
 `${s[2] || ""} ${s[3] || ""}`.trim();
 
 const ministerioPrincipal =
-s[9] || "";
+mapaMinisterios[s[9]] || "";
 
-const ministeriosSecundarios = [
+cconst ministeriosSecundarios = [
 
-s[10],
-s[11],
-s[12]
+mapaMinisterios[s[10]],
+mapaMinisterios[s[11]],
+mapaMinisterios[s[12]]
 
 ].filter(x =>
 x && String(x).trim() !== ""
