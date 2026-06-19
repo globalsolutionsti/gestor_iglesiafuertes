@@ -445,13 +445,12 @@ select.innerHTML =
 ministerios.forEach(m=>{
 
 select.innerHTML += `
-<option value="${m}">
-${m}
+<option value="${m.id}">
+${m.nombre}
 </option>
 `;
 
 });
-
 });
 
 delete window[callbackName];
