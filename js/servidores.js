@@ -1373,7 +1373,15 @@ INIT
 document.addEventListener(
 "DOMContentLoaded",
 function(){
+/* ==========================================
+LIMPIAR MODALES AL RECARGAR
+========================================== */
 
+Swal.close();
+
+document
+.querySelectorAll(".swal2-container")
+.forEach(el => el.remove());
 
 cargarServidores();
 cargarMinisterios();
@@ -1442,9 +1450,15 @@ mostrar ? "block" : "none";
 
 function abrirImportador(){
 
-    document
-    .getElementById("archivoImportacion")
-    .click();
+    const input =
+    document.getElementById(
+        "archivoImportacion"
+    );
+
+    /* limpiar selección anterior */
+    input.value = "";
+
+    input.click();
 
 }
 
