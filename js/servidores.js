@@ -1656,7 +1656,14 @@ ${totalImportados}
 });
 
 registrosImportacion = [];
+const archivo =
+document.getElementById(
+"archivoImportacion"
+);
 
+if(archivo){
+archivo.value = "";
+}
 cargarServidores();
 
 }
