@@ -443,7 +443,7 @@ select.innerHTML =
 `<option value="">Seleccionar</option>`;
 
 ministerios.forEach(m=>{
-
+mapaMinisterios[m.id] = m.nombre;
 select.innerHTML += `
 <option value="${m.id}">
 ${m.nombre}
