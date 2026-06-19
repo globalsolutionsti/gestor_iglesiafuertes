@@ -5,6 +5,10 @@ let modoEdicion = false;
 let idEdicion = null;
 let registrosImportacion = [];
 let mapaMinisterios = {};
+const FOTO_DEFAULT =
+"images/logo-fuertes.png";
+
+
 /* =====================================================
 CARGAR SERVIDORES
 ===================================================== */
@@ -123,7 +127,7 @@ COLUMNAS
 const foto =
 s[16] && String(s[16]).trim() !== ""
 ? s[16]
-: "https://i.pravatar.cc/150?img=12";
+: FOTO_DEFAULT;
 
 const nombre =
 `${s[2] || ""} ${s[3] || ""}`.trim();
@@ -168,7 +172,7 @@ html += `
 <img
 src="${foto}"
 class="servidor-foto"
-onerror="this.src='https://i.pravatar.cc/150?img=12'">
+onerror="this.src='${FOTO_DEFAULT}'">
 
 </td>
 
