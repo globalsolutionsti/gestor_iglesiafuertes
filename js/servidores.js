@@ -127,7 +127,7 @@ COLUMNAS
 const foto =
 s[16] && String(s[16]).trim() !== ""
 ? s[16]
-: FOTO_DEFAULT;
+: "https://i.pravatar.cc/150?img=12";
 
 const nombre =
 `${s[2] || ""} ${s[3] || ""}`.trim();
@@ -172,7 +172,7 @@ html += `
 <img
 src="${foto}"
 class="servidor-foto"
-onerror="this.src='${FOTO_DEFAULT}'">
+onerror="this.src='https://i.pravatar.cc/150?img=12'">
 
 </td>
 
