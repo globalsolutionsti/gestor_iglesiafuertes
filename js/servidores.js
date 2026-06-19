@@ -1211,7 +1211,65 @@ window.print();
 LOADER
 ===================================================== */
 
-function mostrarLoader(){
+function mostrarLoader(texto = "Cargando información..."){
+
+if(document.getElementById("loader")){
+return;
+}
+
+document.body.insertAdjacentHTML(
+
+"beforeend",
+
+`
+
+<div
+id="loader"
+style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(255,255,255,.85);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+">
+
+<div
+style="
+background:white;
+padding:30px;
+border-radius:15px;
+width:350px;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+text-align:center;
+">
+
+<div class="spinner-border text-primary mb-3"
+style="
+width:3rem;
+height:3rem;
+">
+</div>
+
+<h5 id="loaderTexto">
+${texto}
+</h5>
+
+</div>
+
+</div>
+
+`
+
+);
+
+}
+
+function mostrarLoaderImportacion(){
 
 if(document.getElementById("loader")){
 return;
@@ -1248,16 +1306,11 @@ box-shadow:0 5px 20px rgba(0,0,0,.2);
 text-align:center;
 ">
 
-<div class="mb-3">
-
-<div
-class="spinner-border text-primary"
+<div class="spinner-border text-primary mb-3"
 style="
 width:3rem;
 height:3rem;
 ">
-</div>
-
 </div>
 
 <h5>
@@ -1580,7 +1633,7 @@ return;
 
 }
 
-mostrarLoader();
+mostrarLoaderImportacion();
 
 /* ==========================================
 IMPORTAR EN LOTES DE 20 REGISTROS
@@ -1778,3 +1831,5 @@ libro,
 );
 
 }
+
+
