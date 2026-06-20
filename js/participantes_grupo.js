@@ -1239,7 +1239,8 @@ window.location.href =
 function abrirCargaMasiva(){
 
 const callback =
-"masivo_" + Date.now();
+"masivo_" +
+Date.now();
 
 const script =
 document.createElement("script");
@@ -1248,102 +1249,193 @@ window[callback] = function(result){
 
 if(!result.status){
 
-Swal.fire(
-"Error",
-"Cargando personas",
-"error"
-);
+    Swal.fire(
+        "Error",
+        "Cargando personas",
+        "error"
+    );
 
-return;
+    return;
 
 }
 
-let html = `
-<div style="max-height:400px;overflow:auto;">
-`;
+participantesSeleccionadosMasivo = [];
+
+let htmlDisponibles = "";
 
 result.data.forEach(p=>{
 
- html += `
+    htmlDisponibles += `
 
- <div class="form-check">
+    <tr>
 
- <input
- class="form-check-input personaMasiva"
- type="checkbox"
+        <td width="60">
 
- value="${p.id}"
+            <button
+            class="btn btn-success btn-sm"
+            onclick="agregarPersonaMasivo(
+                '${p.id}',
+                '${(p.nombre || '').replace(/'/g,"\\'")}',
+                '${p.tipo}'
+            )">
 
- data-nombre="${p.nombre}"
+                <i class="fa fa-plus"></i>
 
- data-tipo="${p.tipo}"
+            </button>
 
- id="p_${p.id}">
+        </td>
 
- <label
- class="form-check-label"
- for="p_${p.id}">
+        <td>${p.nombre}</td>
 
- ${p.nombre}
+        <td>${p.tipo}</td>
 
- </label>
+    </tr>
 
- </div>
-
- `;
+    `;
 
 });
 
-html += "</div>";
-
 Swal.fire({
 
- title:
- "Inscripción Masiva",
+    title:"Inscripción Masiva",
 
- width:700,
+    width:1300,
 
- html:html,
+    html:`
 
- showCancelButton:true,
+    <div class="container-fluid">
 
- confirmButtonText:
- "Inscribir en todas las sesiones"
+        <div class="row">
 
-}).then(r=>{
+            <div class="col-md-6">
 
- if(!r.isConfirmed){
-  return;
- }
+                <div class="d-flex justify-content-between align-items-center mb-2">
 
- const checks =
- document.querySelectorAll(
- ".personaMasiva:checked"
- );
+                    <h5 class="mb-0">
 
- let personas = [];
+                        Participantes Disponibles
 
- checks.forEach(c=>{
+                    </h5>
 
-  personas.push({
+                    <span class="badge bg-secondary">
 
-   id:c.value,
+                        ${result.data.length}
 
-   nombre:c.dataset.nombre,
+                    </span>
 
-   tipo:c.dataset.tipo
+                </div>
 
-  });
+                <input
+                type="text"
+                class="form-control mb-3"
+                placeholder="Buscar participante..."
+                onkeyup="filtrarParticipantesMasivo(this.value)">
 
- });
+                <div
+                style="
+                height:450px;
+                overflow:auto;
+                border:1px solid #dee2e6;
+                border-radius:8px;
+                ">
 
- guardarParticipantesMasivos(
- personas
- );
+                    <table
+                    class="table table-hover table-sm mb-0"
+                    id="tablaDisponiblesMasivo">
+
+                        <tbody>
+
+                            ${htmlDisponibles}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <h5 class="mb-0">
+
+                        Seleccionados
+
+                    </h5>
+
+                    <span
+                    class="badge bg-primary"
+                    id="contadorSeleccionados">
+
+                        0
+
+                    </span>
+
+                </div>
+
+                <div
+                style="
+                height:450px;
+                overflow:auto;
+                border:1px solid #dee2e6;
+                border-radius:8px;
+                ">
+
+                    <table
+                    class="table table-hover table-sm mb-0">
+
+                        <tbody
+                        id="tablaSeleccionadosMasivo">
+
+                            <tr>
+
+                                <td
+                                class="text-center text-muted p-4">
+
+                                    No hay participantes seleccionados
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `,
+
+    showCancelButton:true,
+
+    confirmButtonText:
+    "Inscribir en todas las sesiones",
+
+    cancelButtonText:
+    "Cancelar"
+
+}).then(res=>{
+
+    if(!res.isConfirmed){
+        return;
+    }
+
+    guardarParticipantesMasivos(
+        participantesSeleccionadosMasivo
+    );
 
 });
 
 delete window[callback];
+
 script.remove();
 
 };
