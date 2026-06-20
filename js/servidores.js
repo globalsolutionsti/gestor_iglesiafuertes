@@ -1081,20 +1081,24 @@ s.telefono || "";
 document.getElementById("email").value =
 s.email || "";
 
-document.getElementById("ministerioPrincipal").value =
-s.ministerio || "";
+setTimeout(() => {
 
-document.getElementById("ministerioSec1").value =
-s.ministerio2 || "";
+    document.getElementById("ministerioPrincipal").value =
+    String(s.ministerio || "");
 
-document.getElementById("ministerioSec2").value =
-s.ministerio3 || "";
+    document.getElementById("ministerioSec1").value =
+    String(s.ministerio2 || "");
 
-document.getElementById("ministerioSec3").value =
-s.ministerio4 || "";
+    document.getElementById("ministerioSec2").value =
+    String(s.ministerio3 || "");
 
-document.getElementById("grupoConexion").value =
-s.grupo || "";
+    document.getElementById("ministerioSec3").value =
+    String(s.ministerio4 || "");
+
+    document.getElementById("grupoConexion").value =
+    String(s.grupo || "");
+
+}, 300);
 
 let fechaFormateada = "";
 
