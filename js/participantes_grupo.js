@@ -1358,13 +1358,80 @@ function guardarParticipantesMasivos(personas){
 
 if(personas.length === 0){
 
- Swal.fire(
- "Seleccione participantes"
- );
+    Swal.fire(
+        "Seleccione participantes"
+    );
 
- return;
+    return;
 
 }
+
+const totalProcesos =
+personas.length;
+
+Swal.fire({
+
+    title:"Inscribiendo participantes",
+
+    html:`
+
+        <div class="mb-2">
+
+            Preparando proceso...
+
+        </div>
+
+        <div class="progress">
+
+            <div
+                id="barraProgresoMasivo"
+                class="progress-bar progress-bar-striped progress-bar-animated"
+                role="progressbar"
+                style="width:0%;">
+
+                0%
+
+            </div>
+
+        </div>
+
+    `,
+
+    allowOutsideClick:false,
+    allowEscapeKey:false,
+    showConfirmButton:false
+
+});
+
+let porcentaje = 10;
+
+const intervalo =
+setInterval(()=>{
+
+    porcentaje += 5;
+
+    if(porcentaje > 90){
+
+        porcentaje = 90;
+
+    }
+
+    const barra =
+    document.getElementById(
+        "barraProgresoMasivo"
+    );
+
+    if(barra){
+
+        barra.style.width =
+        porcentaje + "%";
+
+        barra.innerHTML =
+        porcentaje + "%";
+
+    }
+
+},300);
 
 const callback =
 "saveMasivo_" +
@@ -1375,32 +1442,67 @@ document.createElement("script");
 
 window[callback] = function(result){
 
- if(result.status){
+    clearInterval(intervalo);
 
-  Swal.fire({
+    const barra =
+    document.getElementById(
+        "barraProgresoMasivo"
+    );
 
-   icon:"success",
+    if(barra){
 
-   title:
-   "Participantes inscritos correctamente"
+        barra.style.width =
+        "100%";
 
-  });
+        barra.innerHTML =
+        "100%";
 
- }else{
+    }
 
-  Swal.fire({
+    setTimeout(()=>{
 
-   icon:"error",
+        Swal.close();
 
-   title:
-   result.message
+        if(result.status){
 
-  });
+            Swal.fire({
 
- }
+                icon:"success",
 
- delete window[callback];
- script.remove();
+                title:
+                "Participantes inscritos correctamente",
+
+                text:
+                "La inscripción masiva ha finalizado"
+
+            }).then(()=>{
+
+                /*
+                REFRESCAR TABLA
+                */
+
+                cargarParticipantes();
+
+            });
+
+        }else{
+
+            Swal.fire({
+
+                icon:"error",
+
+                title:
+                result.message
+
+            });
+
+        }
+
+    },500);
+
+    delete window[callback];
+
+    script.remove();
 
 };
 
@@ -1415,7 +1517,7 @@ script.src =
 `&idGrupo=${idGrupo}`
 +
 `&personas=${encodeURIComponent(
- JSON.stringify(personas)
+JSON.stringify(personas)
 )}`;
 
 document.body.appendChild(script);
