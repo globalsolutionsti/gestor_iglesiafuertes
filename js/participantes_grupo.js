@@ -1355,6 +1355,357 @@ document.body.appendChild(script);
 
 }
 
+function abrirModalInscripcionMasiva(){
+
+const callback =
+"personasMasivo_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(!result.status){
+
+Swal.fire(
+"Error",
+"Cargando personas",
+"error"
+);
+
+return;
+
+}
+
+participantesSeleccionadosMasivo = [];
+
+let htmlDisponibles = "";
+
+result.data.forEach(p=>{
+
+htmlDisponibles += `
+
+<tr>
+
+<td width="50">
+
+<button
+class="btn btn-success btn-sm"
+onclick="agregarPersonaMasivo(
+'${p.id}',
+'${(p.nombre || '').replace(/'/g,"\\'")}',
+'${p.tipo}'
+)">
+
+<i class="fa fa-plus"></i>
+
+</button>
+
+</td>
+
+<td>
+
+${p.nombre}
+
+</td>
+
+<td>
+
+${p.tipo}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+Swal.fire({
+
+title:"Inscripción Masiva",
+
+width:1200,
+
+html:`
+
+<div class="row">
+
+<div class="col-md-6">
+
+<h5 class="mb-3">
+
+Disponibles
+
+</h5>
+
+<input
+type="text"
+class="form-control mb-2"
+placeholder="Buscar participante..."
+onkeyup="filtrarParticipantesMasivo(this.value)">
+
+<div
+style="
+height:400px;
+overflow:auto;
+border:1px solid #ddd;
+">
+
+<table
+class="table table-sm"
+id="tablaDisponiblesMasivo">
+
+<tbody>
+
+${htmlDisponibles}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="col-md-6">
+
+<h5>
+
+Seleccionados
+
+<span
+class="badge bg-primary"
+id="contadorSeleccionados">
+
+0
+
+</span>
+
+</h5>
+
+<div
+style="
+height:400px;
+overflow:auto;
+border:1px solid #ddd;
+">
+
+<table
+class="table table-sm">
+
+<tbody
+id="tablaSeleccionadosMasivo">
+
+<tr>
+
+<td
+class="text-muted text-center">
+
+Sin participantes seleccionados
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+`,
+
+showCancelButton:true,
+
+confirmButtonText:
+"Inscribir en todas las sesiones",
+
+cancelButtonText:
+"Cancelar"
+
+}).then(res=>{
+
+if(!res.isConfirmed){
+return;
+}
+
+guardarParticipantesMasivos(
+participantesSeleccionadosMasivo
+);
+
+});
+
+delete window[callback];
+
+script.remove();
+
+};
+
+script.src =
+`${API_URL}?action=getPersonas&callback=${callback}`;
+
+document.body.appendChild(script);
+
+}
+
+function agregarPersonaMasivo(
+id,
+nombre,
+tipo
+){
+
+const existe =
+participantesSeleccionadosMasivo.find(
+p => p.id == id
+);
+
+if(existe){
+return;
+}
+
+participantesSeleccionadosMasivo.push({
+
+id:id,
+nombre:nombre,
+tipo:tipo
+
+});
+
+renderSeleccionadosMasivo();
+
+}
+
+function quitarPersonaMasivo(id){
+
+participantesSeleccionadosMasivo =
+participantesSeleccionadosMasivo.filter(
+
+p => p.id != id
+
+);
+
+renderSeleccionadosMasivo();
+
+}
+
+function renderSeleccionadosMasivo(){
+
+const tbody =
+document.getElementById(
+"tablaSeleccionadosMasivo"
+);
+
+const contador =
+document.getElementById(
+"contadorSeleccionados"
+);
+
+if(!tbody){
+return;
+}
+
+contador.innerHTML =
+participantesSeleccionadosMasivo.length;
+
+if(
+participantesSeleccionadosMasivo.length
+=== 0
+){
+
+tbody.innerHTML = `
+
+<tr>
+
+<td
+class="text-center text-muted">
+
+Sin participantes seleccionados
+
+</td>
+
+</tr>
+
+`;
+
+return;
+
+}
+
+let html = "";
+
+participantesSeleccionadosMasivo.forEach(p=>{
+
+html += `
+
+<tr>
+
+<td width="60">
+
+<button
+class="btn btn-danger btn-sm"
+onclick="quitarPersonaMasivo('${p.id}')">
+
+<i class="fa fa-trash"></i>
+
+</button>
+
+</td>
+
+<td>
+
+${p.nombre}
+
+</td>
+
+<td>
+
+${p.tipo}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+tbody.innerHTML = html;
+
+}
+
+function filtrarParticipantesMasivo(texto){
+
+texto =
+texto.toLowerCase();
+
+const filas =
+document.querySelectorAll(
+"#tablaDisponiblesMasivo tr"
+);
+
+filas.forEach(fila=>{
+
+const contenido =
+fila.innerText.toLowerCase();
+
+fila.style.display =
+
+contenido.includes(texto)
+
+? ""
+
+: "none";
+
+});
+
+}
+
 function guardarParticipantesMasivos(personas){
 
     if(personas.length === 0){
