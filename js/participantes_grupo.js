@@ -12,6 +12,7 @@ params.get("idSesion");
 const idGrupo =
 params.get("idGrupo");
 let participantesCache = [];
+let participantesSeleccionadosMasivo = [];
 
 document.addEventListener(
 "DOMContentLoaded",
