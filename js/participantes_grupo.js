@@ -1368,13 +1368,13 @@ window[callback] = function(result){
 
 if(!result.status){
 
-Swal.fire(
-"Error",
-"Cargando personas",
-"error"
-);
+    Swal.fire(
+        "Error",
+        "Cargando personas",
+        "error"
+    );
 
-return;
+    return;
 
 }
 
@@ -1384,160 +1384,174 @@ let htmlDisponibles = "";
 
 result.data.forEach(p=>{
 
-htmlDisponibles += `
+    htmlDisponibles += `
 
-<tr>
+    <tr>
 
-<td width="50">
+        <td width="60">
 
-<button
-class="btn btn-success btn-sm"
-onclick="agregarPersonaMasivo(
-'${p.id}',
-'${(p.nombre || '').replace(/'/g,"\\'")}',
-'${p.tipo}'
-)">
+            <button
+            class="btn btn-success btn-sm"
+            onclick="agregarPersonaMasivo(
+                '${p.id}',
+                '${(p.nombre || '').replace(/'/g,"\\'")}',
+                '${p.tipo}'
+            )">
 
-<i class="fa fa-plus"></i>
+                <i class="fa fa-plus"></i>
 
-</button>
+            </button>
 
-</td>
+        </td>
 
-<td>
+        <td>${p.nombre}</td>
 
-${p.nombre}
+        <td>${p.tipo}</td>
 
-</td>
+    </tr>
 
-<td>
-
-${p.tipo}
-
-</td>
-
-</tr>
-
-`;
+    `;
 
 });
 
 Swal.fire({
 
-title:"Inscripción Masiva",
+    title:"Inscripción Masiva",
 
-width:1200,
+    width:1300,
 
-html:`
+    html:`
 
-<div class="row">
+    <div class="container-fluid">
 
-<div class="col-md-6">
+        <div class="row">
 
-<h5 class="mb-3">
+            <div class="col-md-6">
 
-Disponibles
+                <div
+                class="d-flex justify-content-between align-items-center mb-2">
 
-</h5>
+                    <h5 class="mb-0">
 
-<input
-type="text"
-class="form-control mb-2"
-placeholder="Buscar participante..."
-onkeyup="filtrarParticipantesMasivo(this.value)">
+                        Participantes Disponibles
 
-<div
-style="
-height:400px;
-overflow:auto;
-border:1px solid #ddd;
-">
+                    </h5>
 
-<table
-class="table table-sm"
-id="tablaDisponiblesMasivo">
+                    <span class="badge bg-secondary">
 
-<tbody>
+                        ${result.data.length}
 
-${htmlDisponibles}
+                    </span>
 
-</tbody>
+                </div>
 
-</table>
+                <input
+                type="text"
+                class="form-control mb-3"
+                placeholder="Buscar participante..."
+                onkeyup="filtrarParticipantesMasivo(this.value)">
 
-</div>
+                <div
+                style="
+                height:450px;
+                overflow:auto;
+                border:1px solid #dee2e6;
+                border-radius:8px;
+                ">
 
-</div>
+                    <table
+                    class="table table-hover table-sm mb-0"
+                    id="tablaDisponiblesMasivo">
 
-<div class="col-md-6">
+                        <tbody>
 
-<h5>
+                            ${htmlDisponibles}
 
-Seleccionados
+                        </tbody>
 
-<span
-class="badge bg-primary"
-id="contadorSeleccionados">
+                    </table>
 
-0
+                </div>
 
-</span>
+            </div>
 
-</h5>
+            <div class="col-md-6">
 
-<div
-style="
-height:400px;
-overflow:auto;
-border:1px solid #ddd;
-">
+                <div
+                class="d-flex justify-content-between align-items-center mb-2">
 
-<table
-class="table table-sm">
+                    <h5 class="mb-0">
 
-<tbody
-id="tablaSeleccionadosMasivo">
+                        Seleccionados
 
-<tr>
+                    </h5>
 
-<td
-class="text-muted text-center">
+                    <span
+                    class="badge bg-primary"
+                    id="contadorSeleccionados">
 
-Sin participantes seleccionados
+                        0
 
-</td>
+                    </span>
 
-</tr>
+                </div>
 
-</tbody>
+                <div
+                style="
+                height:450px;
+                overflow:auto;
+                border:1px solid #dee2e6;
+                border-radius:8px;
+                ">
 
-</table>
+                    <table
+                    class="table table-hover table-sm mb-0">
 
-</div>
+                        <tbody
+                        id="tablaSeleccionadosMasivo">
 
-</div>
+                            <tr>
 
-</div>
+                                <td
+                                class="text-center text-muted p-4">
 
-`,
+                                    No hay participantes seleccionados
 
-showCancelButton:true,
+                                </td>
 
-confirmButtonText:
-"Inscribir en todas las sesiones",
+                            </tr>
 
-cancelButtonText:
-"Cancelar"
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `,
+
+    showCancelButton:true,
+
+    confirmButtonText:
+    "Inscribir en todas las sesiones",
+
+    cancelButtonText:
+    "Cancelar"
 
 }).then(res=>{
 
-if(!res.isConfirmed){
-return;
-}
+    if(!res.isConfirmed){
+        return;
+    }
 
-guardarParticipantesMasivos(
-participantesSeleccionadosMasivo
-);
+    guardarParticipantesMasivos(
+        participantesSeleccionadosMasivo
+    );
 
 });
 
@@ -1553,6 +1567,155 @@ script.src =
 document.body.appendChild(script);
 
 }
+
+function agregarPersonaMasivo(
+id,
+nombre,
+tipo
+){
+
+const existe =
+participantesSeleccionadosMasivo.find(
+p => p.id === id
+);
+
+if(existe){
+    return;
+}
+
+participantesSeleccionadosMasivo.push({
+
+    id:id,
+    nombre:nombre,
+    tipo:tipo
+
+});
+
+renderSeleccionadosMasivo();
+
+}
+
+function quitarPersonaMasivo(id){
+
+participantesSeleccionadosMasivo =
+participantesSeleccionadosMasivo.filter(
+p => p.id !== id
+);
+
+renderSeleccionadosMasivo();
+
+}
+
+function renderSeleccionadosMasivo(){
+
+const tbody =
+document.getElementById(
+"tablaSeleccionadosMasivo"
+);
+
+const contador =
+document.getElementById(
+"contadorSeleccionados"
+);
+
+if(!tbody){
+    return;
+}
+
+contador.innerHTML =
+participantesSeleccionadosMasivo.length;
+
+if(
+participantesSeleccionadosMasivo.length === 0
+){
+
+    tbody.innerHTML = `
+
+    <tr>
+
+        <td
+        class="text-center text-muted p-4">
+
+            No hay participantes seleccionados
+
+        </td>
+
+    </tr>
+
+    `;
+
+    return;
+
+}
+
+let html = "";
+
+participantesSeleccionadosMasivo.forEach(p=>{
+
+    html += `
+
+    <tr>
+
+        <td width="60">
+
+            <button
+            class="btn btn-danger btn-sm"
+            onclick="quitarPersonaMasivo('${p.id}')">
+
+                <i class="fa fa-minus"></i>
+
+            </button>
+
+        </td>
+
+        <td>
+
+            ${p.nombre}
+
+        </td>
+
+        <td>
+
+            ${p.tipo}
+
+        </td>
+
+    </tr>
+
+    `;
+
+});
+
+tbody.innerHTML = html;
+
+}
+
+function filtrarParticipantesMasivo(texto){
+
+texto =
+texto.toLowerCase();
+
+const filas =
+document.querySelectorAll(
+"#tablaDisponiblesMasivo tr"
+);
+
+filas.forEach(fila=>{
+
+const contenido =
+fila.innerText.toLowerCase();
+
+fila.style.display =
+
+contenido.includes(texto)
+? ""
+: "none";
+
+});
+
+}
+
+
 
 function agregarPersonaMasivo(
 id,
@@ -1942,3 +2105,4 @@ function guardarParticipantesMasivos(personas){
     document.body.appendChild(script);
 
 }
+
