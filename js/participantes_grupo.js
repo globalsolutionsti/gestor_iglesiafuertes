@@ -1234,3 +1234,190 @@ window.location.href =
 `&idTemporada=${idTemporada}`;
 
 }
+
+function abrirCargaMasiva(){
+
+const callback =
+"masivo_" + Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+if(!result.status){
+
+Swal.fire(
+"Error",
+"Cargando personas",
+"error"
+);
+
+return;
+
+}
+
+let html = `
+<div style="max-height:400px;overflow:auto;">
+`;
+
+result.data.forEach(p=>{
+
+ html += `
+
+ <div class="form-check">
+
+ <input
+ class="form-check-input personaMasiva"
+ type="checkbox"
+
+ value="${p.id}"
+
+ data-nombre="${p.nombre}"
+
+ data-tipo="${p.tipo}"
+
+ id="p_${p.id}">
+
+ <label
+ class="form-check-label"
+ for="p_${p.id}">
+
+ ${p.nombre}
+
+ </label>
+
+ </div>
+
+ `;
+
+});
+
+html += "</div>";
+
+Swal.fire({
+
+ title:
+ "Inscripción Masiva",
+
+ width:700,
+
+ html:html,
+
+ showCancelButton:true,
+
+ confirmButtonText:
+ "Inscribir en todas las sesiones"
+
+}).then(r=>{
+
+ if(!r.isConfirmed){
+  return;
+ }
+
+ const checks =
+ document.querySelectorAll(
+ ".personaMasiva:checked"
+ );
+
+ let personas = [];
+
+ checks.forEach(c=>{
+
+  personas.push({
+
+   id:c.value,
+
+   nombre:c.dataset.nombre,
+
+   tipo:c.dataset.tipo
+
+  });
+
+ });
+
+ guardarParticipantesMasivos(
+ personas
+ );
+
+});
+
+delete window[callback];
+script.remove();
+
+};
+
+script.src =
+`${API_URL}?action=getPersonas&callback=${callback}`;
+
+document.body.appendChild(script);
+
+}
+
+function guardarParticipantesMasivos(personas){
+
+if(personas.length === 0){
+
+ Swal.fire(
+ "Seleccione participantes"
+ );
+
+ return;
+
+}
+
+const callback =
+"saveMasivo_" +
+Date.now();
+
+const script =
+document.createElement("script");
+
+window[callback] = function(result){
+
+ if(result.status){
+
+  Swal.fire({
+
+   icon:"success",
+
+   title:
+   "Participantes inscritos correctamente"
+
+  });
+
+ }else{
+
+  Swal.fire({
+
+   icon:"error",
+
+   title:
+   result.message
+
+  });
+
+ }
+
+ delete window[callback];
+ script.remove();
+
+};
+
+script.src =
+
+`${API_URL}?action=guardarParticipantesMasivos`
++
+`&callback=${callback}`
++
+`&idTemporada=${idTemporada}`
++
+`&idGrupo=${idGrupo}`
++
+`&personas=${encodeURIComponent(
+ JSON.stringify(personas)
+)}`;
+
+document.body.appendChild(script);
+
+}
