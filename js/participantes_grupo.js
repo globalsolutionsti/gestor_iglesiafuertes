@@ -1356,170 +1356,237 @@ document.body.appendChild(script);
 
 function guardarParticipantesMasivos(personas){
 
-if(personas.length === 0){
+    if(personas.length === 0){
 
-    Swal.fire(
-        "Seleccione participantes"
-    );
+        Swal.fire(
+            "Seleccione participantes"
+        );
 
-    return;
+        return;
 
-}
+    }
 
-const totalProcesos =
-personas.length;
+    Swal.fire({
 
-Swal.fire({
+        title:"Inscribiendo participantes",
 
-    title:"Inscribiendo participantes",
+        html:`
 
-    html:`
+            <div class="text-center mb-3">
 
-        <div class="mb-2">
-
-            Preparando proceso...
-
-        </div>
-
-        <div class="progress">
-
-            <div
-                id="barraProgresoMasivo"
-                class="progress-bar progress-bar-striped progress-bar-animated"
-                role="progressbar"
-                style="width:0%;">
-
-                0%
+                <div class="spinner-border text-primary"></div>
 
             </div>
 
-        </div>
+            <div class="mb-2">
 
-    `,
+                Generando registros en todas las sesiones...
 
-    allowOutsideClick:false,
-    allowEscapeKey:false,
-    showConfirmButton:false
+            </div>
 
-});
+            <div class="progress" style="height:30px;">
 
-let porcentaje = 10;
+                <div
+                    id="barraProgresoMasivo"
+                    class="progress-bar progress-bar-striped progress-bar-animated"
+                    role="progressbar"
+                    style="width:0%;">
 
-const intervalo =
-setInterval(()=>{
+                    0%
 
-    porcentaje += 5;
+                </div>
 
-    if(porcentaje > 90){
+            </div>
 
-        porcentaje = 90;
+            <div
+                id="textoProgresoMasivo"
+                class="small text-muted mt-2">
 
-    }
+                Preparando proceso...
 
-    const barra =
-    document.getElementById(
-        "barraProgresoMasivo"
-    );
+            </div>
 
-    if(barra){
+        `,
 
-        barra.style.width =
-        porcentaje + "%";
+        allowOutsideClick:false,
+        allowEscapeKey:false,
+        showConfirmButton:false
 
-        barra.innerHTML =
-        porcentaje + "%";
+    });
 
-    }
+    let porcentaje = 0;
 
-},300);
+    const intervalo = setInterval(()=>{
 
-const callback =
-"saveMasivo_" +
-Date.now();
+        porcentaje += 3;
 
-const script =
-document.createElement("script");
+        if(porcentaje > 95){
 
-window[callback] = function(result){
-
-    clearInterval(intervalo);
-
-    const barra =
-    document.getElementById(
-        "barraProgresoMasivo"
-    );
-
-    if(barra){
-
-        barra.style.width =
-        "100%";
-
-        barra.innerHTML =
-        "100%";
-
-    }
-
-    setTimeout(()=>{
-
-        Swal.close();
-
-        if(result.status){
-
-            Swal.fire({
-
-                icon:"success",
-
-                title:
-                "Participantes inscritos correctamente",
-
-                text:
-                "La inscripción masiva ha finalizado"
-
-            }).then(()=>{
-
-                /*
-                REFRESCAR TABLA
-                */
-
-                cargarParticipantes();
-
-            });
-
-        }else{
-
-            Swal.fire({
-
-                icon:"error",
-
-                title:
-                result.message
-
-            });
+            porcentaje = 95;
 
         }
 
-    },500);
+        const barra =
+        document.getElementById(
+            "barraProgresoMasivo"
+        );
 
-    delete window[callback];
+        if(barra){
 
-    script.remove();
+            barra.style.width =
+            porcentaje + "%";
 
-};
+            barra.innerHTML =
+            porcentaje + "%";
 
-script.src =
+        }
 
-`${API_URL}?action=guardarParticipantesMasivos`
-+
-`&callback=${callback}`
-+
-`&idTemporada=${idTemporada}`
-+
-`&idGrupo=${idGrupo}`
-+
-`&personas=${encodeURIComponent(
-JSON.stringify(personas)
-)}`;
+    },200);
 
-document.body.appendChild(script);
+    const callback =
+    "saveMasivo_" +
+    Date.now();
+
+    const script =
+    document.createElement("script");
+
+    window[callback] = function(result){
+
+        clearInterval(intervalo);
+
+        const barra =
+        document.getElementById(
+            "barraProgresoMasivo"
+        );
+
+        const texto =
+        document.getElementById(
+            "textoProgresoMasivo"
+        );
+
+        if(barra){
+
+            barra.style.width =
+            "100%";
+
+            barra.innerHTML =
+            "100%";
+
+        }
+
+        if(texto){
+
+            texto.innerHTML =
+            "Proceso finalizado";
+        }
+
+        setTimeout(()=>{
+
+            Swal.close();
+
+            if(result.status){
+
+                Swal.fire({
+
+                    icon:"success",
+
+                    title:
+                    "Proceso terminado",
+
+                    html:`
+
+                        <div class="text-center">
+
+                            <h3 class="text-success">
+
+                                ${result.totalInsertados || 0}
+
+                            </h3>
+
+                            <div>
+
+                                registros fueron creados correctamente.
+
+                            </div>
+
+                        </div>
+
+                    `
+
+                }).then(()=>{
+
+                    /* ===========================
+                       REFRESCAR TABLA
+                    =========================== */
+
+                    cargarParticipantes();
+
+                    /* ===========================
+                       REFRESCAR INFO DEL GRUPO
+                    =========================== */
+
+                    cargarInformacionGrupo();
+
+                });
+
+            }else{
+
+                Swal.fire({
+
+                    icon:"error",
+
+                    title:"Error",
+
+                    text:
+                    result.message
+
+                });
+
+            }
+
+        },500);
+
+        delete window[callback];
+
+        script.remove();
+
+    };
+
+    script.onerror = function(){
+
+        clearInterval(intervalo);
+
+        Swal.close();
+
+        Swal.fire({
+
+            icon:"error",
+
+            title:
+            "Error de conexión con Apps Script"
+
+        });
+
+        delete window[callback];
+
+        script.remove();
+
+    };
+
+    script.src =
+
+    `${API_URL}?action=guardarParticipantesMasivos`
+    +
+    `&callback=${callback}`
+    +
+    `&idTemporada=${idTemporada}`
+    +
+    `&idGrupo=${idGrupo}`
+    +
+    `&personas=${encodeURIComponent(
+        JSON.stringify(personas)
+    )}`;
+
+    document.body.appendChild(script);
 
 }
