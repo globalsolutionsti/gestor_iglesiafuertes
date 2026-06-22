@@ -211,18 +211,17 @@ let asistencias = [];
 
 checks.forEach(c=>{
 
+if(c.checked){
+
 asistencias.push({
 
-idPersona:
-c.value,
-
-nombre:
-c.dataset.nombre,
-
-asistio:
-c.checked ? "SI" : "NO"
+idPersona:c.value,
+nombre:c.dataset.nombre,
+asistio:"SI"
 
 });
+
+}
 
 });
 
