@@ -114,3 +114,34 @@ function abrirImportadorV2(){
     });
 
 }
+
+
+function leerArchivoImportadorV2(archivo){
+
+    console.log(
+
+        "Archivo seleccionado:",
+
+        archivo.name
+
+    );
+
+    Swal.fire({
+
+        icon:"success",
+
+        title:"Archivo recibido",
+
+        html:`
+
+        ${archivo.name}
+
+        <br><br>
+
+        Esta es la primera prueba del Importador V2.
+
+        `
+
+    });
+
+}
