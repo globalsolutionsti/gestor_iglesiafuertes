@@ -1,1 +1,25 @@
+:root{
 
+--primary:#111111;
+--secondary:#2d2d2d;
+--light:#F7F7F7;
+--white:#FFFFFF;
+
+--border:#E4E4E4;
+
+--text:#1E1E1E;
+--text-light:#777777;
+
+--success:#1E7E34;
+--warning:#FFC107;
+--danger:#DC3545;
+
+--radius:14px;
+
+--shadow:
+
+0 8px 30px rgba(0,0,0,.08);
+
+--transition:.25s;
+
+}
