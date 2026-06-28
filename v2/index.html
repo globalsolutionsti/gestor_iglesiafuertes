@@ -1,18 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Sistema Integral de Gestión
+
+</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link
+rel="stylesheet"
+href="css/layout.css">
+
+</head>
+
 <body>
 
 <div class="wrapper">
 
+    <!-- ==========================
+         SIDEBAR
+    =========================== -->
+
     <aside class="sidebar">
 
+        <div class="logo">
+
+            <img
+            src="img/logo.png"
+            alt="Logo">
+
+            <h4>
+
+                Encuentros
+
+            </h4>
+
+        </div>
+
+        <ul class="menu">
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-chart-line"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-users"></i>
+
+                    Personas
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-user-tie"></i>
+
+                    Servidores
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-file-import"></i>
+
+                    Importador
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-layer-group"></i>
+
+                    Grupos
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-calendar-alt"></i>
+
+                    Temporadas
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-book-open"></i>
+
+                    Sesiones
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-clipboard-check"></i>
+
+                    Asistencias
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-chart-pie"></i>
+
+                    Dashboard Ejecutivo
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa fa-gear"></i>
+
+                    Configuración
+
+                </a>
+
+            </li>
+
+        </ul>
+
     </aside>
+
+    <!-- ==========================
+         CONTENIDO
+    =========================== -->
 
     <main class="main">
 
         <header class="navbar-custom">
 
+            <div>
+
+                <h3 id="tituloModulo">
+
+                    Dashboard
+
+                </h3>
+
+            </div>
+
+            <div class="usuario">
+
+                <div>
+
+                    <b>
+
+                        Administrador
+
+                    </b>
+
+                    <br>
+
+                    <small
+                    id="fechaActual">
+
+                    </small>
+
+                </div>
+
+            </div>
+
         </header>
 
-        <section id="contenido">
+        <section
+        id="contenido">
+
+            <div class="bienvenida">
+
+                <h2>
+
+                    Bienvenido al Sistema Integral
+
+                </h2>
+
+                <p>
+
+                    Seleccione un módulo del menú izquierdo.
+
+                </p>
+
+            </div>
 
         </section>
 
@@ -20,4 +245,10 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="js/layout.js"></script>
+
 </body>
+
+</html>
