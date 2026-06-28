@@ -82,3 +82,33 @@ file.name;
 animarBarra();
 
 }
+
+function animarBarra(){
+
+let porcentaje = 0;
+
+const barra =
+document.getElementById(
+"barraImportacion"
+);
+
+const timer =
+setInterval(()=>{
+
+porcentaje += 5;
+
+barra.style.width =
+porcentaje+"%";
+
+barra.innerHTML =
+porcentaje+"%";
+
+if(porcentaje>=100){
+
+clearInterval(timer);
+
+}
+
+},40);
+
+}
