@@ -1,1 +1,23 @@
+.btn-v2{
 
+background:#111;
+
+color:white;
+
+border:none;
+
+padding:12px 22px;
+
+border-radius:10px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+.btn-v2:hover{
+
+background:#333;
+
+}
