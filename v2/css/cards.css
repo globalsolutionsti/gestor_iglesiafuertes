@@ -1,1 +1,15 @@
+.card-v2{
 
+background:white;
+
+border:none;
+
+border-radius:16px;
+
+padding:25px;
+
+box-shadow:var(--shadow);
+
+margin-bottom:25px;
+
+}
