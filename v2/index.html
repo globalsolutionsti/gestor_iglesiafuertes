@@ -7,27 +7,25 @@
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0">
+content="width=device-width,initial-scale=1">
 
 <title>
-
-Sistema Integral de Gestión - V2
-
+Sistema Integral de Gestión
 </title>
 
 <!-- Bootstrap -->
 
 <link
-href="/vendor/bootstrap/bootstrap.min.css"
+href="../vendor/bootstrap/bootstrap.min.css"
 rel="stylesheet">
 
 <!-- FontAwesome -->
 
 <link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+rel="stylesheet">
 
-<!-- CSS -->
+<!-- CSS V2 -->
 
 <link
 rel="stylesheet"
@@ -85,135 +83,94 @@ href="css/utilities.css">
 
     <aside class="sidebar">
 
-        <div class="sidebar-header">
+        <div class="logo">
 
             <img
-            src="img/logo_negro.png"
-            class="logo">
-
-            <h5>
-
-                Sistema Integral
-
-            </h5>
-
-            <small>
-
-                Versión 2
-
-            </small>
+            src="img/logo_negro.png">
 
         </div>
 
-        <nav class="sidebar-menu">
+        <div class="menu-title">
 
-            <a href="#" class="active">
-
-                <i class="fa fa-house"></i>
-
-                Dashboard
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-users"></i>
-
-                Personas
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-user-tie"></i>
-
-                Servidores
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-file-import"></i>
-
-                Importador
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-layer-group"></i>
-
-                Grupos
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-calendar"></i>
-
-                Temporadas
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-book-open"></i>
-
-                Sesiones
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-clipboard-check"></i>
-
-                Asistencias
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-chart-line"></i>
-
-                Dashboard Ejecutivo
-
-            </a>
-
-            <a href="#">
-
-                <i class="fa fa-gear"></i>
-
-                Configuración
-
-            </a>
-
-        </nav>
-
-        <div class="sidebar-footer">
-
-            <img
-            src="img/avatar.png"
-            class="avatar">
-
-            <div>
-
-                <b>
-
-                    Administrador
-
-                </b>
-
-                <br>
-
-                <small>
-
-                    Sistema V2
-
-                </small>
-
-            </div>
+            MENÚ
 
         </div>
+
+        <ul>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="pages/importador.html">
+
+                    <i class="fa-solid fa-file-import"></i>
+
+                    Importador
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Personas
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    Grupos
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    Reportes
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    Configuración
+
+                </a>
+
+            </li>
+
+        </ul>
 
     </aside>
 
@@ -221,102 +178,134 @@ href="css/utilities.css">
          CONTENIDO
     ========================== -->
 
-    <div class="main-content">
-
-        <!-- NAVBAR -->
+    <main class="main">
 
         <header class="navbar-custom">
 
             <div>
 
-                <h3 id="tituloModulo">
+                <h4>
 
-                    Dashboard
+                    Sistema Integral de Gestión
 
-                </h3>
+                </h4>
 
             </div>
 
-            <div class="navbar-right">
+            <div class="usuario">
 
-                <button class="btn btn-light">
+                <img
+                src="img/avatar.png">
 
-                    <i class="fa fa-bell"></i>
+                <span>
 
-                </button>
+                    Administrador
 
-                <button class="btn btn-light">
-
-                    <i class="fa fa-magnifying-glass"></i>
-
-                </button>
-
-                <div class="usuario">
-
-                    <b>
-
-                        Administrador
-
-                    </b>
-
-                    <br>
-
-                    <small id="fechaActual">
-
-                    </small>
-
-                </div>
+                </span>
 
             </div>
 
         </header>
 
-        <!-- CONTENIDO -->
+        <section id="contenido">
 
-        <main
-        id="contenido">
+            <div class="container-fluid">
 
-            <div class="card-v2">
+                <div class="row">
 
-                <h2>
+                    <div class="col-lg-3">
 
-                    Bienvenido
+                        <div class="card card-dashboard">
 
-                </h2>
+                            <h5>
 
-                <hr>
+                                Personas
 
-                <p>
+                            </h5>
 
-                    Seleccione un módulo del menú lateral.
+                            <h2>
 
-                </p>
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <div class="card card-dashboard">
+
+                            <h5>
+
+                                Grupos
+
+                            </h5>
+
+                            <h2>
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <div class="card card-dashboard">
+
+                            <h5>
+
+                                Asistencias
+
+                            </h5>
+
+                            <h2>
+
+                                0
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <div class="card card-dashboard">
+
+                            <h5>
+
+                                Temporada
+
+                            </h5>
+
+                            <h2>
+
+                                Activa
+
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </main>
+        </section>
 
-    </div>
+    </main>
 
 </div>
 
-<!-- Bootstrap -->
-
-<script src="/vendor/bootstrap/bootstrap.bundle.min.js"></script>
-
-<!-- SweetAlert -->
-
-<script src="/vendor/sweetalert/sweetalert2.all.min.js"></script>
-
-<!-- JS -->
+<script src="vendor/bootstrap/bootstrap.bundle.min.js"></script>
 
 <script src="js/config.js"></script>
-
-<script src="js/helpers.js"></script>
-
-<script src="js/ui.js"></script>
-
-<script src="js/api.js"></script>
 
 <script src="js/app.js"></script>
 
